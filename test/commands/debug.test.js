@@ -1,7 +1,7 @@
 var assert = require('chai').assert
 var debug = require('../../lib/commands/debug')
 
-describe.only('debug command', function() {
+describe('debug command', function() {
 
     var messages
 
