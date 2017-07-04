@@ -5,28 +5,33 @@ var path = require('path')
 var debug = require('debug')('power-merge:index')
 var commands = require('require-all')({ dirname: path.join(__dirname, 'lib', 'commands') })
 
-function compile(options) {
-    var params = applyDefaults(options)
-    var rules = preProcessRules(params.config.rules)
-    var ruleBasedMerge = R.curry(merge)(rules)
-    return applyApiWrapper(ruleBasedMerge, params.config)
+function compile(_options, namedCommands) {
+    var options = withDefaultOptions(_options)
+    var rules = preProcessRules(options, namedCommands || {})
+    return buildMerge(options, rules)
 }
 
-function applyDefaults(params) {
-    return R.mergeDeepLeft(params || {}, {
-        config: { async: false, variadic: true, direction: 'left', rules: [] },
-        functions: {},
-        actions: {}
-    })
+function withDefaultOptions(options) {
+    return R.mergeDeepLeft(
+        options || {},
+        { config: { async: false, variadic: true, direction: 'left', rules: [] } }
+    )
 }
 
-function preProcessRules(rules) {
+function preProcessRules(options, namedCommands) {
     return R.map(function(rule) {
-        return { when: rule.when || commands.test(R.T), then: rule.then }
-    }, rules)
+        return {
+            when: rule.when ? rule.when(options, namedCommands) : commands.test(R.T),
+            then: rule.then(options, namedCommands)
+        }
+    }, options.config.rules)
 }
 
-function applyApiWrapper(fn, config) {
+function buildMerge(options, rules) {
+    return withApiWrapper(R.curry(merge)(rules), options.config)
+}
+
+function withApiWrapper(fn, config) {
     if (config.direction === 'right') fn = R.compose(fn, R.reverse)
     if (config.variadic) fn = variadic(fn)
     if (config.async) fn = asyncify(fn)
