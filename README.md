@@ -12,10 +12,6 @@ const config = {
         direction: 'left',
         variadic: true
     },
-    cache: {
-        key: 'my-custom-config',
-        invalidate: false
-    },
     rules: [
         {
             when: pm.odata("depth gt 10"),

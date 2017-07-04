@@ -25,6 +25,7 @@
   "dependencies": {
     "async.asyncify": "^0.5.2",
     "debug": "^2.6.8",
+    "hogan.js": "^3.0.2",
     "odata-query": "^3.3.5",
     "odata-v4-inmemory": "^0.1.7",
     "ramda": "^0.24.1",

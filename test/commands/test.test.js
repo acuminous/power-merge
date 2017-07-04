@@ -2,7 +2,7 @@ var assert = require('chai').assert
 var test = require('../../lib/commands/test')
 var R = require('ramda')
 
-describe.only('test command', function() {
+describe('test command', function() {
 
     it('should test inline functions', function() {
         var cmd = test(R.T, {}, {})
