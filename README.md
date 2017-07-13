@@ -58,7 +58,7 @@ const config = {
             when: pm.and([
                 pm.odata("a/type eq 'array'"),
                 pm.odata("b/type eq 'array'")
-            ]},
+            ]),
             then: pm.union({ key: "id" })
         },
         {

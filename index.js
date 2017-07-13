@@ -57,7 +57,7 @@ function merge(rules, args) {
                 b: { value: b, type: R.type(b) }
             }
             if (!rule.when(facts)) continue
-            a = rule.then(a, b)
+            a = rule.then(facts)
             break
         }
     }

@@ -5,15 +5,19 @@ describe('error command', function() {
 
     it('should throw an error', function() {
         var cmd = error('Oh Noes!')
+        var facts = { a: { value : 1 }, b: { value: 2 } }
+
         assert.throws(function() {
-            cmd(1, 2)
+            cmd(facts)
         }, /Oh Noes!/)
     })
 
     it('should use template', function() {
-        var cmd = error('Oh Noes! {{a}} {{b}}')
+        var cmd = error('Oh Noes! {{a.value}} {{b.value}}')
+        var facts = { a: { value : 1 }, b: { value: 2 } }
+
         assert.throws(function() {
-            cmd(1, 2)
+            cmd(facts)
         }, /Oh Noes! 1 2/)
     })
 

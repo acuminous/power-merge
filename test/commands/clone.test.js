@@ -1,10 +1,10 @@
 var assert = require('chai').assert
-var reference = require('../../lib/commands/reference')
+var clone = require('../../lib/commands/clone')
 
-describe('reference command', function() {
+describe('clone command', function() {
 
-    it('should reference "a" by default', function() {
-        var cmd = reference()
+    it('should clone "a" by default', function() {
+        var cmd = clone()
         var facts = {
             a: { value: { foo: 1 } },
             b: { value: { foo: 2 } }
@@ -12,11 +12,11 @@ describe('reference command', function() {
 
         var result = cmd(facts)
         assert.equal(result.foo, facts.a.value.foo)
-        assert.ok(result === facts.a.value)
+        assert.ok(result !== facts.a.value)
     })
 
-    it('should reference "b" when specified', function() {
-        var cmd = reference(['b', 'value'])
+    it('should clone "b" when specified', function() {
+        var cmd = clone(['b', 'value'])
         var facts = {
             a: { value: { foo: 1 } },
             b: { value: { foo: 2 } }
@@ -24,6 +24,6 @@ describe('reference command', function() {
 
         var result = cmd(facts)
         assert.equal(result.foo, facts.b.value.foo)
-        assert.ok(result === facts.b.value)
+        assert.ok(result !== facts.b.value)
     })
 })

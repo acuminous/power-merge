@@ -51,8 +51,8 @@ describe('Power Merge', function() {
 
             config.rules = [
                 {
-                    then: pm.invoke(function mdl(a, b) {
-                        return R.mergeDeepLeft(a, b)
+                    then: pm.invoke(function mdl(facts) {
+                        return R.mergeDeepLeft(facts.a.value, facts.b.value)
                     })
                 }
             ]
@@ -91,8 +91,8 @@ describe('Power Merge', function() {
             })
         }
 
-        function sum(a, b) {
-            return a + b
+        function sum(facts) {
+            return facts.a.value + facts.b.value
         }
 
         it('should ignore rules that fail the when condition', function() {

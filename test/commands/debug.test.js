@@ -15,14 +15,18 @@ describe('debug command', function() {
 
     it('should debug via supplied function', function() {
         var cmd = debug('meh', log)
-        cmd(1, 2)
+        var facts = { a: { value : 1 }, b: { value: 2 } }
+
+        cmd(facts)
         assert.equal(messages.length, 1)
         assert.equal(messages[0], 'meh')
     })
 
     it('should use template', function() {
-        var cmd = debug('meh {{a}} {{b}}', log)
-        cmd(1, 2)
+        var cmd = debug('meh {{a.value}} {{b.value}}', log)
+        var facts = { a: { value : 1 }, b: { value: 2 } }
+
+        cmd(facts)
         assert.equal(messages.length, 1)
         assert.equal(messages[0], 'meh 1 2')
     })

@@ -10,27 +10,43 @@ describe('recurse command', function() {
 
     it('should recuse using context when both keys are present', function() {
         var context = new Context()
-        var cmd = recurse({}, {}, context)
         context.set(concat)
-        var result = cmd({ a: '1.1' }, { a: '2.1' })
-        assert.equal(result.a, '1.1-2.1')
+
+        var cmd = recurse({}, {}, context)
+        var facts = {
+            a: { value: { x: '1.1' } },
+            b: { value: { x: '2.1' } }
+        }
+
+        var result = cmd(facts)
+        assert.equal(result.x, '1.1-2.1')
     })
 
     it('should recurse using context when key exists in a but not in b', function() {
         var context = new Context()
-        var cmd = recurse({}, {}, context)
         context.set(concat)
 
-        var result = cmd({ a: '1.1' }, {})
-        assert.equal(result.a, '1.1-undefined')
+        var cmd = recurse({}, {}, context)
+        var facts = {
+            a: { value: { x: '1.1' } },
+            b: { value: {} }
+        }
+
+        var result = cmd(facts)
+        assert.equal(result.x, '1.1-undefined')
     })
 
     it('should clone b when not in a', function() {
         var context = new Context()
-        var cmd = recurse({}, {}, context)
         context.set(concat)
 
-        var result = cmd({}, { a: '2.1' })
-        assert.equal(result.a, 'undefined-2.1')
+        var cmd = recurse({}, {}, context)
+        var facts = {
+            a: { value: {} },
+            b: { value: { x: '2.1' } }
+        }
+
+        var result = cmd(facts)
+        assert.equal(result.x, 'undefined-2.1')
     })
 })
