@@ -16,17 +16,13 @@ describe('recurse command', function() {
         assert.equal(result.a, '1.1-2.1')
     })
 
-    it('should clone a when not in b', function() {
+    it('should recurse using context when key exists in a but not in b', function() {
         var context = new Context()
         var cmd = recurse({}, {}, context)
         context.set(concat)
 
-        var a = { x: { y: 1 } }
-        var b = {}
-        var result = cmd(a, b)
-
-        a.x.y = 2
-        assert.equal(result.x.y, 1)
+        var result = cmd({ a: '1.1' }, {})
+        assert.equal(result.a, '1.1-undefined')
     })
 
     it('should clone b when not in a', function() {
@@ -34,11 +30,7 @@ describe('recurse command', function() {
         var cmd = recurse({}, {}, context)
         context.set(concat)
 
-        var a = {}
-        var b = { x: { y: 1 } }
-        var result = cmd(a, b)
-
-        b.x.y = 2
-        assert.equal(result.x.y, 1)
+        var result = cmd({}, { a: '2.1' })
+        assert.equal(result.a, 'undefined-2.1')
     })
 })
