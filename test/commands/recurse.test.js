@@ -4,17 +4,41 @@ var Context = require('../../lib/Context')
 
 describe('recurse command', function() {
 
-    function merge(a, b) {
+    function concat(a, b) {
         return a + '-' + b
     }
 
-    it('should descend into objects', function() {
+    it('should recuse using context when both keys are present', function() {
         var context = new Context()
-        context.set(merge)
         var cmd = recurse({}, {}, context)
-        var result = cmd({ a: '1.1', b: '1.2' }, { a: '2.1', c: '2.2' })
+        context.set(concat)
+        var result = cmd({ a: '1.1' }, { a: '2.1' })
         assert.equal(result.a, '1.1-2.1')
-        assert.equal(result.b, '1.2')
-        assert.equal(result.c, '2.2')
+    })
+
+    it('should clone a when not in b', function() {
+        var context = new Context()
+        var cmd = recurse({}, {}, context)
+        context.set(concat)
+
+        var a = { x: { y: 1 } }
+        var b = {}
+        var result = cmd(a, b)
+
+        a.x.y = 2
+        assert.equal(result.x.y, 1)
+    })
+
+    it('should clone b when not in a', function() {
+        var context = new Context()
+        var cmd = recurse({}, {}, context)
+        context.set(concat)
+
+        var a = {}
+        var b = { x: { y: 1 } }
+        var result = cmd(a, b)
+
+        b.x.y = 2
+        assert.equal(result.x.y, 1)
     })
 })
