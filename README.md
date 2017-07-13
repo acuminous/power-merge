@@ -66,7 +66,7 @@ const config = {
             then: pm.reference()
         },
         {
-            then: pm.deepClone()
+            then: pm.recurse()
         }
     ]
 })

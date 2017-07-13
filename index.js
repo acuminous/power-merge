@@ -1,14 +1,18 @@
+var debug = require('debug')('power-merge:index')
 var R = require('ramda')
 var asyncify = require('async.asyncify')
 var variadic = require('variadic')
 var path = require('path')
-var debug = require('debug')('power-merge:index')
 var commands = require('require-all')({ dirname: path.join(__dirname, 'lib', 'commands') })
+var Context = require('./lib/Context')
 
 function compile(_options, namedCommands) {
+    var context = new Context()
     var options = withDefaultOptions(_options)
-    var rules = preProcessRules(options, namedCommands || {})
-    return buildMerge(options, rules)
+    var rules = preProcessRules(options, namedCommands || {}, context)
+    var merge = buildMerge(options, rules)
+    context.set(merge)
+    return merge
 }
 
 function withDefaultOptions(options) {
@@ -18,17 +22,18 @@ function withDefaultOptions(options) {
     )
 }
 
-function preProcessRules(options, namedCommands) {
+function preProcessRules(options, namedCommands, context) {
     return R.map(function(rule) {
         return {
             when: rule.when ? rule.when(options, namedCommands) : commands.test(R.T),
-            then: rule.then(options, namedCommands)
+            then: rule.then(options, namedCommands, context)
         }
     }, options.config.rules)
 }
 
 function buildMerge(options, rules) {
-    return withApiWrapper(R.curry(merge)(rules), options.config)
+    var partial = R.curry(merge)(rules)
+    return withApiWrapper(partial, options.config)
 }
 
 function withApiWrapper(fn, config) {
