@@ -1,16 +1,21 @@
 var pm = require('../..')
+var R = require('ramda')
 
 module.exports = [
     {
         when: pm.and([
-            pm.odata("a/type eq 'object'"),
-            pm.odata("b/type eq 'object'")
+            pm.eq('object', ['a', 'value']),
+            pm.eq('object', ['b', 'value']),
         ]),
         then: pm.recurse()
     },
     {
-        when: pm.undef(),
-        then: pm.clone(['a', 'value'])
+        when: pm.eq(null),
+        then: pm.clone(['b', 'value'])
+    },
+    {
+        when: pm.eq(undefined),
+        then: pm.clone(['b', 'value'])
     },
     {
         then: pm.clone()
