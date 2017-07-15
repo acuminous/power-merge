@@ -39,19 +39,19 @@ describe('Power Merge', function() {
             assert.equal(merged.d, '3.4')
         }
 
-        permutations.forEach(function(config) {
+        permutations.forEach(function(options) {
 
             var step = format('should support %s %s merges %s',
-                config.async ? 'asynchronous' : 'synchronous',
-                config.variadic ? 'variadic' : 'array',
-                config.direction == 'left' ? 'from left to right' : 'from right to left'
+                options.async ? 'asynchronous' : 'synchronous',
+                options.variadic ? 'variadic' : 'array',
+                options.direction == 'left' ? 'from left to right' : 'from right to left'
             )
 
             testFn = it
-            if (config.only) testFn = it.only
-            if (config.skip) testFn = it.skip
+            if (options.only) testFn = it.only
+            if (options.skip) testFn = it.skip
 
-            config.rules = [
+            options.rules = [
                 {
                     then: pm.invoke(function mdl(facts) {
                         return R.mergeDeepLeft(facts.a.value, facts.b.value)
@@ -60,10 +60,10 @@ describe('Power Merge', function() {
             ]
 
             testFn(step, function(done) {
-                var merge = pm.compile({ config: config })
+                var merge = pm.compile(options)
                 var original = R.clone(data)
 
-                if (config.direction == 'right') original.reverse()
+                if (options.direction == 'right') original.reverse()
                 var copy = R.clone(original)
 
                 var cb = function(err, result) {
@@ -72,8 +72,8 @@ describe('Power Merge', function() {
                     done()
                 }
 
-                var args = config.variadic ? original : [original]
-                if (config.async) {
+                var args = options.variadic ? original : [original]
+                if (options.async) {
                     merge.apply(null, args.concat(cb))
                 } else {
                     var result = merge.apply(null, args)
@@ -86,11 +86,7 @@ describe('Power Merge', function() {
     describe('Rules', function() {
 
         function compile(rules) {
-            return pm.compile({
-                config: {
-                    rules: rules
-                }
-            })
+            return pm.compile({ rules: rules })
         }
 
         function sum(facts) {
@@ -110,6 +106,13 @@ describe('Power Merge', function() {
         it('should invoke rules that pass the when condition', function() {
             var merge = compile([{
                 when: pm.test(R.T),
+                then: pm.invoke(sum)
+            }])
+            assert.equal(merge(1, 2), 3)
+        })
+
+        it('should invoke rules without a when condition', function() {
+            var merge = compile([{
                 then: pm.invoke(sum)
             }])
             assert.equal(merge(1, 2), 3)

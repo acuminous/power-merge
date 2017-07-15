@@ -8,9 +8,7 @@ var Context = require('./lib/Context')
 
 function compile(_options, namedCommands) {
     var options = withDefaultOptions(_options)
-    var context = new Context()
-    context.set('namedCommands', namedCommands || {})
-    context.set('options', options)
+    var context = new Context({ namedCommands: namedCommands, options: options })
     var rules = preProcessRules(context)
     var merge = buildMerge(options, rules)
     context.set('merge', merge)
@@ -20,22 +18,22 @@ function compile(_options, namedCommands) {
 function withDefaultOptions(options) {
     return R.mergeDeepLeft(
         options || {},
-        { config: { async: false, variadic: true, direction: 'left', rules: [] } }
+        { async: false, variadic: true, direction: 'left', rules: [] }
     )
 }
 
 function preProcessRules(context) {
     return R.map(function(rule) {
         return {
-            when: rule.when ? rule.when(context) : commands.test(R.T),
+            when: rule.when ? rule.when(context) : commands.test(R.T, context),
             then: rule.then(context)
         }
-    }, context.get('options').config.rules)
+    }, context.get('options').rules)
 }
 
 function buildMerge(options, rules) {
     var partial = R.curry(merge)(rules)
-    return withApiWrapper(partial, options.config)
+    return withApiWrapper(partial, options)
 }
 
 function withApiWrapper(fn, config) {
@@ -46,8 +44,8 @@ function withApiWrapper(fn, config) {
 }
 
 function merge(rules, args) {
-    if (args.length == 0) return
-    if (args.length == 1) return args[0] // To clone or not to clone
+    if (args.length === 0) return
+    if (args.length === 1) return args[0] // To clone or not to clone
 
     var a = args[0]
     for (var i = 1; i < args.length; i++) {
