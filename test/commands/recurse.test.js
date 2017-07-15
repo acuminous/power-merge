@@ -4,8 +4,8 @@ var Context = require('../../lib/Context')
 
 describe('recurse command', function() {
 
-    function concat(a, b) {
-        return a + '-' + b
+    function concat(args) {
+        return args[0] + '-' + args[1]
     }
 
     it('should recuse using context when both keys are present', function() {

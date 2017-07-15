@@ -10,9 +10,9 @@ function compile(_options, namedCommands) {
     var options = withDefaultOptions(_options)
     var context = new Context({ namedCommands: namedCommands, options: options })
     var rules = preProcessRules(context)
-    var merge = buildMerge(options, rules)
-    context.set('merge', merge)
-    return merge
+    var partial = R.curry(merge)(rules)
+    context.set('merge', partial)
+    return withApiWrapper(partial, options)
 }
 
 function withDefaultOptions(options) {
@@ -25,21 +25,16 @@ function withDefaultOptions(options) {
 function preProcessRules(context) {
     return R.map(function(rule) {
         return {
-            when: rule.when ? rule.when(context) : commands.test(R.T, context),
+            when: rule.when ? rule.when(context) : commands.always(context),
             then: rule.then(context)
         }
     }, context.get('options').rules)
 }
 
-function buildMerge(options, rules) {
-    var partial = R.curry(merge)(rules)
-    return withApiWrapper(partial, options)
-}
-
-function withApiWrapper(fn, config) {
-    if (config.direction === 'right') fn = R.compose(fn, R.reverse)
-    if (config.variadic) fn = variadic(fn)
-    if (config.async) fn = asyncify(fn)
+function withApiWrapper(fn, options) {
+    if (options.direction === 'right') fn = R.compose(fn, R.reverse)
+    if (options.variadic) fn = variadic(fn)
+    if (options.async) fn = asyncify(fn)
     return fn
 }
 

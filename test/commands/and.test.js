@@ -1,6 +1,6 @@
 var assert = require('chai').assert
 var and = require('../../lib/commands/and')
-var R = require('ramda')
+var eq = require('../../lib/commands/eq')
 var Context = require('../../lib/Context')
 
 describe('and command', function() {
@@ -9,8 +9,8 @@ describe('and command', function() {
 
     it('should return the result of all commands', function() {
         var cmd = and([
-            R.pathEq(['a', 'value'], 1),
-            R.pathEq(['b', 'value'], 2)
+            eq(1, ['a', 'value']),
+            eq(2, ['b', 'value'])
         ])(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
@@ -26,7 +26,7 @@ describe('and command', function() {
 
     it('should short circuit when a command return false', function() {
         var cmd = and([
-            R.pathEq(['a', 'value'], 2),
+            eq(2, ['a', 'value']),
             function() {
                 throw new Error('Did not short circuit')
             }

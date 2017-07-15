@@ -157,20 +157,16 @@ describe('Power Merge', function() {
         })
     })
 
-    describe.skip('Examples', function() {
+    describe('Examples', function() {
 
         Object.keys(examples).forEach(function(name) {
             it(name, function() {
                 var example = examples[name]
-                var merge = pm.compile(example)
+                var merge = pm.compile(example.config)
 
-                var result = merge(
-                    { a: '1.1', b: { a: '1.2.1' } },
-                    { a: '2.1', b: { a: '2.2.1', b: '2.2.2' }, c: '2.3' },
-                    { a: '3.1', b: { a: '3.2.1', b: '3.2.2', c: '3.2.3' }, c: '3.3', d: '3.4' }
-                )
+                var result = merge(example.data)
 
-                console.log(result)
+                assert.deepEqual(result, example.result)
             })
         })
 
