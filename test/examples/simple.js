@@ -15,10 +15,6 @@ module.exports = {
                 then: pm.recurse()
             },
             {
-                when: pm.eq(null),
-                then: pm.clone(['b', 'value'])
-            },
-            {
                 when: pm.eq(undefined),
                 then: pm.clone(['b', 'value'])
             },
