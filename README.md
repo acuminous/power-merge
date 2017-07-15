@@ -1,77 +1,87 @@
 # power-merge
-Merges multiple objects in a configurable way
+There are scores of merge libraries for node.js, but they all have hidden assumptions and surprises waiting to catch you out. For example
+
+1. Ramda merge doesn't clone sub documents which only exist in one of the input documents
+```
+var defaults = { ip: '192.168.1.100', port: 8080 }
+var overrides = {}
+
+var server = R.merge(defaults, overrides)
+server.port = 9090
+
+assert.equal(defaults.port, 9090)
+```
+
+1. Ramda merge unions arrays
+```
+R.merge({ a: [1, 2, 3], b: [3, 4, 5] }) === [ 1, 2, 3, 4, 5 ]
+```
+
+1. Lodash merge mashes (for want of a better word) arrays
+```
+_.merge({ a: [1, 2, 3], b: [3, 4, 5, 6] }) === [ 1, 2, 3, 6 ]
+```
+
+There are situations (e.g. when you want to union by) when the above behaviour wont do, e.g.
+
+```
+var hosts = merge(
+   [ { ip: '192.168.1.100' }, { ip: '192.168.1.101' } ]
+   [ { ip: '192.168.1.100' }, { ip: '192.168.1.200' } ]
+)
+assert.deepEqual(hosts, [
+    { ip: '192.168.1.100' },
+    { ip: '192.168.1.101' },
+    { ip: '192.168.1.200' }
+])
+```
+power-merge puts you in charge of your merge rules, and making it easy to specify custom merge behaviour for any property within your documents.
 
 ## tldr;
 ```js
 const pm = require('power-merge')
+const R = require('ramda')
 
 
 const config = {
-    api: {
-        sync: true,
-        direction: 'left',
-        variadic: true
-    },
     rules: [
         {
-            when: pm.odata("depth gt 10"),
-            then: pm.error("Max depth exceeded at {{path}}")
-        },
-        {
-            when: pm.odata("circular eq true"),
-            then: pm.error("Circular reference at {{path}}")
-        },
-        {
-            when: pm.odata("a/value eq null"),
-            then: pm.debug("Skipping null a/value at {{path}}")
-        },
-        {
-            when: pm.test(() => true)
-            then: pm.invoke(() => { /* noop */ })
-        },
-        {
-            when: pm.test('namedTestFn')
-            then: pm.invoke('namedActionFn')
-        },
-        {
-            when: pm.odata("path eq 'some.flattened.property.path'"),
-            then: pm.shallowClone()
-        },
-        {
-            when: pm.odata("path eq 'some.other.flattened.property.path'"),
-            then: pm.merge({ config: require("./different-config" }))
-        },
-        {
-            when: pm.odata("r/type eq 'accessor'")
-            then: pm.access()
-            onError: [
-                {
-                    when: pm.odata("contains(err/message, 'some special case'")),
-                    then: pm.debug('Error calling accessor at {{path}}: {{err.message}}'),
-                },
-                {
-                    then: pm.rethrow()
-                }
-            ]
+            when: pm.and([
+                pm.eq('Object', ['a', 'type']),
+                pm.eq('Object', ['b', 'type']),
+            ]),
+            then: pm.recurse()
         },
         {
             when: pm.and([
-                pm.odata("a/type eq 'array'"),
-                pm.odata("b/type eq 'array'")
+                pm.eq('Array', ['a', 'type']),
+                pm.eq('Array', ['b', 'type']),
             ]),
-            then: pm.union({ key: "id" })
+            then: pm.compose([
+                pm.union(),
+                pm.invoke(R.sort((a, b) => a.localeCompare(b))
+            ])
         },
         {
-            when: pm.odata("r/type eq 'function'"),
-            then: pm.reference()
+            when: pm.eq(undefined),
+            then: pm.clone(['b', 'value'])
         },
         {
-            then: pm.recurse()
+            then: pm.clone()
         }
     ]
 })
 
 const merge = pm.compile({ config })
-merge(a, b, c, d)
-
+var result = merge(
+    { name: 'John', qualifications: [ 'Computer Science', 'English' ] },
+    { age: 27, qualifications: [ 'Computer Science', 'Maths' ] }
+)
+assert.equal(result.name, 'John')
+assert.equal(result.age, 27)
+assert.deepEqual(result.qualifications, [
+    'Computer Science',
+    'English',
+    'Maths'
+])
 ```
