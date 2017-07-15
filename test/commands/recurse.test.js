@@ -9,10 +9,9 @@ describe('recurse command', function() {
     }
 
     it('should recuse using context when both keys are present', function() {
-        var context = new Context()
-        context.set(concat)
+        var context = new Context({ merge: concat })
 
-        var cmd = recurse({}, {}, context)
+        var cmd = recurse(context)
         var facts = {
             a: { value: { x: '1.1' } },
             b: { value: { x: '2.1' } }
@@ -23,10 +22,9 @@ describe('recurse command', function() {
     })
 
     it('should recurse using context when key exists in a but not in b', function() {
-        var context = new Context()
-        context.set(concat)
+        var context = new Context({ merge: concat })
 
-        var cmd = recurse({}, {}, context)
+        var cmd = recurse(context)
         var facts = {
             a: { value: { x: '1.1' } },
             b: { value: {} }
@@ -37,10 +35,9 @@ describe('recurse command', function() {
     })
 
     it('should clone b when not in a', function() {
-        var context = new Context()
-        context.set(concat)
+        var context = new Context({ merge: concat })
 
-        var cmd = recurse({}, {}, context)
+        var cmd = recurse(context)
         var facts = {
             a: { value: {} },
             b: { value: { x: '2.1' } }

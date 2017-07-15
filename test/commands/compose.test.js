@@ -2,8 +2,11 @@ var assert = require('chai').assert
 var union = require('../../lib/commands/union')
 var compose = require('../../lib/commands/compose')
 var R = require('ramda')
+var Context = require('../../lib/Context')
 
 describe('compose command', function() {
+
+    var context = new Context()
 
     it('should return the result of all functions', function() {
 
@@ -12,9 +15,9 @@ describe('compose command', function() {
         }
 
         var cmd = compose([
-            union(),
+            union()(context),
             R.sort(reverse)
-        ])
+        ])(context)
 
         var facts = {
             a: { value: [1, 2, 3, 4, 5, 6, 7] },
@@ -29,7 +32,7 @@ describe('compose command', function() {
     })
 
     it('should return the result of no commands', function() {
-        var cmd = compose([])
+        var cmd = compose([])(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
         assert.equal(cmd(facts), undefined)

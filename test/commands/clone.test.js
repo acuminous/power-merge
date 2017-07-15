@@ -1,10 +1,14 @@
 var assert = require('chai').assert
 var clone = require('../../lib/commands/clone')
+var R = require('ramda')
+var Context = require('../../lib/Context')
 
 describe('clone command', function() {
 
+    var context = new Context()
+
     it('should clone "a" by default', function() {
-        var cmd = clone()
+        var cmd = clone()(context)
         var facts = {
             a: { value: { foo: 1 } },
             b: { value: { foo: 2 } }
@@ -16,7 +20,7 @@ describe('clone command', function() {
     })
 
     it('should clone "b" when specified', function() {
-        var cmd = clone(['b', 'value'])
+        var cmd = clone(['b', 'value'])(context)
         var facts = {
             a: { value: { foo: 1 } },
             b: { value: { foo: 2 } }

@@ -4,6 +4,8 @@ var assert = require('chai').assert
 var R = require('ramda')
 var pm = require('..')
 var format = require('util').format
+var path = require('path')
+var examples = require('require-all')({ dirname: path.join(__dirname, 'examples') })
 
 describe('Power Merge', function() {
 
@@ -150,5 +152,24 @@ describe('Power Merge', function() {
             }])
             assert.equal(merge(1, 2), 3)
         })
+    })
+
+    describe.skip('Examples', function() {
+
+        Object.keys(examples).forEach(function(name) {
+            it(name, function() {
+                var example = examples[name]
+                var merge = pm.compile(example)
+
+                var result = merge(
+                    { a: '1.1', b: { a: '1.2.1' } },
+                    { a: '2.1', b: { a: '2.2.1', b: '2.2.2' }, c: '2.3' },
+                    { a: '3.1', b: { a: '3.2.1', b: '3.2.2', c: '3.2.3' }, c: '3.3', d: '3.4' }
+                )
+
+                console.log(result)
+            })
+        })
+
     })
 })

@@ -7,11 +7,13 @@ var commands = require('require-all')({ dirname: path.join(__dirname, 'lib', 'co
 var Context = require('./lib/Context')
 
 function compile(_options, namedCommands) {
-    var context = new Context()
     var options = withDefaultOptions(_options)
-    var rules = preProcessRules(options, namedCommands || {}, context)
+    var context = new Context()
+    context.set('namedCommands', namedCommands || {})
+    context.set('options', options)
+    var rules = preProcessRules(context)
     var merge = buildMerge(options, rules)
-    context.set(merge)
+    context.set('merge', merge)
     return merge
 }
 
@@ -22,13 +24,13 @@ function withDefaultOptions(options) {
     )
 }
 
-function preProcessRules(options, namedCommands, context) {
+function preProcessRules(context) {
     return R.map(function(rule) {
         return {
-            when: rule.when ? rule.when(options, namedCommands) : commands.test(R.T),
-            then: rule.then(options, namedCommands, context)
+            when: rule.when ? rule.when(context) : commands.test(R.T),
+            then: rule.then(context)
         }
-    }, options.config.rules)
+    }, context.get('options').config.rules)
 }
 
 function buildMerge(options, rules) {
