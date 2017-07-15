@@ -1,26 +1,15 @@
 # power-merge
 There are scores of merge libraries for node.js, but they all have hidden assumptions and surprises waiting to catch you out. For example
 
-1. Ramda merge doesn't clone sub documents which only exist in one of the input documents
-```
-var defaults = { ip: '192.168.1.100', port: 8080 }
-var overrides = {}
-
-var server = R.merge(defaults, overrides)
-server.port = 9090
-
-assert.equal(defaults.port, 9090)
-```
-
 1. Ramda merge unions arrays
-```
-R.merge({ a: [1, 2, 3], b: [3, 4, 5] }) === [ 1, 2, 3, 4, 5 ]
-```
+    ```
+    R.merge({ a: [1, 2, 3], b: [3, 4, 5] }) === [ 1, 2, 3, 4, 5 ]
+    ```
 
 1. Lodash merge mashes (for want of a better word) arrays
-```
-_.merge({ a: [1, 2, 3], b: [3, 4, 5, 6] }) === [ 1, 2, 3, 6 ]
-```
+    ```
+    _.merge({ a: [1, 2, 3], b: [3, 4, 5, 6] }) === [ 1, 2, 3, 6 ]
+    ```
 
 There are situations (e.g. when you want to union by) when the above behaviour wont do, e.g.
 
