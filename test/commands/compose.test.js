@@ -1,5 +1,6 @@
 var assert = require('chai').assert
 var union = require('../../lib/commands/union')
+var invoke = require('../../lib/commands/invoke')
 var compose = require('../../lib/commands/compose')
 var R = require('ramda')
 var Context = require('../../lib/Context')
@@ -10,13 +11,9 @@ describe('compose command', function() {
 
     it('should return the result of all functions', function() {
 
-        function reverse(a, b) {
-            return b - a
-        }
-
         var cmd = compose([
-            union()(context),
-            R.sort(reverse)
+            union(),
+            invoke(R.reverse)
         ])(context)
 
         var facts = {
