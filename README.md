@@ -4,12 +4,14 @@ There are scores of merge libraries for node.js, but they all have hidden assump
 1. Ramda merge unions arrays
     ```
     R.merge({ a: [1, 2, 3] }, { b: [3, 4, 5] })
+    // Output
     { a: [ 1, 2, 3, 4, 5 ] }
     ```
 
 1. Lodash merge mashes (for want of a better word) arrays
     ```
     _.merge({ a: [1, 2, 3] }, { a: [3, 4, 5, 6] })
+    // Output
     { a: [ 1, 2, 3, 6 ] }
     ```
 
@@ -25,6 +27,7 @@ merge(
         { ip: '192.168.1.200' }
     ] }
 )
+// Output
 { hosts: [
     { ip: '192.168.1.100' },
     { ip: '192.168.1.101' },
