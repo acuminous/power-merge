@@ -49,15 +49,11 @@ function merge(context, rules, args) {
         var b = args[i]
         for (var r = 0; r < rules.length; r++) {
             var rule = rules[r]
-            var path = context.get('path')
+            var node = context.get('node')
             var facts = {
                 a: { value: a, type: R.type(a) },
                 b: { value: b, type: R.type(b) },
-                node: {
-                    depth: path.length,
-                    path: path.join(context.get('options').pathSeparator),
-                    name: R.last(path)
-                }
+                node: node.getFacts()
             }
             if (!rule.when(context)(facts)) continue
             a = rule.then(context)(facts)
