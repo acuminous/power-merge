@@ -8,11 +8,9 @@ var Context = require('./lib/Context')
 
 function compile(_options, namedCommands) {
     var options = withDefaultOptions(_options)
-    var context = new Context({ namedCommands: namedCommands, options: options })
-    var rules = preProcessRules(context)
-    var partial = R.curry(merge)(rules)
-    context.set('merge', partial)
-    return withApiWrapper(partial, options)
+    var rules = preProcessRules(options.rules)
+    var context = new Context({ namedCommands: namedCommands, options: options, rules: rules })
+    return buildMerge(context)
 }
 
 function withDefaultOptions(options) {
@@ -22,13 +20,19 @@ function withDefaultOptions(options) {
     )
 }
 
-function preProcessRules(context) {
+function preProcessRules(rules) {
     return R.map(function(rule) {
         return {
-            when: rule.when ? rule.when(context) : commands.always(context),
-            then: rule.then(context)
+            when: rule.when ? rule.when() : commands.always(),
+            then: rule.then()
         }
-    }, context.get('options').rules)
+    }, rules)
+}
+
+function buildMerge(context, rules) {
+    var partial = R.curry(merge)(context, context.get('rules'))
+    context.set('merge', partial)
+    return withApiWrapper(partial, context.get('options'))
 }
 
 function withApiWrapper(fn, options) {
@@ -38,7 +42,7 @@ function withApiWrapper(fn, options) {
     return fn
 }
 
-function merge(rules, args) {
+function merge(context, rules, args) {
     if (args.length === 0) return
     if (args.length === 1) return args[0] // To clone or not to clone
 
@@ -49,10 +53,11 @@ function merge(rules, args) {
             var rule = rules[r]
             var facts = {
                 a: { value: a, type: R.type(a) },
-                b: { value: b, type: R.type(b) }
+                b: { value: b, type: R.type(b) },
+                depth: context.get('depth')
             }
-            if (!rule.when(facts)) continue
-            a = rule.then(facts)
+            if (!rule.when(context)(facts)) continue
+            a = rule.then(context)(facts)
             break
         }
     }
