@@ -75,17 +75,6 @@ const config = {
 
 const merge = pm.compile({ config })
 
-var defaults = {
-    poll: {
-        delay: '1m',
-        frequency: '10s',
-    },
-    hosts: [
-        { ip: '192.168.1.100', port: 8080 },
-        { ip: '192.168.1.101', port: 8080 }
-    ]
-}
-
 var custom = {
     poll: {
         delay: '30s',
@@ -97,7 +86,20 @@ var custom = {
     ]
 }
 
-console.log(merge(defaults, custom))
+var defaults = {
+    poll: {
+        delay: '1m',
+        frequency: '10s',
+    },
+    hosts: [
+        { ip: '192.168.1.100', port: 8080 },
+        { ip: '192.168.1.101', port: 8080 }
+    ]
+}
+
+console.log(merge(custom, defaults))
+
+// Output
 {
     poll: {
         delay: '30s',
@@ -112,6 +114,25 @@ console.log(merge(defaults, custom))
 ```
 
 ## Facts
+Facts is a document are passed to each `when` and `then` condition. The facts are...
+
+```js
+{
+    a: {
+        value: '30s',
+        type: 'String'
+    },
+    b: {
+        value: '1m',
+        type: 'String'
+    },
+    node: {
+        depth: 3,
+        name: 'delay',
+        path: 'poll.delay'
+    }
+```
+When conditions are used to check the facts. If they return true, the `then` condition will be executed. Then conditions typically reference, clone or decend into the a and/or b values.
 
 ## Commands
 
