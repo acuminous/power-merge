@@ -118,7 +118,7 @@ describe('Power Merge', function() {
             assert.equal(merge(1, 2), 3)
         })
 
-        it('should supply when condition with value facts', function() {
+        it('should provide when condition the value facts', function() {
             var merge = compile([{
                 when: pm.test(function(facts) {
                     assert.equal(facts.a.value, 1)
@@ -130,7 +130,7 @@ describe('Power Merge', function() {
             assert.equal(merge(1, 2), 3)
         })
 
-        it('should supply when condition with type facts', function() {
+        it('should provide when condition the type facts', function() {
             var merge = compile([{
                 when: pm.test(function(facts) {
                     assert.equal(facts.a.type, 'Number')
@@ -140,6 +140,22 @@ describe('Power Merge', function() {
                 then: pm.invoke(sum)
             }])
             assert.equal(merge(1, 2), 3)
+        })
+
+        it('should provide when condition the node facts', function() {
+            var merge = compile([{
+                when: pm.eq('b', 'node.name'),
+                then: pm.invoke(function(facts) {
+                    assert.equal(facts.node.name, 'b')
+                    assert.equal(facts.node.path, 'a.b')
+                    assert.equal(facts.node.depth, 2)
+                    return facts.a.value + facts.b.value
+                })
+            }, {
+                then: pm.recurse()
+            }])
+            var result = merge({ a: { b: 1 } }, { a: { b: 2 } })
+            assert.equal(result.a.b, 3)
         })
 
         it('should short circuit after invoking a rule', function() {

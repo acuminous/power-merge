@@ -14,7 +14,8 @@ describe('recurse command', function() {
         var cmd = recurse(context)
         var facts = {
             a: { value: { x: '1.1' } },
-            b: { value: { x: '2.1' } }
+            b: { value: { x: '2.1' } },
+            node: { depth: 1 }
         }
 
         var result = cmd(facts)
@@ -27,7 +28,8 @@ describe('recurse command', function() {
         var cmd = recurse(context)
         var facts = {
             a: { value: { x: '1.1' } },
-            b: { value: {} }
+            b: { value: {} },
+            node: { depth: 1 }
         }
 
         var result = cmd(facts)
@@ -40,7 +42,8 @@ describe('recurse command', function() {
         var cmd = recurse(context)
         var facts = {
             a: { value: {} },
-            b: { value: { x: '2.1' } }
+            b: { value: { x: '2.1' } },
+            node: { depth: 1 }
         }
 
         var result = cmd(facts)
