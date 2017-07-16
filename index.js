@@ -34,7 +34,7 @@ function buildMerge(context, rules) {
 }
 
 function withApiWrapper(fn, options) {
-    if (options.direction === 'right') fn = R.compose(fn, R.reverse)
+    if (options.direction === 'right-to-left') fn = R.compose(fn, R.reverse)
     if (options.variadic) fn = variadic(fn)
     if (options.async) fn = asyncify(fn)
     return fn

@@ -10,14 +10,14 @@ describe('Power Merge', function() {
     describe('API', function() {
 
         var permutations = [
-            { async: false, variadic: true, direction: 'left' },
-            { async: false, variadic: true, direction: 'right' },
-            { async: false, variadic: false, direction: 'left' },
-            { async: false, variadic: false, direction: 'right' },
-            { async: true, variadic: true, direction: 'left' },
-            { async: true, variadic: true, direction: 'right' },
-            { async: true, variadic: false, direction: 'left' },
-            { async: true, variadic: false, direction: 'right' }
+            { async: false, variadic: true, direction: 'left-to-right' },
+            { async: false, variadic: true, direction: 'right-to-left' },
+            { async: false, variadic: false, direction: 'left-to-right' },
+            { async: false, variadic: false, direction: 'right-to-left' },
+            { async: true, variadic: true, direction: 'left-to-right' },
+            { async: true, variadic: true, direction: 'right-to-left' },
+            { async: true, variadic: false, direction: 'left-to-right' },
+            { async: true, variadic: false, direction: 'right-to-left' }
         ]
 
         var data = [
@@ -42,7 +42,7 @@ describe('Power Merge', function() {
             var step = format('should support %s %s merges %s',
                 options.async ? 'asynchronous' : 'synchronous',
                 options.variadic ? 'variadic' : 'array',
-                options.direction === 'left' ? 'from left to right' : 'from right to left'
+                options.direction === 'left-to-right' ? 'from left to right' : 'from right to left'
             )
 
             var testFn = it
@@ -61,7 +61,7 @@ describe('Power Merge', function() {
                 var merge = pm.compile(options)
                 var original = R.clone(data)
 
-                if (options.direction === 'right') original.reverse()
+                if (options.direction === 'right-to-left') original.reverse()
                 var copy = R.clone(original)
 
                 var cb = function(err, result) {
