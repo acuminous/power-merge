@@ -29,6 +29,11 @@ module.exports = {
                     }))
                 ])
             },
+            // If the left value is null, ignore the attribute completely
+            {
+                when: pm.eq('a.value', null),
+                then: pm.ignore()
+            },
             // If the left value is undefined, clone the right
             {
                 when: pm.eq('a.value', undefined),
@@ -49,7 +54,8 @@ module.exports = {
             hosts: [
                 { ip: '192.168.1.100', port: 8080 },
                 { ip: '192.168.1.200', port: 8080 }
-            ]
+            ],
+            timeout: null
         },
         {
             poll: {
@@ -59,8 +65,9 @@ module.exports = {
             hosts: [
                 { ip: '192.168.1.100', port: 8080 },
                 { ip: '192.168.1.101', port: 8080 }
-            ]
-        },
+            ],
+            timeout: '1m'
+        }
     ],
     result: {
         poll: {
