@@ -9,8 +9,8 @@ module.exports = {
         rules: [
             {
                 when: pm.and([
-                    pm.eq('Array', ['a', 'type']),
-                    pm.eq('Array', ['b', 'type']),
+                    pm.eq('a.type', 'Array'),
+                    pm.eq('b.type', 'Array'),
                 ]),
                 then: pm.compose([
                     pm.unionWith(R.eqBy(R.prop('id'))),
@@ -20,7 +20,7 @@ module.exports = {
                 ])
             },
             {
-                then: pm.clone()
+                then: pm.clone('a.value')
             }
         ]
     },

@@ -9,17 +9,17 @@ module.exports = {
         rules: [
             {
                 when: pm.and([
-                    pm.eq('Object', ['a', 'type']),
-                    pm.eq('Object', ['b', 'type']),
+                    pm.eq('a.type', 'Object'),
+                    pm.eq('b.type', 'Object'),
                 ]),
                 then: pm.recurse()
             },
             {
-                when: pm.eq(undefined),
-                then: pm.clone(['b', 'value'])
+                when: pm.eq('a.value', undefined),
+                then: pm.clone('b.value')
             },
             {
-                then: pm.clone()
+                then: pm.clone('a.value')
             }
         ]
     },

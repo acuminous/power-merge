@@ -9,8 +9,8 @@ describe('or command', function() {
 
     it('should return the result of all commands', function() {
         var cmd = or([
-            eq(2, ['a', 'value']),
-            eq(1, ['b', 'value'])
+            eq('a.value', 2),
+            eq('b.value', 1)
         ])(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
@@ -26,7 +26,7 @@ describe('or command', function() {
 
     it('should short circuit when a command return true', function() {
         var cmd = or([
-            eq(1, ['a', 'value']),
+            eq('a.value', 1),
             function() {
                 throw new Error('Did not short circuit')
             }

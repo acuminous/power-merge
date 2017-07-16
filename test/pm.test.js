@@ -144,7 +144,7 @@ describe('Power Merge', function() {
 
         it('should provide when condition the node facts', function() {
             var merge = compile([{
-                when: pm.eq('b', 'node.name'),
+                when: pm.eq('node.name', 'b'),
                 then: pm.invoke(function(facts) {
                     assert.equal(facts.node.name, 'b')
                     assert.equal(facts.node.path, 'a.b')

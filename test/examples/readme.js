@@ -10,17 +10,17 @@ module.exports = {
             // Recurse into objects
             {
                 when: pm.and([
-                    pm.eq('Object', 'a.type'),
-                    pm.eq('Object', 'b.type')
+                    pm.eq('a.type', 'Object'),
+                    pm.eq('b.type', 'Object')
                 ]),
                 then: pm.recurse()
             },
             // Union an array of hosts by the 'ip' attribute
             {
                 when: pm.and([
-                    pm.eq('hosts', 'node.name'),
-                    pm.eq('Array', 'a.type'),
-                    pm.eq('Array', 'b.type')
+                    pm.eq('node.name', 'hosts'),
+                    pm.eq('a.type', 'Array'),
+                    pm.eq('b.type', 'Array')
                 ]),
                 then: pm.compose([
                     pm.unionWith(R.eqBy(R.prop('ip'))),
@@ -31,12 +31,12 @@ module.exports = {
             },
             // If the left value is undefined, clone the right
             {
-                when: pm.eq(undefined, 'a.value'),
+                when: pm.eq('a.value', undefined),
                 then: pm.clone('b.value')
             },
             // Otherwise clone the left
             {
-                then: pm.clone()
+                then: pm.clone('a.value')
             }
         ]
     },

@@ -9,8 +9,8 @@ describe('and command', function() {
 
     it('should return the result of all commands', function() {
         var cmd = and([
-            eq(1, ['a', 'value']),
-            eq(2, ['b', 'value'])
+            eq('a.value', 1),
+            eq('b.value', 2)
         ])(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
@@ -26,7 +26,7 @@ describe('and command', function() {
 
     it('should short circuit when a command return false', function() {
         var cmd = and([
-            eq(2, ['a', 'value']),
+            eq('a.value', 2),
             function() {
                 throw new Error('Did not short circuit')
             }

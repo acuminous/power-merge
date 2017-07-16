@@ -6,8 +6,8 @@ describe('reference command', function() {
 
     var context = new Context()
 
-    it('should reference "a" by default', function() {
-        var cmd = reference()(context)
+    it('should reference "a" using an array path', function() {
+        var cmd = reference(['a', 'value'])(context)
         var facts = {
             a: { value: { foo: 1 } },
             b: { value: { foo: 2 } }
@@ -18,8 +18,8 @@ describe('reference command', function() {
         assert.ok(result === facts.a.value)
     })
 
-    it('should reference "b" when specified', function() {
-        var cmd = reference(['b', 'value'])(context)
+    it('should reference "b" using a string path', function() {
+        var cmd = reference('b.value')(context)
         var facts = {
             a: { value: { foo: 1 } },
             b: { value: { foo: 2 } }
