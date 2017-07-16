@@ -1,5 +1,3 @@
-var odata = require('odata-v4-inmemory')
-var buildQuery = require('odata-query')
 var assert = require('chai').assert
 var R = require('ramda')
 var pm = require('..')
@@ -44,10 +42,10 @@ describe('Power Merge', function() {
             var step = format('should support %s %s merges %s',
                 options.async ? 'asynchronous' : 'synchronous',
                 options.variadic ? 'variadic' : 'array',
-                options.direction == 'left' ? 'from left to right' : 'from right to left'
+                options.direction === 'left' ? 'from left to right' : 'from right to left'
             )
 
-            testFn = it
+            var testFn = it
             if (options.only) testFn = it.only
             if (options.skip) testFn = it.skip
 
@@ -63,7 +61,7 @@ describe('Power Merge', function() {
                 var merge = pm.compile(options)
                 var original = R.clone(data)
 
-                if (options.direction == 'right') original.reverse()
+                if (options.direction === 'right') original.reverse()
                 var copy = R.clone(original)
 
                 var cb = function(err, result) {

@@ -1,6 +1,5 @@
 var assert = require('chai').assert
 var clone = require('../../lib/commands/clone')
-var R = require('ramda')
 var Context = require('../../lib/Context')
 
 describe('clone command', function() {

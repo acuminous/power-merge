@@ -1,6 +1,5 @@
 var assert = require('chai').assert
 var unionWith = require('../../lib/commands/unionWith')
-var R = require('ramda')
 var Context = require('../../lib/Context')
 
 describe('unionWith command', function() {
