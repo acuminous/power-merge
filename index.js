@@ -5,6 +5,7 @@ var variadic = require('variadic')
 var path = require('path')
 var commands = require('require-all')({ dirname: path.join(__dirname, 'lib', 'commands') })
 var Context = require('./lib/Context')
+var defaults = require('./lib/defaults')
 
 function compile(_options, namedCommands) {
     var options = withDefaultOptions(_options)
@@ -14,10 +15,7 @@ function compile(_options, namedCommands) {
 }
 
 function withDefaultOptions(options) {
-    return R.mergeDeepLeft(
-        options || {},
-        { async: false, variadic: true, direction: 'left', rules: [] }
-    )
+    return R.mergeDeepLeft(options || {}, defaults)
 }
 
 function preProcessRules(rules) {
@@ -51,10 +49,15 @@ function merge(context, rules, args) {
         var b = args[i]
         for (var r = 0; r < rules.length; r++) {
             var rule = rules[r]
+            var path = context.get('path')
             var facts = {
                 a: { value: a, type: R.type(a) },
                 b: { value: b, type: R.type(b) },
-                depth: context.get('depth')
+                node: {
+                    depth: path.length,
+                    path: path.join(context.get('options').pathSeparator),
+                    name: R.last(path)
+                }
             }
             if (!rule.when(context)(facts)) continue
             a = rule.then(context)(facts)
