@@ -93,7 +93,7 @@ describe('Power Merge', function() {
 
         it('should ignore rules that fail the when condition', function() {
             var merge = compile([{
-                when: pm.test(R.F),
+                when: pm.invoke(R.F),
                 then: pm.invoke(function() {
                     throw new Error('Should have been ignored')
                 })
@@ -103,7 +103,7 @@ describe('Power Merge', function() {
 
         it('should invoke rules that pass the when condition', function() {
             var merge = compile([{
-                when: pm.test(R.T),
+                when: pm.invoke(R.T),
                 then: pm.invoke(sum)
             }])
             assert.equal(merge(1, 2), 3)
@@ -118,7 +118,7 @@ describe('Power Merge', function() {
 
         it('should provide when condition the value facts', function() {
             var merge = compile([{
-                when: pm.test(function(facts) {
+                when: pm.invoke(function(facts) {
                     assert.equal(facts.a.value, 1)
                     assert.equal(facts.b.value, 2)
                     return true
@@ -130,7 +130,7 @@ describe('Power Merge', function() {
 
         it('should provide when condition the type facts', function() {
             var merge = compile([{
-                when: pm.test(function(facts) {
+                when: pm.invoke(function(facts) {
                     assert.equal(facts.a.type, 'Number')
                     assert.equal(facts.b.type, 'Number')
                     return true
@@ -158,11 +158,11 @@ describe('Power Merge', function() {
 
         it('should short circuit after invoking a rule', function() {
             var merge = compile([{
-                when: pm.test(R.T),
+                when: pm.invoke(R.T),
                 then: pm.invoke(sum)
             },
             {
-                when: pm.test(R.T),
+                when: pm.invoke(R.T),
                 then: pm.invoke(function() {
                     throw new Error('Should not have been invoked')
                 })

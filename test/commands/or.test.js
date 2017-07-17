@@ -11,17 +11,17 @@ describe('or command', function() {
         var cmd = or([
             eq('a.value', 2),
             eq('b.value', 1)
-        ])(context)
+        ])
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), false)
+        assert.equal(cmd(context, facts), false)
     })
 
     it('should return the result of no commands', function() {
-        var cmd = or([])(context)
+        var cmd = or([])
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), true)
+        assert.equal(cmd(context, facts), true)
     })
 
     it('should short circuit when a command return true', function() {
@@ -30,9 +30,9 @@ describe('or command', function() {
             function() {
                 throw new Error('Did not short circuit')
             }
-        ])(context)
+        ])
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), true)
+        assert.equal(cmd(context, facts), true)
     })
 })

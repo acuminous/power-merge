@@ -15,7 +15,7 @@ There are scores of merge libraries for node.js, but they all have hidden assump
     { a: [ 1, 2, 3, 6 ] }
     ```
 
-There are situations when the above behaviour wont do. What happens if I only want the left most array, or if I want the union on both arrays, based on a key? e.g.
+But what if I only want the left most array, or if I want the union on both arrays, based on a key? e.g.
 ```
 merge(
     { hosts: [
@@ -61,12 +61,17 @@ const config = {
             ]),
             then: pm.unionWith(R.eqBy(R.prop('ip')))
         },
-        // If the left value is undefined, clone the right
+        // If the "a" value is null, ignore the attribute altogether
+        {
+            when: pm.eq('a.value', null),
+            then: pm.ignore()
+        },
+        // If the "a" value is undefined, clone the "b" value
         {
             when: pm.eq('a.value', undefined),
             then: pm.clone('b.value')
         },
-        // Otherwise clone the left
+        // Otherwise clone the "a" value
         {
             then: pm.clone('a.value')
         }
@@ -113,7 +118,9 @@ console.log(merge(custom, defaults))
 }
 ```
 
-## Facts
+## How power-merge works
+
+### Facts
 Facts is a document are passed to each `when` and `then` condition. The facts are...
 
 ```js
@@ -132,11 +139,25 @@ Facts is a document are passed to each `when` and `then` condition. The facts ar
         path: 'poll.delay'
     }
 ```
-When conditions are used to check the facts. If they return true, the `then` condition will be executed. Then conditions typically reference, clone or decend into the a and/or b values.
+'when' conditions are used to check the facts. If they return true, the `then` condition will be executed. `then` conditions typically reference, clone or descend into the facts a and/or b values, but could also be written to perform operations upon any of the facts)
 
-## Commands
+### Context
+The context contains information about the current merge. It records the depth, current node name and path. It also contains a reference to the merge function that is used to recursively descend into objects or iterate over arrays. Unless you're writing your own commands, you won't need to know about the context.
 
-### Always
+### Commands
+Commands are the functions which operate on facts. You specify them in the `when` and `then` conditions. e.g.
+
+```
+{
+    when: pm.eq('a.value', 'foo'),
+    then: pm.clone('a.value')
+}
+```
+references two commands, `eq` and `clone`. The `eq` command takes two parameters, `path` and `value`. It uses the `path` to extract data from the facts and compares it to the `value`, returning true if they are equal, and false otherwise.
+
+The `clone` takes one parameter, `path`. It clones the data located at the specified`path` and returns it to the merge operation. Several commands are included with power-merge. Others such as [power-merge-odata](npmjs.org/package/power-merge-odata] are included in separate modules. It is also easy to write your own [custom commands](#custom-commands).
+
+#### Always
 Always execute the `then` command.
 ```
 {
@@ -146,7 +167,7 @@ Always execute the `then` command.
 ```
 Since `when` will default to `always`, you can achieve the same result by omitting the `when` clause altogether.
 
-### And
+#### And
 Boolean AND for combining multiple commands.
 ```
 {
@@ -157,5 +178,44 @@ Boolean AND for combining multiple commands.
     then: pm.clone()
 }
 ```
-### Clone
+#### Clone
 
+
+#### Custom Commands
+power-merge commands are easy to write, once you understand that they must be expressed as a  function which returns a function. The other function takes the command configuration parameters, the inner function takes the context and facts, e.g.
+
+```js
+var debug = require('debug')('power-merge:commands:stars')
+
+module.exports = function stars(path) {
+
+    return function(context, facts) {
+
+        var view = context.getView(path)
+
+        debug('path: %o, facts: %o', path, facts)
+        var result = '***' + view(facts) + '***'
+
+        debug('return: %o', result)
+        return result
+    }
+})
+```
+Unless you need to do some expensive setup such as compiling templates, the above can be simplified by currying...
+
+```js
+var debug = require('debug')('power-merge:commands:stars')
+var R = require('ramda')
+
+module.exports = R.curry(function stars(path, context, facts) {
+
+    var view = context.getView(path)
+
+    debug('path: %o, facts: %o', path, facts)
+    var result = '***' + view(facts) + '***'
+
+    debug('return: %o', result)
+    return result
+})
+
+```

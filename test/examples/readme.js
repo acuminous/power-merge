@@ -29,17 +29,17 @@ module.exports = {
                     }))
                 ])
             },
-            // If the left value is null, ignore the attribute completely
+            // If the "a" value is null, ignore the attribute completely
             {
                 when: pm.eq('a.value', null),
                 then: pm.ignore()
             },
-            // If the left value is undefined, clone the right
+            // If the "a" value is undefined, clone the "b" value
             {
                 when: pm.eq('a.value', undefined),
                 then: pm.clone('b.value')
             },
-            // Otherwise clone the left
+            // Otherwise clone the "a" value
             {
                 then: pm.clone('a.value')
             }

@@ -7,14 +7,14 @@ describe('odata command', function() {
     var context = new Context()
 
     it('should test facts with odata query', function() {
-        var cmd = odata('a/value eq 1')(context)
-        assert.equal(cmd({ a: { value: 1 } }), true)
-        assert.equal(cmd({ a: { value: 2 } }), false)
+        var cmd = odata('a/value eq 1')
+        assert.equal(cmd(context, { a: { value: 1 } }), true)
+        assert.equal(cmd(context, { a: { value: 2 } }), false)
     })
 
     it('should throw error on invalid queries', function() {
         assert.throws(function() {
-            odata('invalid(a/value)')(context)
+            odata('invalid(a/value)')
         }, /Unexpected character/)
     })
 

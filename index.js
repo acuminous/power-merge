@@ -21,8 +21,8 @@ function withDefaultOptions(options) {
 function preProcessRules(rules) {
     return R.map(function(rule) {
         return {
-            when: rule.when ? rule.when() : commands.always(),
-            then: rule.then()
+            when: rule.when ? rule.when : commands.always(),
+            then: rule.then
         }
     }, rules)
 }
@@ -55,8 +55,8 @@ function merge(context, rules, args) {
                 b: { value: b, type: R.type(b) },
                 node: node.getFacts()
             }
-            if (!rule.when(context)(facts)) continue
-            a = rule.then(context)(facts)
+            if (!rule.when(context, facts)) continue
+            a = rule.then(context, facts)
             break
         }
     }

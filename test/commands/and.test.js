@@ -11,17 +11,17 @@ describe('and command', function() {
         var cmd = and([
             eq('a.value', 1),
             eq('b.value', 2)
-        ])(context)
+        ])
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), true)
+        assert.equal(cmd(context, facts), true)
     })
 
     it('should return the result of no commands', function() {
-        var cmd = and([])(context)
+        var cmd = and([])
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), true)
+        assert.equal(cmd(context, facts), true)
     })
 
     it('should short circuit when a command return false', function() {
@@ -30,9 +30,9 @@ describe('and command', function() {
             function() {
                 throw new Error('Did not short circuit')
             }
-        ])(context)
+        ])
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), false)
+        assert.equal(cmd(context, facts), false)
     })
 })
