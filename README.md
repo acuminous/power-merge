@@ -350,6 +350,16 @@ Compares the value located at the given [path](#paths) with the second parameter
 }
 ```
 
+#### never
+Never execute the `then` command.
+```
+{
+    when: pm.never(),
+    then: pm.clone()
+}
+```
+Only useful for tests or to temporarily disable a rule.
+
 #### or
 Boolean OR multiple commands. e.g.
 ```
