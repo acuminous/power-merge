@@ -52,14 +52,6 @@ const R = require('ramda')
 
 const config = {
     rules: [
-        // Recurse into objects
-        {
-            when: pm.and([
-                pm.eq('a.type', 'Object'),
-                pm.eq('b.type', 'Object')
-            ]),
-            then: pm.recurse()
-        },
         // Union an array of hosts by the 'ip' attribute
         {
             when: pm.and([
@@ -68,6 +60,22 @@ const config = {
                 pm.eq('b.type', 'Array')
             ]),
             then: pm.unionWith(R.eqBy(R.prop('ip')))
+        },
+        // Recurse into objects
+        {
+            when: pm.and([
+                pm.eq('a.type', 'Object'),
+                pm.eq('b.type', 'Object')
+            ]),
+            then: pm.recurse()
+        },
+        // Iterate over arrays
+        {
+            when: pm.and([
+                pm.eq('a.type', 'Array'),
+                pm.eq('b.type', 'Array')
+            ]),
+            then: pm.iterate()
         },
         // If the "a" value is null, ignore the attribute altogether
         {
