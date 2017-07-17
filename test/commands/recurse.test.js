@@ -8,7 +8,7 @@ describe('recurse command', function() {
         return args[0] + '-' + args[1]
     }
 
-    it('should recuse using context when both keys are present', function() {
+    it('should recuse objects when both keys are present', function() {
         var context = new Context({ merge: concat })
 
         var cmd = recurse()
@@ -22,7 +22,7 @@ describe('recurse command', function() {
         assert.equal(result.x, '1.1-2.1')
     })
 
-    it('should recurse using context when key exists in a but not in b', function() {
+    it('should recurse objects when key exists in a but not in b', function() {
         var context = new Context({ merge: concat })
 
         var cmd = recurse()
@@ -36,7 +36,7 @@ describe('recurse command', function() {
         assert.equal(result.x, '1.1-undefined')
     })
 
-    it('should clone b when not in a', function() {
+    it('should recurse objects when key exists in b but not in a', function() {
         var context = new Context({ merge: concat })
 
         var cmd = recurse()

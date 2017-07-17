@@ -258,6 +258,18 @@ Invokes a named or inline function.
 }
 ```
 
+#### iterate
+Iterates over two arrays, merging each item. If the arrays are different lengths, overflowing items will be merged against undefined.
+```js
+{
+    when: pm.and([
+        pm.eq('a.type', 'Array'),
+        pm.eq('b.type', 'Array')
+    ]),
+    then: pm.iterate()
+}
+```
+
 #### matches
 Tests the value located at the given [path](#paths) against a regex.
 ```js
