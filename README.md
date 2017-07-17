@@ -131,9 +131,25 @@ console.log(merge(custom, defaults))
 ### API
 power-merge is intended to be configurable. In addition to the merge rules you can specify
 
-* a synchronous(default) or asynchronus interface.
+* a synchronous(default) or asynchronous interface.
 * whether the merge should be left-to-right(default) or right-to-left
 * whether the arguments should be varardic(default) or an array.
+
+var merge = pm.compile({
+    api: {
+        synchronous: false,
+        direction: 'right-to-left',
+        varardic: false
+    },
+    rules: []
+})
+
+merge([d, c, b, a], function(err, result) {
+    // profit
+})
+
+### Rules
+power-merge operates on an array of rules. A rule is comprised of zero or one `when` conditions and exactly one `then` condition. The `when` conditions are tested in order until one passes, after which the associated `then` condition is invoked. The result of the `then` condition will normally be the merge result, but could be a token to instruct the merge function to skip over the current node instead of merging it.
 
 ### Facts
 Facts is a document are passed to each `when` and `then` condition. The facts are...
