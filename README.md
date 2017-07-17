@@ -182,7 +182,7 @@ Boolean AND for combining multiple commands.
 
 
 #### Custom Commands
-power-merge commands are easy to write, once you understand that they must be expressed as a  function which returns a function. The other function takes the command configuration parameters, the inner function takes the context and facts, e.g.
+power-merge commands are easy to write, once you understand that they must be expressed as a function that returns a function. The outer function takes the command's configuration parameters, the inner function takes the context and facts, e.g.
 
 ```js
 var debug = require('debug')('power-merge:commands:stars')
@@ -218,4 +218,16 @@ module.exports = R.curry(function stars(path, context, facts) {
     return result
 })
 
+```
+Commands that should cause an attribute to be ignored, rather than merged should return the special `pm.noop` token. i.e.
+
+```js
+var debug = require('debug')('power-merge:commands:ignore')
+var R = require('ramda')
+var pm = require('pm')
+
+module.exports = R.curry(function ignore(context, facts) {
+    debug('facts: %o', facts)
+    return pm.noop
+})
 ```

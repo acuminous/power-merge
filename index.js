@@ -6,6 +6,7 @@ var path = require('path')
 var commands = require('require-all')({ dirname: path.join(__dirname, 'lib', 'commands') })
 var Context = require('./lib/Context')
 var defaults = require('./lib/defaults')
+var noop = require('./lib/noop')
 
 function compile(_options, namedCommands) {
     var options = withDefaultOptions(_options)
@@ -63,4 +64,4 @@ function merge(context, rules, args) {
     return a
 }
 
-module.exports = R.merge({ compile: compile }, commands)
+module.exports = R.merge({ compile: compile, noop: noop }, commands)
