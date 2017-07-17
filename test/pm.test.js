@@ -93,7 +93,7 @@ describe('Power Merge', function() {
 
         it('should ignore rules that fail the when condition', function() {
             var merge = compile([{
-                when: pm.invoke(R.F),
+                when: pm.never(),
                 then: pm.invoke(function() {
                     throw new Error('Should have been ignored')
                 }),
@@ -105,7 +105,7 @@ describe('Power Merge', function() {
 
         it('should invoke rules that pass the when condition', function() {
             var merge = compile([{
-                when: pm.invoke(R.T),
+                when: pm.always(),
                 then: pm.invoke(sum)
             }])
             assert.equal(merge(1, 2), 3)
@@ -160,11 +160,11 @@ describe('Power Merge', function() {
 
         it('should short circuit after invoking a rule', function() {
             var merge = compile([{
-                when: pm.invoke(R.T),
+                when: pm.always(),
                 then: pm.invoke(sum)
             },
             {
-                when: pm.invoke(R.T),
+                when: pm.always(),
                 then: pm.invoke(function() {
                     throw new Error('Should not have been invoked')
                 })
@@ -174,13 +174,42 @@ describe('Power Merge', function() {
 
         it('should error if no rules pass', function() {
             var merge = compile([{
-                when: pm.invoke(R.F),
+                when: pm.never(),
                 then: pm.invoke(sum)
             }])
             assert.throws(function() {
                 merge(1, 2)
             }, /No passing when condition/)
         })
+
+        it('should error asynchronously if no rules pass', function(done) {
+            var merge = pm.compile({
+                api: { async: true },
+                rules: [{
+                    when: pm.never(),
+                    then: pm.invoke(sum)
+                }]
+            })
+            merge(1, 2, function(err, result) {
+                assert.equal('No passing when condition for (1, 2)', err.message)
+                done()
+            })
+        })
+
+        it('should error asynchronously for thrown errors', function(done) {
+            var merge = pm.compile({
+                api: { async: true },
+                rules: [{
+                    when: pm.always(),
+                    then: pm.error('Oh Noes!')
+                }]
+            })
+            merge(1, 2, function(err, result) {
+                assert.equal('Oh Noes!', err.message)
+                done()
+            })
+        })
+
     })
 
     describe('Examples', function() {
