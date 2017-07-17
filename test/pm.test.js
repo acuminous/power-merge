@@ -96,7 +96,9 @@ describe('Power Merge', function() {
                 when: pm.invoke(R.F),
                 then: pm.invoke(function() {
                     throw new Error('Should have been ignored')
-                })
+                }),
+                when: pm.always(),
+                then: pm.ignore()
             }])
             merge(1, 2)
         })
@@ -168,6 +170,16 @@ describe('Power Merge', function() {
                 })
             }])
             assert.equal(merge(1, 2), 3)
+        })
+
+        it('should error if no rules pass', function() {
+            var merge = compile([{
+                when: pm.invoke(R.F),
+                then: pm.invoke(sum)
+            }])
+            assert.throws(function() {
+                merge(1, 2)
+            }, /No passing when condition/)
         })
     })
 

@@ -25,7 +25,10 @@ function preProcessRules(rules) {
             when: rule.when ? rule.when : commands.always(),
             then: rule.then
         }
-    }, rules)
+    }, rules).concat({
+        when: commands.always(),
+        then: commands.error('No passing when condition for ({{a.value}}, {{b.value}})')
+    })
 }
 
 function buildMerge(context, rules) {
