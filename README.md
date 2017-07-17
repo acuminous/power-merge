@@ -157,7 +157,7 @@ references two commands, `eq` and `clone`. The `eq` command takes two parameters
 
 The `clone` takes one parameter, `path`. It clones the data located at the specified`path` and returns it to the merge operation. Several commands are included with power-merge. Others such as [power-merge-odata](npmjs.org/package/power-merge-odata] are included in separate modules. It is also easy to write your own [custom commands](#custom-commands).
 
-#### Always
+#### always
 Always execute the `then` command.
 ```
 {
@@ -181,14 +181,12 @@ Boolean AND multiple commands. e.g.
 Clones the value specified by the [path](#paths) parameter using [Rambda's clone](ramdajs.com/docs/#clone) function.
 ```js
 {
-<<<<<<< HEAD
     then: pm.clone()
 }
 ```
 
 #### compose
 Composes a chain of commands so the output from one will be passed to the next. This is useful post processing tasks such as sorting arrays, e.g.
-=======
     then: pm.clone('a.value')
 }
 ```
@@ -236,6 +234,22 @@ Throws an error constructed from the given [hogan.js](npm.org/package/hogan.js) 
 }
 ```
 
+#### gt
+Compares the value located at the given [path](#paths) with the second parameter, returning true if it is greater and false otherwise
+```js
+{
+    when: pm.gt('a.value', 10)
+}
+```
+
+#### gte
+Compares the value located at the given [path](#paths) with the second parameter, returning true if it is greater or equal and false otherwise
+```js
+{
+    when: pm.gte('a.value', 10)
+}
+```
+
 #### ignore
 Ignores a part of the document, e.g.
 ```js
@@ -267,6 +281,22 @@ Iterates over two arrays, merging each item. If the arrays are different lengths
         pm.eq('b.type', 'Array')
     ]),
     then: pm.iterate()
+}
+```
+
+#### lt
+Compares the value located at the given [path](#paths) with the second parameter, returning true if it is less and false otherwise
+```js
+{
+    when: pm.gt('a.value', 10)
+}
+```
+
+#### lte
+Compares the value located at the given [path](#paths) with the second parameter, returning true if it is less or equal and false otherwise
+```js
+{
+    when: pm.gte('a.value', 10)
 }
 ```
 
