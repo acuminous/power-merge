@@ -12,6 +12,9 @@
   "keywords": [
     "merge",
     "clone",
+    "recurive",
+    "deep",
+    "arrays",
     "configurable"
   ],
   "author": "Stephen Cresswell",
@@ -29,8 +32,6 @@
     "async.asyncify": "^0.5.2",
     "debug": "^2.6.8",
     "hogan.js": "^3.0.2",
-    "odata-query": "^3.3.5",
-    "odata-v4-inmemory": "^0.1.7",
     "ramda": "^0.24.1",
     "require-all": "^2.2.0",
     "variadic": "^1.0.1"

@@ -1,4 +1,12 @@
 # power-merge
+
+[![NPM version](https://img.shields.io/npm/v/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
+[![NPM downloads](https://img.shields.io/npm/dm/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
+[![Build Status](https://img.shields.io/travis/guidesmiths/power-merge/master.svg)](https://travis-ci.org/guidesmiths/power-merge)
+[![Code Style](https://img.shields.io/badge/code%20style-imperative-brightgreen.svg)](https://github.com/guidesmiths/eslint-config-imperative)
+[![Dependency Status](https://david-dm.org/guidesmiths/power-merge.svg)](https://david-dm.org/guidesmiths/power-merge)
+[![devDependencies Status](https://david-dm.org/guidesmiths/power-merge/dev-status.svg)](https://david-dm.org/guidesmiths/power-merge?type=dev)
+
 There are scores of merge libraries for node.js, but they all have hidden assumptions and surprises waiting to catch you out. For example:
 
 1. Ramda merge unions arrays
@@ -36,7 +44,7 @@ merge(
 ```
 power-merge puts you in charge of your merge rules, making it easy to specify custom merge behaviour for any property within your documents.
 
-## tldr;
+## TL;DR
 ```js
 const pm = require('power-merge')
 const R = require('ramda')
@@ -119,6 +127,13 @@ console.log(merge(custom, defaults))
 ```
 
 ## How power-merge works
+
+### API
+power-merge is intended to be configurable. In addition to the merge rules you can specify
+
+* a synchronous(default) or asynchronus interface.
+* whether the merge should be left-to-right(default) or right-to-left
+* whether the arguments should be varardic(default) or an array.
 
 ### Facts
 Facts is a document are passed to each `when` and `then` condition. The facts are...

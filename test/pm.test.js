@@ -49,7 +49,7 @@ describe('Power Merge', function() {
             if (options.only) testFn = it.only
             if (options.skip) testFn = it.skip
 
-            options.rules = [
+            var rules = [
                 {
                     then: pm.invoke(function mdl(facts) {
                         return R.mergeDeepLeft(facts.a.value, facts.b.value)
@@ -58,7 +58,7 @@ describe('Power Merge', function() {
             ]
 
             testFn(step, function(done) {
-                var merge = pm.compile(options)
+                var merge = pm.compile({ api: options, rules: rules })
                 var original = R.clone(data)
 
                 if (options.direction === 'right-to-left') original.reverse()

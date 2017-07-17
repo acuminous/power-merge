@@ -3,9 +3,11 @@ var R = require('ramda')
 
 module.exports = {
     config: {
-        async: false,
-        variadic: false,
-        direction: 'left',
+        api: {
+            async: false,
+            variadic: false,
+            direction: 'left-to-right'
+        },
         rules: [
             // Recurse into objects
             {

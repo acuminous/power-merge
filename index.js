@@ -31,7 +31,7 @@ function preProcessRules(rules) {
 function buildMerge(context, rules) {
     var partial = R.curry(merge)(context, context.get('rules'))
     context.set('merge', partial)
-    return withApiWrapper(partial, context.get('options'))
+    return withApiWrapper(partial, context.get('options').api)
 }
 
 function withApiWrapper(fn, options) {
