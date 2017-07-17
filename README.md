@@ -295,14 +295,32 @@ Ignores a part of the document, e.g.
 #### invoke
 Invokes a named or inline function.
 ```js
-{
-    when: pm.invoke(function(facts) {
+var options = {
+    rules: [
+        // inline
+        {
+            when: pm.invoke(function(facts) {
+                return facts.value.a === 'yes'
+            }),
+            then: pm.invoke(function(facts) {
+                return true
+            })
+        },
+        // named
+        {
+            when: pm.invoke('yes'),
+            then: pm.invoke('truism')
+        }
+    ]
+}
+merge.compile(options, {
+    yes: function(facts) {
         return facts.value.a === 'yes'
     }),
-    then: pm.invoke(function(facts) {
+    truism: function(facts) {
         return true
-    })
-}
+    }
+})
 ```
 
 #### iterate
