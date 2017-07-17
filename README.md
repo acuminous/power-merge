@@ -181,7 +181,15 @@ Boolean AND multiple commands. e.g.
 Clones the value specified by the [path](#paths) parameter using [Rambda's clone](ramdajs.com/docs/#clone) function.
 ```js
 {
+<<<<<<< HEAD
     then: pm.clone()
+}
+```
+
+#### compose
+Composes a chain of commands so the output from one will be passed to the next. This is useful post processing tasks such as sorting arrays, e.g.
+=======
+    then: pm.clone('a.value')
 }
 ```
 
@@ -212,7 +220,7 @@ Useful for debuging output to the consule while developing your merge rules, how
 ```
 
 #### eq
-Compares the value located at the given path, with another value.
+Compares the value located at the given [path](#paths) with the second parameter, returning true if they are equal and false otherwise
 
 ```js
 {
@@ -246,6 +254,80 @@ Invokes a named or inline function.
     }),
     then: pm.invoke(function(facts) {
         return true
+    })
+}
+```
+
+#### matches
+Tests the value located at the given [path](#paths) against a regex.
+```js
+{
+    when: pm.matches('a.value', /foo/i)
+}
+```
+
+#### ne
+Compares the value located at the given [path](#paths) with the second parameter, returning false if they are equal and true otherwise
+
+```js
+{
+    when: pm.eq('a.type', 'Number')
+}
+```
+
+#### or
+Boolean OR multiple commands. e.g.
+```
+{
+    when: pm.or([
+        pm.eq('a.type', 'String'),
+        pm.eq('a.type', 'Number')
+    ])
+}
+```
+
+#### recurse
+Recursively merge the attributes of "a" and "b". Only sensible when both "a" and "b" are objects (use the [iterate](#iterate) command to recurively merge two arrays).
+```
+{
+    when: pm.and([
+        pm.eq('a.type', 'Object'),
+        pm.eq('b.type', 'Object')
+    ]),
+    then: pm.recurse()
+}
+```
+
+#### reference
+References the value specified by the [path](#paths) parameter.
+```js
+{
+    then: pm.reference('a.value')
+}
+```
+
+#### union
+Union the "a" and "b" values using [Ramda's union](ramdajs.com/docs/#lensPath) function (which also dedupes). Only sensible when both "a" and "b" are arrays.
+```js
+{
+    when: pm.and([
+        pm.eq('a.type', 'Array'),
+        pm.eq('b.type', 'Array')
+    ]),
+    then: pm.union()
+}
+```
+
+#### unionWith
+Union the "a" and "b" values using [Ramda's unionWith](ramdajs.com/docs/#lensPath) function (which dedupes based on the result of the given function). Only sensible when both "a" and "b" are arrays.
+```js
+{
+    when: pm.and([
+        pm.eq('a.type', 'Array'),
+        pm.eq('b.type', 'Array')
+    ]),
+    then: pm.unionWith(function(v) {
+        return v.id
     })
 }
 ```
