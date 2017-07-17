@@ -153,7 +153,7 @@ Commands are the functions which operate on facts. You specify them in the `when
     then: pm.clone('a.value')
 }
 ```
-references two commands, `eq` and `clone`. The `eq` command takes two parameters, `path` and `value`. It uses the `path` to extract data from the facts and compares it to the `value`, returning true if they are equal, and false otherwise.
+references two commands, `eq` and `clone`. The `eq` command takes two parameters, `path` and `value`. It uses the `path` to extract data from the [facts](#facts) and compares it to the `value`, returning true if they are equal, and false otherwise.
 
 The `clone` takes one parameter, `path`. It clones the data located at the specified`path` and returns it to the merge operation. Several commands are included with power-merge. Others such as [power-merge-odata](npmjs.org/package/power-merge-odata] are included in separate modules. It is also easy to write your own [custom commands](#custom-commands).
 
@@ -167,22 +167,91 @@ Always execute the `then` command.
 ```
 Since `when` will default to `always`, you can achieve the same result by omitting the `when` clause altogether.
 
-#### And
-Boolean AND for combining multiple commands.
+#### and
+Boolean AND multiple commands. e.g.
 ```
 {
     when: pm.and([
-        pm.eq('String', ['a', 'type']),
-        pm.eq('String', ['b', 'type']),
-    ]),
+        pm.eq('a.type', 'String'),
+        pm.eq('b.type', 'String')
+    ])
+}
+```
+#### clone
+Clones the value specified by the [path](#paths) parameter using [Rambda's clone](ramdajs.com/docs/#clone) function.
+```js
+{
     then: pm.clone()
 }
 ```
-#### Clone
 
+#### compose
+Composes a chain of commands so the output from one will be passed to the next. This is useful post processing tasks such as sorting arrays, e.g.
+```js
+{
+    when: pm.and([
+        pm.eq('a.type', 'Array'),
+        pm.eq('b.type', 'Array')
+    ]),
+    then: pm.compose([
+        pm.union(),
+        pm.invoke(R.sort(function(a, b) {
+            return a.localeCompare(b.ip)
+        }))
+    ])
+}
+```
 
-#### Custom Commands
-power-merge commands are easy to write, once you understand that they must be expressed as a function that returns a function. The outer function takes the command's configuration parameters, the inner function takes the context and facts, e.g.
+#### debug
+Useful for debuging output to the consule while developing your merge rules, however use with care since this command will also cause the current node to be omitted from the merged document. The first parameter is a [hogan.js](npm.org/package/hogan.js) template, the second (optional) parameter is a logger in case you want to direct output somewhere other than the console.
+
+```js
+{
+    then: pm.debug('A: {{value.a}}, B: {{value.b}}')
+}
+```
+
+#### eq
+Compares the value located at the given path, with another value.
+
+```js
+{
+    when: pm.eq('a.type', 'Number')
+}
+```
+
+#### error
+Throws an error constructed from the given [hogan.js](npm.org/package/hogan.js) template
+```js
+{
+    then: pm.err('Boom! A: {{value.a}}, B: {{value.b}}')
+}
+```
+
+#### ignore
+Ignores a part of the document, e.g.
+```js
+{
+    when: pm.eq('a.value', 'do-not-want')
+    then: pm.ignore()
+}
+```
+
+#### invoke
+Invokes a named or inline function.
+```js
+{
+    when: pm.invoke(function(facts) {
+        return facts.value.a === 'yes'
+    }),
+    then: pm.invoke(function(facts) {
+        return true
+    })
+}
+```
+
+### Custom Commands
+power-merge commands are easy to write, once you understand that they must be expressed as a function that returns a function. The outer function takes the command's configuration parameters, the inner function takes the [context](#context) and [facts](#facts), e.g.
 
 ```js
 var debug = require('debug')('power-merge:commands:stars')
@@ -230,4 +299,20 @@ module.exports = R.curry(function ignore(context, facts) {
     debug('facts: %o', facts)
     return pm.noop
 })
+```
+
+### Paths
+Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array or use the power-merge `pathSeparator` option to change the separator, e.g.
+
+```js
+var merge = pm.compile({ pathSeparator: '/', rules: [
+    when: pm.eq('a/value', 'foo'),
+    then: pm.ignore()
+]})
+```
+
+### Debugging
+power-merge uses [debug](npm.org/package/debug). You can enable as follows...
+```
+DEBUG='power-merge:*' node your-application.js
 ```
