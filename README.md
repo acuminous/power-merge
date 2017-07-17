@@ -313,7 +313,7 @@ var options = {
         }
     ]
 }
-merge.compile(options, {
+var merge = pm.compile(options, {
     yes: function(facts) {
         return facts.value.a === 'yes'
     }),
