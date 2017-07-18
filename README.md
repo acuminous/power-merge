@@ -45,8 +45,7 @@ merge(
 power-merge puts you in charge of your merge rules, making it easy to specify custom merge behaviour for any property within your documents.
 
 ## Caveats
-* Depending on how you configure the merge rules (referencing / recursing / cloning), power-merge may be very slow for large documents
-
+* Depending on how you configure the merge rules (referencing / recursing / cloning), power-merge may be very slow and use considerable system resources when processing for large documents
 
 ## TL;DR
 ```js
