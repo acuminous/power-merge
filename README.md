@@ -199,7 +199,7 @@ Facts is a document are passed to each `when` and `then` condition. The facts ar
 The context contains information about the current merge. It records the depth, current node name and path. It also contains a reference to the merge function that is used to recursively descend into objects or iterate over arrays. Unless you're writing your own commands, you won't need to know about the context.
 
 ### Commands
-Commands are the functions which operate on facts. You specify them in the `when` and `then` conditions. e.g.
+Commands are the functions which operate on [facts](#facts). You specify them in the `when` and `then` conditions. e.g.
 
 ```
 {
