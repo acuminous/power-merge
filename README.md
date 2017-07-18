@@ -201,9 +201,9 @@ The context contains information about the current merge. It records the depth, 
 ### Commands
 Commands are the functions which operate on [facts](#facts). You specify them in the `when` and `then` conditions. e.g.
 
-```
+```js
 {
-js    when: pm.eq('a.value', 'foo'),
+    when: pm.eq('a.value', 'foo'),
     then: pm.clone('a.value')
 }
 ```
