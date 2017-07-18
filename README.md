@@ -96,7 +96,7 @@ const rules = [
 ```js
 const merge = pm.compile({ rules })
 ```
-### 3. Merge the data    
+### 3. Merge the data
 ```js
 const a = {
     poll: {
@@ -162,7 +162,7 @@ merge([d, c, b, a], function(err, result) {
 ```
 
 ### Rules
-power-merge operates on an array of rules. A rule is comprised of zero or one `when` conditions and exactly one `then` condition. 
+power-merge operates on an array of rules. A rule is comprised of zero or one `when` conditions and exactly one `then` condition.
 
 ```js
 const rules = [{
@@ -203,7 +203,7 @@ Commands are the functions which operate on [facts](#facts). You specify them in
 
 ```
 {
-    when: pm.eq('a.value', 'foo'),
+js    when: pm.eq('a.value', 'foo'),
     then: pm.clone('a.value')
 }
 ```
@@ -213,7 +213,7 @@ The `clone` takes one parameter, `path`. It clones the data located at the speci
 
 #### always
 Always execute the `then` command.
-```
+```js
 {
     when: pm.always(),
     then: pm.clone()
@@ -223,7 +223,7 @@ Since `when` will default to `always`, you can achieve the same result by omitti
 
 #### and
 Boolean AND multiple commands. e.g.
-```
+```js
 {
     when: pm.and([
         pm.eq('a.type', 'String'),
@@ -268,7 +268,6 @@ Useful for debuging output to the consule while developing your merge rules, how
 
 #### eq
 Compares the value located at the given [path](#paths) with the second parameter, returning true if they are equal and false otherwise
-
 ```js
 {
     when: pm.eq('a.type', 'Number')
@@ -377,7 +376,6 @@ Tests the value located at the given [path](#paths) against a regex.
 
 #### ne
 Compares the value located at the given [path](#paths) with the second parameter, returning false if they are equal and true otherwise
-
 ```js
 {
     when: pm.eq('a.type', 'Number')
@@ -386,7 +384,7 @@ Compares the value located at the given [path](#paths) with the second parameter
 
 #### never
 Never execute the `then` command.
-```
+```js
 {
     when: pm.never(),
     then: pm.clone()
@@ -396,7 +394,7 @@ Only useful for tests or to temporarily disable a rule.
 
 #### or
 Boolean OR multiple commands. e.g.
-```
+```js
 {
     when: pm.or([
         pm.eq('a.type', 'String'),
@@ -407,7 +405,7 @@ Boolean OR multiple commands. e.g.
 
 #### recurse
 Recursively merge the attributes of "a" and "b". Only sensible when both "a" and "b" are objects (use the [iterate](#iterate) command to recurively merge two arrays).
-```
+```js
 {
     when: pm.and([
         pm.eq('a.type', 'Object'),
@@ -503,9 +501,8 @@ Even without expensive setup, currying does have incur a minor performance penal
 
 ### Paths
 Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](http://ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array, e.g.
-
 ```js
-{ 
+{
     when: pm.eq(['a', 'value'], 'nothing to see here'),
     then: pm.ignore()
 }
