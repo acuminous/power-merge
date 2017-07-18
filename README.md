@@ -23,8 +23,8 @@ But what if I only want the left most array, or if I want the union on both arra
 ```js
 merge(
     { hosts: [
-        { ip: '192.168.1.100', port: 8080 },
-        { ip: '192.168.1.101', port: 8080 }
+        { ip: '192.168.1.100', port: 9090 },
+        { ip: '192.168.1.101', port: 9090 }
     ] },
     { hosts: [
         { ip: '192.168.1.100', port: 8080 },
@@ -34,8 +34,8 @@ merge(
 
 // Output
 { hosts: [
-    { ip: '192.168.1.100', port: 8080 },
-    { ip: '192.168.1.101', port: 8080 },
+    { ip: '192.168.1.100', port: 9090 },
+    { ip: '192.168.1.101', port: 9090 },
     { ip: '192.168.1.200', port: 8080 }
 ] }
 ```
