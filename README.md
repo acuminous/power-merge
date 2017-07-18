@@ -233,7 +233,7 @@ Boolean AND multiple commands. e.g.
 ```
 
 #### clone
-Clones the value specified by the [path](#paths) parameter using [Rambda's clone](https://ramdajs.com/docs/#clone) function.
+Clones the value specified by the [path](#paths) parameter using [Ramda's clone](http://ramdajs.com/docs/#clone) function.
 ```js
 {
     then: pm.clone()
@@ -426,7 +426,7 @@ References the value specified by the [path](#paths) parameter.
 ```
 
 #### union
-Union the "a" and "b" values using [Ramda's union](https://ramdajs.com/docs/#lensPath) function (which also dedupes). Only sensible when both "a" and "b" are arrays.
+Union the "a" and "b" values using [Ramda's union](http://ramdajs.com/docs/#lensPath) function (which also dedupes). Only sensible when both "a" and "b" are arrays.
 ```js
 {
     when: pm.and([
@@ -438,7 +438,7 @@ Union the "a" and "b" values using [Ramda's union](https://ramdajs.com/docs/#len
 ```
 
 #### unionWith
-Union the "a" and "b" values using [Ramda's unionWith](https://ramdajs.com/docs/#lensPath) function (which dedupes based on the result of the given function). Only sensible when both "a" and "b" are arrays.
+Union the "a" and "b" values using [Ramda's unionWith](http://ramdajs.com/docs/#lensPath) function (which dedupes based on the result of the given function). Only sensible when both "a" and "b" are arrays.
 ```js
 {
     when: pm.and([
@@ -502,7 +502,7 @@ module.exports = R.curry(function highlight(str, context, facts) {
 Even without expensive setup, currying does have incur a minor performance penalty. It can also make it harder to realise you've forgotten to pass one of the configuration parameters to the command.
 
 ### Paths
-Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](https://ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array or use the power-merge `pathSeparator` option to change the separator, e.g.
+Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](http://ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array or use the power-merge `pathSeparator` option to change the separator, e.g.
 
 ```js
 var merge = pm.compile({ pathSeparator: '/', rules: [
