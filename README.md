@@ -474,7 +474,6 @@ module.exports = function log(text) {
     }
 })
 ```
-
 Unless you need to do some expensive setup such as compiling templates, the above can be simplified by currying...
 
 ```js
