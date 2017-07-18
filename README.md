@@ -2,10 +2,10 @@
 
 [![NPM version](https://img.shields.io/npm/v/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
 [![NPM downloads](https://img.shields.io/npm/dm/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
-[![Build Status](https://img.shields.io/travis/guidesmiths/power-merge/master.svg)](https://travis-ci.org/guidesmiths/power-merge)
-[![Code Style](https://img.shields.io/badge/code%20style-imperative-brightgreen.svg)](https://github.com/guidesmiths/eslint-config-imperative)
-[![Dependency Status](https://david-dm.org/guidesmiths/power-merge.svg)](https://david-dm.org/guidesmiths/power-merge)
-[![devDependencies Status](https://david-dm.org/guidesmiths/power-merge/dev-status.svg)](https://david-dm.org/guidesmiths/power-merge?type=dev)
+[![Build Status](https://img.shields.io/travis/cressie176/power-merge/master.svg)](https://travis-ci.org/cressie176/power-merge)
+[![Code Style](https://img.shields.io/badge/code%20style-imperative-brightgreen.svg)](https://github.com/cressie176/eslint-config-imperative)
+[![Dependency Status](https://david-dm.org/cressie176/power-merge.svg)](https://david-dm.org/cressie176/power-merge)
+[![devDependencies Status](https://david-dm.org/cressie176/power-merge/dev-status.svg)](https://david-dm.org/cressie176/power-merge?type=dev)
 
 There are scores of merge libraries for node.js, but they all have hidden assumptions and surprises waiting to catch you out. For example:
 
