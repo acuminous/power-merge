@@ -9,15 +9,15 @@
 
 There are scores of merge libraries for node.js, but they all have hidden assumptions and surprises waiting to catch you out. For example:
 
-1. Ramda merge unions arrays
-    ```js
-    R.merge({ a: [1, 2, 3] }, { b: [3, 4, 5] })         // { a: [ 1, 2, 3, 4, 5 ] }
-    ```
+Ramda merge unions arrays
+```js
+R.merge({ a: [1, 2, 3] }, { b: [3, 4, 5] })         // { a: [ 1, 2, 3, 4, 5 ] }
+```
 
-1. Lodash merge mashes (for want of a better word) arrays
-    ```js
-    _.merge({ a: [1, 2, 3] }, { a: [3, 4, 5, 6] })      // { a: [ 1, 2, 3, 6 ] }
-    ```
+Lodash merge mashes (for want of a better word) arrays
+```js
+_.merge({ a: [1, 2, 3] }, { a: [3, 4, 5, 6] })      // { a: [ 1, 2, 3, 6 ] }
+```
 
 But what if I only want the left most array, or if I want the union on both arrays, based on a key? e.g.
 ```js
