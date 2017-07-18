@@ -35,5 +35,16 @@
     "ramda": "^0.24.1",
     "require-all": "^2.2.0",
     "variadic": "^1.0.1"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cressie176/power-merge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cressie176/power-merge/issues"
+  },
+  "homepage": "https://github.com/cressie176/power-merge#readme"
 }
