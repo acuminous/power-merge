@@ -460,6 +460,22 @@ module.exports = function highlight(str) {
     }
 })
 ```
+Commands that should cause an attribute to be ignored, rather than merged should return the special `pm.noop` token. i.e.
+
+```js
+var debug = require('debug')('power-merge:commands:log')
+var noop = require('pm').noop
+
+module.exports = function log(text) {
+
+    return function(context, facts) {
+        debug('path: %o, facts: %o', path, facts)
+        console.log(text)
+        return noop
+    }
+})
+```
+
 Unless you need to do some expensive setup such as compiling templates, the above can be simplified by currying...
 
 ```js
@@ -474,22 +490,8 @@ module.exports = R.curry(function highlight(str, context, facts) {
     debug('return: %o', result)
     return result
 })
-
+```
 Even without expensive setup, currying does have incur a minor performance penalty. It can also make it harder to realise you've forgotten to pass one of the configuration parameters to the command.
-
-```
-Commands that should cause an attribute to be ignored, rather than merged should return the special `pm.noop` token. i.e.
-
-```js
-var debug = require('debug')('power-merge:commands:ignore')
-var R = require('ramda')
-var pm = require('pm')
-
-module.exports = R.curry(function ignore(context, facts) {
-    debug('facts: %o', facts)
-    return pm.noop
-})
-```
 
 ### Paths
 Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array or use the power-merge `pathSeparator` option to change the separator, e.g.
