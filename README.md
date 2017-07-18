@@ -27,19 +27,19 @@ But what if I only want the left most array, or if I want the union on both arra
 ```
 merge(
     { hosts: [
-        { ip: '192.168.1.100' },
-        { ip: '192.168.1.101' }
+        { ip: '192.168.1.100', port: 8080 },
+        { ip: '192.168.1.101', port: 8080 }
     ] },
     { hosts: [
-        { ip: '192.168.1.100' },
-        { ip: '192.168.1.200' }
+        { ip: '192.168.1.100', port: 8080 },
+        { ip: '192.168.1.200', port: 8080 }
     ] }
 )
 // Output
 { hosts: [
-    { ip: '192.168.1.100' },
-    { ip: '192.168.1.101' },
-    { ip: '192.168.1.200' }
+    { ip: '192.168.1.100', port: 8080 },
+    { ip: '192.168.1.101', port: 8080 },
+    { ip: '192.168.1.200', port: 8080 }
 ] }
 ```
 power-merge puts you in charge of your merge rules, making it easy to specify custom merge behaviour for any property within your documents.
