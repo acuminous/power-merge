@@ -48,58 +48,60 @@ power-merge puts you in charge of your merge rules, making it easy to specify cu
 * Depending on how you configure the merge rules (referencing / recursing / cloning), power-merge may be very slow and use considerable system resources when processing for large documents
 
 ## TL;DR
+### 1. Define the rules
 ```js
 const pm = require('power-merge')
 const R = require('ramda')
 
-
-const config = {
-    rules: [
-        // Union an array of hosts by the 'ip' attribute
-        {
-            when: pm.and([
-                pm.eq('node.name', 'hosts'),
-                pm.eq('a.type', 'Array'),
-                pm.eq('b.type', 'Array')
-            ]),
-            then: pm.unionWith(R.eqBy(R.prop('ip')))
-        },
-        // Recurse into objects
-        {
-            when: pm.and([
-                pm.eq('a.type', 'Object'),
-                pm.eq('b.type', 'Object')
-            ]),
-            then: pm.recurse()
-        },
-        // Iterate over arrays
-        {
-            when: pm.and([
-                pm.eq('a.type', 'Array'),
-                pm.eq('b.type', 'Array')
-            ]),
-            then: pm.iterate()
-        },
-        // If the "a" value is null, ignore the attribute altogether
-        {
-            when: pm.eq('a.value', null),
-            then: pm.ignore()
-        },
-        // If the "a" value is undefined, clone the "b" value
-        {
-            when: pm.eq('a.value', undefined),
-            then: pm.clone('b.value')
-        },
-        // Otherwise clone the "a" value
-        {
-            then: pm.clone('a.value')
-        }
-    ]
-})
-
-const merge = pm.compile({ config })
-
-var custom = {
+const rules = [
+    // Union an array of hosts by the 'ip' attribute
+    {
+        when: pm.and([
+            pm.eq('node.name', 'hosts'),
+            pm.eq('a.type', 'Array'),
+            pm.eq('b.type', 'Array')
+        ]),
+        then: pm.unionWith(R.eqBy(R.prop('ip')))
+    },
+    // Recurse into objects
+    {
+        when: pm.and([
+            pm.eq('a.type', 'Object'),
+            pm.eq('b.type', 'Object')
+        ]),
+        then: pm.recurse()
+    },
+    // Iterate over arrays
+    {
+        when: pm.and([
+            pm.eq('a.type', 'Array'),
+            pm.eq('b.type', 'Array')
+        ]),
+        then: pm.iterate()
+    },
+    // If the "a" value is null, ignore the attribute altogether
+    {
+        when: pm.eq('a.value', null),
+        then: pm.ignore()
+    },
+    // If the "a" value is undefined, clone the "b" value
+    {
+        when: pm.eq('a.value', undefined),
+        then: pm.clone('b.value')
+    },
+    // Otherwise clone the "a" value
+    {
+        then: pm.clone('a.value')
+    }
+]
+```
+### 2. Compile the rules
+```js
+const merge = pm.compile({ rules })
+```
+### 3. Merge the data    
+```js
+const a = {
     poll: {
         delay: '30s',
         frequency: '5s',
@@ -110,7 +112,7 @@ var custom = {
     ]
 }
 
-var defaults = {
+const b = {
     poll: {
         delay: '1m',
         frequency: '10s',
@@ -121,9 +123,10 @@ var defaults = {
     ]
 }
 
-console.log(merge(custom, defaults))
-
-// Output
+const result = merge(a, b)
+```
+### 4. Profit
+```js
 {
     poll: {
         delay: '30s',
