@@ -209,7 +209,7 @@ Commands are the functions which operate on [facts](#facts). You specify them in
 ```
 references two commands, `eq` and `clone`. The `eq` command takes two parameters, `path` and `value`. It uses the `path` to extract data from the [facts](#facts) and compares it to the `value`, returning true if they are equal, and false otherwise.
 
-The `clone` takes one parameter, `path`. It clones the data located at the specified`path` and returns it to the merge operation. Several commands are included with power-merge. Others such as [power-merge-odata](https://www.npmjs.org/package/power-merge-odata] are included in separate modules. It is also easy to write your own [custom commands](#custom-commands).
+The `clone` takes one parameter, `path`. It clones the data located at the specified`path` and returns it to the merge operation. Several commands are included with power-merge. Others such as [power-merge-odata](https://www.npmjs.org/package/power-merge-odata) are included in separate modules. It is also easy to write your own [custom commands](#custom-commands).
 
 #### always
 Always execute the `then` command.
