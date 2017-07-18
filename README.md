@@ -192,6 +192,7 @@ Facts is a document are passed to each `when` and `then` condition. The facts ar
         name: 'delay',
         path: 'poll.delay'
     }
+}
 ```
 `when` conditions are used to check the facts. If they return true, the `then` condition will be executed. `then` conditions typically reference, clone or descend into the fact's `a.value` and/or `b.value`, but could also be written to perform operations upon any of the facts.
 
