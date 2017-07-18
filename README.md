@@ -162,7 +162,17 @@ merge([d, c, b, a], function(err, result) {
 ```
 
 ### Rules
-power-merge operates on an array of rules. A rule is comprised of zero or one `when` conditions and exactly one `then` condition. The `when` conditions are tested in order until one passes, after which the associated `then` condition is invoked. The result of the `then` condition will normally be the merge result, but could be a token to instruct the merge function to skip over the current node instead of merging it.
+power-merge operates on an array of rules. A rule is comprised of zero or one `when` conditions and exactly one `then` condition. 
+
+```js
+const rules = [{
+    when: pm.eq('a.value', undefined),
+    then: pm.clone('b.value')
+}, {
+    then: pm.clone('a.value')
+}]
+```
+The `when` conditions are tested in order until one passes, after which the associated `then` condition is invoked. The result of the `then` condition will normally be the merge result, but could be a token to instruct the merge function to skip over the current node instead of merging it.
 
 ### Facts
 Facts is a document are passed to each `when` and `then` condition. The facts are...
