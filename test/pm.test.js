@@ -3,7 +3,7 @@ var R = require('ramda')
 var pm = require('..')
 var format = require('util').format
 var path = require('path')
-var examples = require('require-all')({ dirname: path.join(__dirname, 'examples') })
+var examples = require('require-all')({ filter: /.*\.js$/, dirname: path.join(__dirname, 'examples') })
 
 describe('Power Merge', function() {
 
@@ -96,7 +96,8 @@ describe('Power Merge', function() {
                 when: pm.never(),
                 then: pm.invoke(function() {
                     throw new Error('Should have been ignored')
-                }),
+                })
+            }, {
                 when: pm.always(),
                 then: pm.ignore()
             }])
@@ -216,6 +217,7 @@ describe('Power Merge', function() {
 
         Object.keys(examples).forEach(function(name) {
             it(name, function() {
+                this.timeout(0)
                 var example = examples[name]
                 var merge = pm.compile(example.config)
 

@@ -44,6 +44,10 @@ merge(
 ```
 power-merge puts you in charge of your merge rules, making it easy to specify custom merge behaviour for any property within your documents.
 
+## Caveats
+* Depending on how you configure the merge rules (referencing / recursing / cloning), power-merge may be very slow for large documents
+
+
 ## TL;DR
 ```js
 const pm = require('power-merge')
@@ -447,16 +451,14 @@ Union the "a" and "b" values using [Ramda's unionWith](ramdajs.com/docs/#lensPat
 power-merge commands are easy to write, once you understand that they must be expressed as a function that returns a function. The outer function takes the command's configuration parameters, the inner function takes the [context](#context) and [facts](#facts), e.g.
 
 ```js
-var debug = require('debug')('power-merge:commands:stars')
+var debug = require('debug')('power-merge:commands:highlight')
 
-module.exports = function stars(path) {
+module.exports = function highlight(str) {
 
     return function(context, facts) {
 
-        var view = context.getView(path)
-
         debug('path: %o, facts: %o', path, facts)
-        var result = '***' + view(facts) + '***'
+        var result = str + view(facts) + str
 
         debug('return: %o', result)
         return result
@@ -466,19 +468,19 @@ module.exports = function stars(path) {
 Unless you need to do some expensive setup such as compiling templates, the above can be simplified by currying...
 
 ```js
-var debug = require('debug')('power-merge:commands:stars')
+var debug = require('debug')('power-merge:commands:highlight')
 var R = require('ramda')
 
-module.exports = R.curry(function stars(path, context, facts) {
-
-    var view = context.getView(path)
+module.exports = R.curry(function highlight(str, context, facts) {
 
     debug('path: %o, facts: %o', path, facts)
-    var result = '***' + view(facts) + '***'
+    var result = str + view(facts) + str
 
     debug('return: %o', result)
     return result
 })
+
+Even without expensive setup, currying does have incur a minor performance penalty. It can also make it harder to realise you've forgotten to pass one of the configuration parameters to the command.
 
 ```
 Commands that should cause an attribute to be ignored, rather than merged should return the special `pm.noop` token. i.e.
