@@ -199,7 +199,7 @@ Commands are the functions which operate on facts. You specify them in the `when
 ```
 references two commands, `eq` and `clone`. The `eq` command takes two parameters, `path` and `value`. It uses the `path` to extract data from the [facts](#facts) and compares it to the `value`, returning true if they are equal, and false otherwise.
 
-The `clone` takes one parameter, `path`. It clones the data located at the specified`path` and returns it to the merge operation. Several commands are included with power-merge. Others such as [power-merge-odata](npmjs.org/package/power-merge-odata] are included in separate modules. It is also easy to write your own [custom commands](#custom-commands).
+The `clone` takes one parameter, `path`. It clones the data located at the specified`path` and returns it to the merge operation. Several commands are included with power-merge. Others such as [power-merge-odata](https://www.npmjs.org/package/power-merge-odata] are included in separate modules. It is also easy to write your own [custom commands](#custom-commands).
 
 #### always
 Always execute the `then` command.
@@ -223,7 +223,7 @@ Boolean AND multiple commands. e.g.
 ```
 
 #### clone
-Clones the value specified by the [path](#paths) parameter using [Rambda's clone](ramdajs.com/docs/#clone) function.
+Clones the value specified by the [path](#paths) parameter using [Rambda's clone](https://ramdajs.com/docs/#clone) function.
 ```js
 {
     then: pm.clone()
@@ -248,7 +248,7 @@ Composes a chain of commands so the output from one will be passed to the next. 
 ```
 
 #### debug
-Useful for debuging output to the consule while developing your merge rules, however use with care since this command will also cause the current node to be omitted from the merged document. The first parameter is a [hogan.js](npm.org/package/hogan.js) template, the second (optional) parameter is a logger in case you want to direct output somewhere other than the console.
+Useful for debuging output to the consule while developing your merge rules, however use with care since this command will also cause the current node to be omitted from the merged document. The first parameter is a [hogan.js](https://www.npmjs.org/package/hogan.js) template, the second (optional) parameter is a logger in case you want to direct output somewhere other than the console.
 
 ```js
 {
@@ -266,7 +266,7 @@ Compares the value located at the given [path](#paths) with the second parameter
 ```
 
 #### error
-Throws an error constructed from the given [hogan.js](npm.org/package/hogan.js) template
+Throws an error constructed from the given [hogan.js](https://www.npmjs.org/package/hogan.js) template
 ```js
 {
     then: pm.err('Boom! A: {{value.a}}, B: {{value.b}}')
@@ -416,7 +416,7 @@ References the value specified by the [path](#paths) parameter.
 ```
 
 #### union
-Union the "a" and "b" values using [Ramda's union](ramdajs.com/docs/#lensPath) function (which also dedupes). Only sensible when both "a" and "b" are arrays.
+Union the "a" and "b" values using [Ramda's union](https://ramdajs.com/docs/#lensPath) function (which also dedupes). Only sensible when both "a" and "b" are arrays.
 ```js
 {
     when: pm.and([
@@ -428,7 +428,7 @@ Union the "a" and "b" values using [Ramda's union](ramdajs.com/docs/#lensPath) f
 ```
 
 #### unionWith
-Union the "a" and "b" values using [Ramda's unionWith](ramdajs.com/docs/#lensPath) function (which dedupes based on the result of the given function). Only sensible when both "a" and "b" are arrays.
+Union the "a" and "b" values using [Ramda's unionWith](https://ramdajs.com/docs/#lensPath) function (which dedupes based on the result of the given function). Only sensible when both "a" and "b" are arrays.
 ```js
 {
     when: pm.and([
@@ -492,7 +492,7 @@ module.exports = R.curry(function highlight(str, context, facts) {
 Even without expensive setup, currying does have incur a minor performance penalty. It can also make it harder to realise you've forgotten to pass one of the configuration parameters to the command.
 
 ### Paths
-Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array or use the power-merge `pathSeparator` option to change the separator, e.g.
+Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](https://ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array or use the power-merge `pathSeparator` option to change the separator, e.g.
 
 ```js
 var merge = pm.compile({ pathSeparator: '/', rules: [
@@ -502,7 +502,7 @@ var merge = pm.compile({ pathSeparator: '/', rules: [
 ```
 
 ### Debugging
-power-merge uses [debug](npm.org/package/debug). You can enable as follows...
+power-merge uses [debug](https://www.npmjs.org/package/debug). You can enable as follows...
 ```
 DEBUG='power-merge:*' node your-application.js
 ```
