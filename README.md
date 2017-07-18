@@ -222,17 +222,12 @@ Boolean AND multiple commands. e.g.
     ])
 }
 ```
+
 #### clone
 Clones the value specified by the [path](#paths) parameter using [Rambda's clone](ramdajs.com/docs/#clone) function.
 ```js
 {
     then: pm.clone()
-}
-```
-
-#### compose
-Composes a chain of commands so the output from one will be passed to the next. This is useful post processing tasks such as sorting arrays, e.g.
-    then: pm.clone('a.value')
 }
 ```
 
