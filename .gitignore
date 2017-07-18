@@ -1,3 +1,4 @@
+.codeclimate
 coverage
 node_modules
 *.log

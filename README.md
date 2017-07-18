@@ -3,6 +3,8 @@
 [![NPM version](https://img.shields.io/npm/v/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
 [![NPM downloads](https://img.shields.io/npm/dm/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
 [![Build Status](https://img.shields.io/travis/cressie176/power-merge/master.svg)](https://travis-ci.org/cressie176/power-merge)
+[![Code Climate](https://codeclimate.com/github/cressie176/power-merge/badges/gpa.svg)](https://codeclimate.com/github/cressie176/power-merge)
+[![Test Coverage](https://codeclimate.com/github/cressie176/power-merge/badges/coverage.svg)](https://codeclimate.com/github/cressie176/power-merge/coverage)
 [![Code Style](https://img.shields.io/badge/code%20style-imperative-brightgreen.svg)](https://github.com/cressie176/eslint-config-imperative)
 [![Dependency Status](https://david-dm.org/cressie176/power-merge.svg)](https://david-dm.org/cressie176/power-merge)
 [![devDependencies Status](https://david-dm.org/cressie176/power-merge/dev-status.svg)](https://david-dm.org/cressie176/power-merge?type=dev)
