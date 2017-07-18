@@ -193,7 +193,7 @@ Facts is a document are passed to each `when` and `then` condition. The facts ar
         path: 'poll.delay'
     }
 ```
-`when` conditions are used to check the facts. If they return true, the `then` condition will be executed. `then` conditions typically reference, clone or descend into the facts a and/or b values, but could also be written to perform operations upon any of the facts)
+`when` conditions are used to check the facts. If they return true, the `then` condition will be executed. `then` conditions typically reference, clone or descend into the fact's `a.value` and/or `b.value`, but could also be written to perform operations upon any of the facts.
 
 ### Context
 The context contains information about the current merge. It records the depth, current node name and path. It also contains a reference to the merge function that is used to recursively descend into objects or iterate over arrays. Unless you're writing your own commands, you won't need to know about the context.
