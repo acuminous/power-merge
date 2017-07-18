@@ -506,7 +506,7 @@ Several of the bundled commands take a `path` parameter to locate a value within
 
 ```js
 { 
-    when: pm.eq(['a', 'value'], 'foo'),
+    when: pm.eq(['a', 'value'], 'nothing to see here'),
     then: pm.ignore()
 }
 ```
