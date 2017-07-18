@@ -20,7 +20,7 @@ There are scores of merge libraries for node.js, but they all have hidden assump
     ```
 
 But what if I only want the left most array, or if I want the union on both arrays, based on a key? e.g.
-```
+```js
 merge(
     { hosts: [
         { ip: '192.168.1.100', port: 8080 },
