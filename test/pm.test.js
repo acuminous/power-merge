@@ -218,7 +218,7 @@ describe('Power Merge', function() {
 
     describe('Circular References', function() {
 
-        var merge = pm.compile({ rules: [
+        var mergeTolerateCircular = pm.compile({ rules: [
             {
                 when: pm.and([
                     pm.eq('a.type', 'Object'),
@@ -234,20 +234,59 @@ describe('Power Merge', function() {
                 then: pm.iterate()
             },
             {
-                when: pm.eq('a.circular', true),
+                then: pm.clone('a.value')
+            }
+        ]})
+
+        var mergeErrorOnCircular = pm.compile({ rules: [
+            {
+                when: pm.or([
+                    pm.eq('a.circular', true),
+                    pm.eq('b.circular', true)
+                ]),
                 then: pm.error('Circular reference at {{node.path}}')
+            },
+            {
+                when: pm.and([
+                    pm.eq('a.type', 'Object'),
+                    pm.eq('b.type', 'Object')
+                ]),
+                then: pm.recurse()
+            },
+            {
+                when: pm.and([
+                    pm.eq('a.type', 'Array'),
+                    pm.eq('b.type', 'Array')
+                ]),
+                then: pm.iterate()
             },
             {
                 then: pm.clone('a.value')
             }
         ]})
 
+        it('should tolerate circular references in objects when cloning', function() {
+            var a = {}
+            var b = { x: 1 }
+            a.x = a
+            var result = mergeTolerateCircular(a, b)
+            assert.equal(result.x, result.x.x)
+        })
+
+        it('should tolerate circular references in arrays when cloning', function() {
+            var a = []
+            var b = [1]
+            a.push(a)
+            var result = mergeTolerateCircular(a, b)
+            assert.equal(result[0], result[0][0])
+        })
+
         it('should report circular references in objects via facts', function() {
             var a = {}
             var b = {}
             a.x = a
             assert.throws(function() {
-                merge(a, b)
+                mergeErrorOnCircular(a, b)
             }, /Circular reference at x/)
         })
 
@@ -256,7 +295,7 @@ describe('Power Merge', function() {
             var b = []
             a.push(a)
             assert.throws(function() {
-                merge(a, b)
+                mergeErrorOnCircular(a, b)
             }, /Circular reference at 0/)
         })
 
@@ -265,7 +304,7 @@ describe('Power Merge', function() {
             var b = { x: [] }
             a.x.push(a)
             assert.throws(function() {
-                merge(a, b)
+                mergeErrorOnCircular(a, b)
             }, /Circular reference at x.0/)
         })
 
@@ -274,16 +313,16 @@ describe('Power Merge', function() {
             var b = [{}]
             a[0].x = a
             assert.throws(function() {
-                merge(a, b)
+                mergeErrorOnCircular(a, b)
             }, /Circular reference at 0.x/)
         })
 
         it('should not report circular references in array siblings', function() {
             var sibling = { sibling: 1 }
             var a = { a: sibling, b: sibling, c: sibling }
-            var b = []
+            var b = { a: 1, b: 1, c: 2 }
 
-            var result = merge(a, b)
+            var result = mergeErrorOnCircular(a, b)
             assert.equal(result.a.sibling, 1)
             assert.equal(result.b.sibling, 1)
             assert.equal(result.c.sibling, 1)
@@ -292,9 +331,9 @@ describe('Power Merge', function() {
         it('should not report circular references in object siblings', function() {
             var sibling = { a: 1 }
             var a = [sibling, sibling, sibling]
-            var b = []
+            var b = [1, 2, 3]
 
-            var result = merge(a, b)
+            var result = mergeErrorOnCircular(a, b)
             assert.equal(result.length, 3)
             assert.equal(result[0].a, 1)
             assert.equal(result[1].a, 1)

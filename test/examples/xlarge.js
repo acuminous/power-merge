@@ -12,7 +12,7 @@ module.exports = {
         rules: [
             // Errors on circular references
             {
-                when: pm.and([
+                when: pm.or([
                     pm.eq('a.circular', true),
                     pm.eq('b.circular', true)
                 ]),
@@ -25,7 +25,7 @@ module.exports = {
             },
             // Recurse into objects
             {
-                when: pm.and([
+                when: pm.or([
                     pm.eq('a.type', 'Object'),
                     pm.eq('b.type', 'Object')
                 ]),
@@ -33,7 +33,7 @@ module.exports = {
             },
             // Iterate over arrays
             {
-                when: pm.and([
+                when: pm.or([
                     pm.eq('a.type', 'Array'),
                     pm.eq('b.type', 'Array')
                 ]),

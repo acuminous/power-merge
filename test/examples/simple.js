@@ -10,7 +10,7 @@ module.exports = {
         },
         rules: [
             {
-                when: pm.and([
+                when: pm.or([
                     pm.eq('a.circular', true),
                     pm.eq('b.circular', true)
                 ]),

@@ -55,7 +55,7 @@ const R = require('ramda')
 const rules = [
     // Error or circular references
     {
-        when: pm.and([
+        when: pm.or([
             pm.eq('a.circular', true),
             pm.eq('b.circular', true)
         ]),
