@@ -216,7 +216,7 @@ describe('Power Merge', function() {
         })
     })
 
-    describe.only('Circular References', function() {
+    describe('Circular References', function() {
 
         var merge = pm.compile({ rules: [
             {
@@ -260,7 +260,7 @@ describe('Power Merge', function() {
             }, /Circular reference at 0/)
         })
 
-        it.only('should report circular references in array attributes of objects via facts', function() {
+        it('should report circular references in array attributes of objects via facts', function() {
             var a = { x: [] }
             var b = { x: [] }
             a.x.push(a)
