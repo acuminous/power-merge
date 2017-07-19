@@ -245,12 +245,11 @@ describe('Power Merge', function() {
         it('should report circular references in objects via facts', function() {
             var a = {}
             var b = {}
-            a.a = a
+            a.x = a
             assert.throws(function() {
                 merge(a, b)
-            }, /Circular reference at a/)
+            }, /Circular reference at x/)
         })
-
 
         it('should report circular references in arrays via facts', function() {
             var a = []
@@ -259,6 +258,24 @@ describe('Power Merge', function() {
             assert.throws(function() {
                 merge(a, b)
             }, /Circular reference at 0/)
+        })
+
+        it.only('should report circular references in array attributes of objects via facts', function() {
+            var a = { x: [] }
+            var b = { x: [] }
+            a.x.push(a)
+            assert.throws(function() {
+                merge(a, b)
+            }, /Circular reference at x.0/)
+        })
+
+        it('should report circular references in object items in arrays via facts', function() {
+            var a = [{}]
+            var b = [{}]
+            a[0].x = a
+            assert.throws(function() {
+                merge(a, b)
+            }, /Circular reference at 0.x/)
         })
 
         it('should not report circular references in array siblings', function() {
