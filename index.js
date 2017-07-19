@@ -34,14 +34,23 @@ function preProcessRules(rules) {
 function buildMerge(context, rules) {
     var partial = R.curry(merge)(context, context.get('rules'))
     context.set('merge', partial)
-    return withApiWrapper(partial, context.get('options').api)
+    return withApiWrapper(partial, context)
 }
 
-function withApiWrapper(fn, options) {
-    if (options.direction === 'right-to-left') fn = R.compose(fn, R.reverse)
-    if (options.variadic) fn = variadic(fn)
-    if (options.async) fn = asyncify(fn)
+function withApiWrapper(fn, context) {
+    fn = withResetWrapper(fn, context)
+    var api = context.get('options').api
+    if (api.direction === 'right-to-left') fn = R.compose(fn, R.reverse)
+    if (api.variadic) fn = variadic(fn)
+    if (api.async) fn = asyncify(fn)
     return fn
+}
+
+function withResetWrapper(fn, context) {
+    return function(args) {
+        context.reset()
+        return fn(args)
+    }
 }
 
 function merge(context, rules, args) {
@@ -59,8 +68,14 @@ function merge(context, rules, args) {
                 b: { value: b, type: R.type(b) },
                 node: node.getFacts()
             }
+            facts.a.circular = context.isCircular(facts.a)
+            facts.b.circular = context.isCircular(facts.b)
             if (!rule.when(context, facts)) continue
+            context.recordHistory(facts.a)
+            context.recordHistory(facts.b)
             a = rule.then(context, facts)
+            context.eraseHistory(facts.a)
+            context.eraseHistory(facts.b)
             break
         }
     }

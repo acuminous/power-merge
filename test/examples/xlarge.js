@@ -10,6 +10,14 @@ module.exports = {
             direction: 'left-to-right'
         },
         rules: [
+            // Errors on circular references
+            {
+                when: pm.and([
+                    pm.eq('a.circular', true),
+                    pm.eq('b.circular', true)
+                ]),
+                then: pm.error('Circular reference at {{node.path}}')
+            },
             // Reference arrays of coordinates (too big to clone quickly)
             {
                 when: pm.eq('node.name', 'coordinates'),

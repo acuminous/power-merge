@@ -9,13 +9,13 @@ module.exports = {
             direction: 'left-to-right'
         },
         rules: [
-            // Recurse into objects
+            // Error or circular references
             {
                 when: pm.and([
-                    pm.eq('a.type', 'Object'),
-                    pm.eq('b.type', 'Object')
+                    pm.eq('a.circular', true),
+                    pm.eq('b.circular', true)
                 ]),
-                then: pm.recurse()
+                then: pm.error('Circular reference at {{node.path}}')
             },
             // Union an array of hosts by the 'ip' attribute
             {
@@ -30,6 +30,14 @@ module.exports = {
                         return a.ip.localeCompare(b.ip)
                     }))
                 ])
+            },
+            // Recurse into objects
+            {
+                when: pm.and([
+                    pm.eq('a.type', 'Object'),
+                    pm.eq('b.type', 'Object')
+                ]),
+                then: pm.recurse()
             },
             // If the "a" value is null, ignore the attribute completely
             {

@@ -11,6 +11,13 @@ module.exports = {
         rules: [
             {
                 when: pm.and([
+                    pm.eq('a.circular', true),
+                    pm.eq('b.circular', true)
+                ]),
+                then: pm.error('Circular reference at {{node.path}}')
+            },
+            {
+                when: pm.and([
                     pm.eq('a.type', 'Object'),
                     pm.eq('b.type', 'Object'),
                 ]),

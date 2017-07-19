@@ -3,7 +3,7 @@ var R = require('ramda')
 var pm = require('..')
 var format = require('util').format
 var path = require('path')
-var examples = require('require-all')({ filter: /.*\.js$/, dirname: path.join(__dirname, 'examples') })
+var examples = require('require-all')({ filter: /(.*)\.js$/, dirname: path.join(__dirname, 'examples') })
 
 describe('Power Merge', function() {
 
@@ -144,32 +144,36 @@ describe('Power Merge', function() {
         })
 
         it('should provide when condition the node facts', function() {
-            var merge = compile([{
-                when: pm.eq('node.name', 'b'),
-                then: pm.invoke(function(facts) {
-                    assert.equal(facts.node.name, 'b')
-                    assert.equal(facts.node.path, 'a.b')
-                    assert.equal(facts.node.depth, 2)
-                    return facts.a.value + facts.b.value
-                })
-            }, {
-                then: pm.recurse()
-            }])
+            var merge = compile([
+                {
+                    when: pm.eq('node.name', 'b'),
+                    then: pm.invoke(function(facts) {
+                        assert.equal(facts.node.name, 'b')
+                        assert.equal(facts.node.path, 'a.b')
+                        assert.equal(facts.node.depth, 2)
+                        return facts.a.value + facts.b.value
+                    })
+                }, {
+                    then: pm.recurse()
+                }
+            ])
             var result = merge({ a: { b: 1 } }, { a: { b: 2 } })
             assert.equal(result.a.b, 3)
         })
 
         it('should short circuit after invoking a rule', function() {
-            var merge = compile([{
-                when: pm.always(),
-                then: pm.invoke(sum)
-            },
-            {
-                when: pm.always(),
-                then: pm.invoke(function() {
-                    throw new Error('Should not have been invoked')
-                })
-            }])
+            var merge = compile([
+                {
+                    when: pm.always(),
+                    then: pm.invoke(sum)
+                },
+                {
+                    when: pm.always(),
+                    then: pm.invoke(function() {
+                        throw new Error('Should not have been invoked')
+                    })
+                }
+            ])
             assert.equal(merge(1, 2), 3)
         })
 
@@ -210,7 +214,75 @@ describe('Power Merge', function() {
                 done()
             })
         })
+    })
 
+    describe.only('Circular References', function() {
+
+        var merge = pm.compile({ rules: [
+            {
+                when: pm.and([
+                    pm.eq('a.type', 'Object'),
+                    pm.eq('b.type', 'Object')
+                ]),
+                then: pm.recurse()
+            },
+            {
+                when: pm.and([
+                    pm.eq('a.type', 'Array'),
+                    pm.eq('b.type', 'Array')
+                ]),
+                then: pm.iterate()
+            },
+            {
+                when: pm.eq('a.circular', true),
+                then: pm.error('Circular reference at {{node.path}}')
+            },
+            {
+                then: pm.clone('a.value')
+            }
+        ]})
+
+        it('should report circular references in objects via facts', function() {
+            var a = {}
+            var b = {}
+            a.a = a
+            assert.throws(function() {
+                merge(a, b)
+            }, /Circular reference at a/)
+        })
+
+
+        it('should report circular references in arrays via facts', function() {
+            var a = []
+            var b = []
+            a.push(a)
+            assert.throws(function() {
+                merge(a, b)
+            }, /Circular reference at 0/)
+        })
+
+        it('should not report circular references in array siblings', function() {
+            var sibling = { sibling: 1 }
+            var a = { a: sibling, b: sibling, c: sibling }
+            var b = []
+
+            var result = merge(a, b)
+            assert.equal(result.a.sibling, 1)
+            assert.equal(result.b.sibling, 1)
+            assert.equal(result.c.sibling, 1)
+        })
+
+        it('should not report circular references in object siblings', function() {
+            var sibling = { a: 1 }
+            var a = [sibling, sibling, sibling]
+            var b = []
+
+            var result = merge(a, b)
+            assert.equal(result.length, 3)
+            assert.equal(result[0].a, 1)
+            assert.equal(result[1].a, 1)
+            assert.equal(result[2].a, 1)
+        })
     })
 
     describe('Examples', function() {

@@ -53,6 +53,14 @@ const pm = require('power-merge')
 const R = require('ramda')
 
 const rules = [
+    // Error or circular references
+    {
+        when: pm.and([
+            pm.eq('a.circular', true),
+            pm.eq('b.circular', true)
+        ]),
+        then: pm.error('Circular reference at {{node.path}}')
+    },
     // Union an array of hosts by the 'ip' attribute
     {
         when: pm.and([
@@ -183,11 +191,13 @@ Facts is a document are passed to each `when` and `then` condition. The facts ar
 {
     a: {
         value: '30s',
-        type: 'String'
+        type: 'String',
+        circular: false
     },
     b: {
         value: '1m',
-        type: 'String'
+        type: 'String',
+        circular: false
     },
     node: {
         depth: 3,
