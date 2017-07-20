@@ -292,7 +292,7 @@ describe('Power Merge', function() {
 
         it('should report circular references in objects when b is undefined', function() {
             var a = {}
-            var b = undefined
+            var b
             a.x = a
             assert.throws(function() {
                 mergeErrorOnCircular(a, b)

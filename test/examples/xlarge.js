@@ -10,14 +10,6 @@ module.exports = {
             direction: 'left-to-right'
         },
         rules: [
-            // Errors on circular references
-            {
-                when: pm.or([
-                    pm.eq('a.circular', true),
-                    pm.eq('b.circular', true)
-                ]),
-                then: pm.error('Circular reference at {{node.path}}')
-            },
             // Reference arrays of coordinates (too big to clone quickly)
             {
                 when: pm.eq('node.name', 'coordinates'),
@@ -25,7 +17,7 @@ module.exports = {
             },
             // Recurse into objects
             {
-                when: pm.or([
+                when: pm.and([
                     pm.eq('a.type', 'Object'),
                     pm.eq('b.type', 'Object')
                 ]),
@@ -33,7 +25,7 @@ module.exports = {
             },
             // Iterate over arrays
             {
-                when: pm.or([
+                when: pm.and([
                     pm.eq('a.type', 'Array'),
                     pm.eq('b.type', 'Array')
                 ]),

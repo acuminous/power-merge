@@ -513,6 +513,11 @@ Several of the bundled commands take a `path` parameter to locate a value within
 }
 ```
 
+### Circular References
+If you use the [clone](#clone) command circular references will be handled automatically. Clone uses [Ramda's clone](http://ramdajs.com/docs/#clone) function under the hood, which makes a copy of the original item, but uses references to the copy if they are encountered in a circular context.
+
+If you prefer some other action, then you can explicitly handle circular references as with any other [fact](#facts).
+
 ### Debugging
 power-merge uses [debug](https://www.npmjs.org/package/debug). You can enable as follows...
 ```
