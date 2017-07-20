@@ -49,4 +49,60 @@ describe('recurse command', function() {
         var result = cmd(context, facts)
         assert.equal(result.x, 'undefined-2.1')
     })
+
+    it('should recuse objects a is undefined', function() {
+        var context = new Context({ merge: concat })
+
+        var cmd = recurse()
+        var facts = {
+            a: { value: undefined },
+            b: { value: { x: '2.1' } },
+            node: { depth: 1 }
+        }
+
+        var result = cmd(context, facts)
+        assert.equal(result.x, 'undefined-2.1')
+    })
+
+    it('should recuse objects a is null', function() {
+        var context = new Context({ merge: concat })
+
+        var cmd = recurse()
+        var facts = {
+            a: { value: undefined },
+            b: { value: { x: '2.1' } },
+            node: { depth: 1 }
+        }
+
+        var result = cmd(context, facts)
+        assert.equal(result.x, 'undefined-2.1')
+    })
+
+    it('should recuse objects when b is undefined', function() {
+        var context = new Context({ merge: concat })
+
+        var cmd = recurse()
+        var facts = {
+            a: { value: { x: '1.1' } },
+            b: { value: undefined },
+            node: { depth: 1 }
+        }
+
+        var result = cmd(context, facts)
+        assert.equal(result.x, '1.1-undefined')
+    })
+
+    it('should recuse objects when b is null', function() {
+        var context = new Context({ merge: concat })
+
+        var cmd = recurse()
+        var facts = {
+            a: { value: { x: '1.1' } },
+            b: { value: undefined },
+            node: { depth: 1 }
+        }
+
+        var result = cmd(context, facts)
+        assert.equal(result.x, '1.1-undefined')
+    })
 })

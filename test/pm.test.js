@@ -247,14 +247,14 @@ describe('Power Merge', function() {
                 then: pm.error('Circular reference at {{node.path}}')
             },
             {
-                when: pm.and([
+                when: pm.or([
                     pm.eq('a.type', 'Object'),
                     pm.eq('b.type', 'Object')
                 ]),
                 then: pm.recurse()
             },
             {
-                when: pm.and([
+                when: pm.or([
                     pm.eq('a.type', 'Array'),
                     pm.eq('b.type', 'Array')
                 ]),
@@ -265,7 +265,7 @@ describe('Power Merge', function() {
             }
         ]})
 
-        it('should tolerate circular references in objects when cloning', function() {
+        it('should tolerate circular references in objects without special rules', function() {
             var a = {}
             var b = { x: 1 }
             a.x = a
@@ -273,7 +273,7 @@ describe('Power Merge', function() {
             assert.equal(result.x, result.x.x)
         })
 
-        it('should tolerate circular references in arrays when cloning', function() {
+        it('should tolerate circular references in arrays without special rules', function() {
             var a = []
             var b = [1]
             a.push(a)
@@ -281,7 +281,7 @@ describe('Power Merge', function() {
             assert.equal(result[0], result[0][0])
         })
 
-        it('should report circular references in objects via facts', function() {
+        it('should report circular references in objects', function() {
             var a = {}
             var b = {}
             a.x = a
@@ -290,7 +290,25 @@ describe('Power Merge', function() {
             }, /Circular reference at x/)
         })
 
-        it('should report circular references in arrays via facts', function() {
+        it('should report circular references in objects when b is undefined', function() {
+            var a = {}
+            var b = undefined
+            a.x = a
+            assert.throws(function() {
+                mergeErrorOnCircular(a, b)
+            }, /Circular reference at x/)
+        })
+
+        it('should report circular references in objects when a is undefined', function() {
+            var a
+            var b = {}
+            b.x = b
+            assert.throws(function() {
+                mergeErrorOnCircular(a, b)
+            }, /Circular reference at x/)
+        })
+
+        it('should report circular references in arrays', function() {
             var a = []
             var b = []
             a.push(a)
@@ -299,7 +317,25 @@ describe('Power Merge', function() {
             }, /Circular reference at 0/)
         })
 
-        it('should report circular references in array attributes of objects via facts', function() {
+        it('should report circular references in arrays when b is undefined', function() {
+            var a = []
+            var b
+            a.push(a)
+            assert.throws(function() {
+                mergeErrorOnCircular(a, b)
+            }, /Circular reference at 0/)
+        })
+
+        it('should report circular references in arrays when a is undefined', function() {
+            var a
+            var b = []
+            b.push(b)
+            assert.throws(function() {
+                mergeErrorOnCircular(a, b)
+            }, /Circular reference at 0/)
+        })
+
+        it('should report circular references in array attributes of objects', function() {
             var a = { x: [] }
             var b = { x: [] }
             a.x.push(a)
@@ -308,7 +344,7 @@ describe('Power Merge', function() {
             }, /Circular reference at x.0/)
         })
 
-        it('should report circular references in object items in arrays via facts', function() {
+        it('should report circular references in object items in arrays', function() {
             var a = [{}]
             var b = [{}]
             a[0].x = a

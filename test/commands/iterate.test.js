@@ -55,4 +55,69 @@ describe('iterate command', function() {
         assert.equal(result[0], '1.1-2.1')
         assert.equal(result[1], 'undefined-2.2')
     })
+
+    it('should iterate over arrays when a is undefined', function() {
+        var context = new Context({ merge: concat })
+
+        var cmd = iterate()
+        var facts = {
+            a: { value: undefined },
+            b: { value: [ '2.1', '2.2' ] },
+            node: { depth: 1 }
+        }
+
+        var result = cmd(context, facts)
+        assert.equal(result.length, 2)
+        assert.equal(result[0], 'undefined-2.1')
+        assert.equal(result[1], 'undefined-2.2')
+    })
+
+    it('should iterate over arrays when a is null', function() {
+        var context = new Context({ merge: concat })
+
+        var cmd = iterate()
+        var facts = {
+            a: { value: null },
+            b: { value: [ '2.1', '2.2' ] },
+            node: { depth: 1 }
+        }
+
+        var result = cmd(context, facts)
+        assert.equal(result.length, 2)
+        assert.equal(result[0], 'undefined-2.1')
+        assert.equal(result[1], 'undefined-2.2')
+    })
+
+
+    it('should iterate over arrays when b is undefined', function() {
+        var context = new Context({ merge: concat })
+
+        var cmd = iterate()
+        var facts = {
+            a: { value: [ '1.1', '1.2' ] },
+            b: { value: undefined },
+            node: { depth: 1 }
+        }
+
+        var result = cmd(context, facts)
+        assert.equal(result.length, 2)
+        assert.equal(result[0], '1.1-undefined')
+        assert.equal(result[1], '1.2-undefined')
+    })
+
+    it('should iterate over arrays when b is null', function() {
+        var context = new Context({ merge: concat })
+
+        var cmd = iterate()
+        var facts = {
+            a: { value: [ '1.1', '1.2' ] },
+            b: { value: null },
+            node: { depth: 1 }
+        }
+
+        var result = cmd(context, facts)
+        assert.equal(result.length, 2)
+        assert.equal(result[0], '1.1-undefined')
+        assert.equal(result[1], '1.2-undefined')
+    })
 })

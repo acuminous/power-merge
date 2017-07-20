@@ -9,14 +9,6 @@ module.exports = {
             direction: 'left-to-right'
         },
         rules: [
-            // Error or circular references
-            {
-                when: pm.or([
-                    pm.eq('a.circular', true),
-                    pm.eq('b.circular', true)
-                ]),
-                then: pm.error('Circular reference at {{node.path}}')
-            },
             // Union an array of hosts by the 'ip' attribute
             {
                 when: pm.and([
