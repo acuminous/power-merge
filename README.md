@@ -31,7 +31,7 @@ However it your merge requirements aren't satisfied by a pre-configured merge li
 ```js
 const pm = require('power-merge')
 const { and, eq, unionWith } = pm.commands
-const { ignoreNull, baseRules } = pm.rules
+const { ignoreNull, base } = pm.ruleSets
 const R = require('ramda')
 
 const unionHostsByIp = {
@@ -39,7 +39,7 @@ const unionHostsByIp = {
     then: unionWith(R.eqBy(R.prop('ip')))
 }
 
-const rules = [ unionHostsByIp, ignoreNull, baseRules ]
+const rules = [ unionHostsByIp, ignoreNull, base ]
 ```
 ### 2. Compile the rules
 ```js

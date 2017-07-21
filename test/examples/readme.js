@@ -1,5 +1,6 @@
 var pm = require('../..')
 var cmds = pm.commands
+var rs = pm.ruleSets
 var R = require('ramda')
 
 module.exports = {
@@ -24,28 +25,8 @@ module.exports = {
                     }))
                 ])
             },
-            // Recurse into objects
-            {
-                when: cmds.and([
-                    cmds.eq('a.type', 'Object'),
-                    cmds.eq('b.type', 'Object')
-                ]),
-                then: cmds.recurse()
-            },
-            // If the "a" value is null, ignore the attribute completely
-            {
-                when: cmds.eq('a.value', null),
-                then: cmds.ignore()
-            },
-            // If the "a" value is undefined, clone the "b" value
-            {
-                when: cmds.eq('a.value', undefined),
-                then: cmds.clone('b.value')
-            },
-            // Otherwise clone the "a" value
-            {
-                then: cmds.clone('a.value')
-            }
+            rs.ignoreNull,
+            rs.base
         ]
     },
     data: [

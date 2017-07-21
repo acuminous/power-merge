@@ -4,6 +4,8 @@ var asyncify = require('async.asyncify')
 var variadic = require('variadic')
 var path = require('path')
 var commands = require('require-all')({ dirname: path.join(__dirname, 'lib', 'commands') })
+var ruleSets = require('require-all')({ dirname: path.join(__dirname, 'lib', 'rulesets') })
+
 var Context = require('./lib/Context')
 var defaults = require('./lib/defaults')
 var noop = require('./lib/noop')
@@ -20,15 +22,17 @@ function withDefaultOptions(options) {
 }
 
 function preProcessRules(rules) {
-    return R.map(function(rule) {
-        return {
-            when: rule.when ? rule.when : commands.always(),
-            then: rule.then
-        }
-    }, rules).concat({
+    return R.compose(R.map(toWhenAndThen), R.flatten)(rules).concat({
         when: commands.always(),
         then: commands.error('No passing when condition for ({{a.value}}, {{b.value}})')
     })
+}
+
+function toWhenAndThen(rule) {
+    return {
+        when: rule.when ? rule.when : commands.always(),
+        then: rule.then
+    }
 }
 
 function buildMerge(context, rules) {
@@ -82,4 +86,4 @@ function merge(context, rules, args) {
     return a
 }
 
-module.exports = { compile: compile, noop: noop, commands: commands }
+module.exports = { compile: compile, noop: noop, commands: commands, ruleSets: ruleSets }
