@@ -29,8 +29,43 @@ then you're probably better off using one of those libraries. They will be faste
 ### 1. Compile the rules
 ```js
 const pm = require('power-merge')
-const { and, eq, unionWith } = pm.commands
 const { ignoreNull, deepClone } = pm.ruleSets
+
+const merge = pm.compile({ rules: [ ignoreNull, deepClone ] })
+```
+### 2. Merge the data
+```js
+const a = {
+    poll: {
+        delay: null,
+        frequency: '5s'
+    }
+}
+
+const b = {
+    poll: {
+        delay: '1m',
+        frequency: '10s'
+    }
+}
+
+const result = merge(a, b)
+```
+### 3. Profit
+```js
+
+{
+    poll: {
+        frequency: '5s',
+    }
+}
+```
+
+### 4. Make Your Own Rules!
+```js
+const pm = require('power-merge')
+const { ignoreNull, deepClone } = pm.ruleSets
+const { and, eq, unionWith } = pm.commands
 const R = require('ramda')
 
 const unionHostsByIp = {
@@ -39,9 +74,7 @@ const unionHostsByIp = {
 }
 
 const merge = pm.compile({ rules: [ unionHostsByIp, ignoreNull, deepClone ] })
-```
-### 2. Merge the data
-```js
+
 const a = {
     poll: {
         delay: null,
@@ -65,9 +98,8 @@ const b = {
 }
 
 const result = merge(a, b)
-```
-### 3. Profit
-```js
+
+/**************** Result ****************
 {
     poll: {
         frequency: '5s',
@@ -78,7 +110,9 @@ const result = merge(a, b)
         { ip: '192.168.1.200', port: 80 }
     ]
 }
+****************************************/
 ```
+
 
 ## How power-merge works
 
