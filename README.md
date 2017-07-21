@@ -328,7 +328,7 @@ const rules = [
 ]
 pm.compile({ rules }, {
     isYes: facts => facts.value.a === 'yes'
-    truism: facts) => true
+    truism: facts => true
 })
 ```
 
