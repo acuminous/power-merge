@@ -119,7 +119,7 @@ const rules = [
     }
 ]
 ```
-The `when` conditions are tested in order until one passes, after which the associated `then` condition is invoked. The result of the `then` condition will normally be the merge result, but could be a token to instruct the merge function to skip over the current node instead of merging it.
+The `when` conditions are tested in order until one passes, after which the associated `then` condition is invoked. The result of the `then` condition will normally be the merge result, but could be the `pm.noop` token to instruct the merge function to skip over the current node instead of merging it.
 
 To support re-use you can also provide nested arrays of rules which power-merge will automatically flatten, e.g.
 
