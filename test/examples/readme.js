@@ -1,4 +1,5 @@
 var pm = require('../..')
+var cmds = pm.commands
 var R = require('ramda')
 
 module.exports = {
@@ -11,39 +12,39 @@ module.exports = {
         rules: [
             // Union an array of hosts by the 'ip' attribute
             {
-                when: pm.and([
-                    pm.eq('node.name', 'hosts'),
-                    pm.eq('a.type', 'Array'),
-                    pm.eq('b.type', 'Array')
+                when: cmds.and([
+                    cmds.eq('node.name', 'hosts'),
+                    cmds.eq('a.type', 'Array'),
+                    cmds.eq('b.type', 'Array')
                 ]),
-                then: pm.compose([
-                    pm.unionWith(R.eqBy(R.prop('ip'))),
-                    pm.invoke(R.sort(function(a, b) {
+                then: cmds.compose([
+                    cmds.unionWith(R.eqBy(R.prop('ip'))),
+                    cmds.invoke(R.sort(function(a, b) {
                         return a.ip.localeCompare(b.ip)
                     }))
                 ])
             },
             // Recurse into objects
             {
-                when: pm.and([
-                    pm.eq('a.type', 'Object'),
-                    pm.eq('b.type', 'Object')
+                when: cmds.and([
+                    cmds.eq('a.type', 'Object'),
+                    cmds.eq('b.type', 'Object')
                 ]),
-                then: pm.recurse()
+                then: cmds.recurse()
             },
             // If the "a" value is null, ignore the attribute completely
             {
-                when: pm.eq('a.value', null),
-                then: pm.ignore()
+                when: cmds.eq('a.value', null),
+                then: cmds.ignore()
             },
             // If the "a" value is undefined, clone the "b" value
             {
-                when: pm.eq('a.value', undefined),
-                then: pm.clone('b.value')
+                when: cmds.eq('a.value', undefined),
+                then: cmds.clone('b.value')
             },
             // Otherwise clone the "a" value
             {
-                then: pm.clone('a.value')
+                then: cmds.clone('a.value')
             }
         ]
     },

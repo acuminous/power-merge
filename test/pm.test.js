@@ -1,6 +1,7 @@
 var assert = require('chai').assert
 var R = require('ramda')
 var pm = require('..')
+var cmds = pm.commands
 var format = require('util').format
 var path = require('path')
 var examples = require('require-all')({ filter: /(.*)\.js$/, dirname: path.join(__dirname, 'examples') })
@@ -51,7 +52,7 @@ describe('Power Merge', function() {
 
             var rules = [
                 {
-                    then: pm.invoke(function mdl(facts) {
+                    then: cmds.invoke(function mdl(facts) {
                         return R.mergeDeepLeft(facts.a.value, facts.b.value)
                     })
                 }
@@ -93,52 +94,52 @@ describe('Power Merge', function() {
 
         it('should ignore rules that fail the when condition', function() {
             var merge = compile([{
-                when: pm.never(),
-                then: pm.invoke(function() {
+                when: cmds.never(),
+                then: cmds.invoke(function() {
                     throw new Error('Should have been ignored')
                 })
             }, {
-                when: pm.always(),
-                then: pm.ignore()
+                when: cmds.always(),
+                then: cmds.ignore()
             }])
             merge(1, 2)
         })
 
         it('should invoke rules that pass the when condition', function() {
             var merge = compile([{
-                when: pm.always(),
-                then: pm.invoke(sum)
+                when: cmds.always(),
+                then: cmds.invoke(sum)
             }])
             assert.equal(merge(1, 2), 3)
         })
 
         it('should invoke rules without a when condition', function() {
             var merge = compile([{
-                then: pm.invoke(sum)
+                then: cmds.invoke(sum)
             }])
             assert.equal(merge(1, 2), 3)
         })
 
         it('should provide when condition the value facts', function() {
             var merge = compile([{
-                when: pm.invoke(function(facts) {
+                when: cmds.invoke(function(facts) {
                     assert.equal(facts.a.value, 1)
                     assert.equal(facts.b.value, 2)
                     return true
                 }),
-                then: pm.invoke(sum)
+                then: cmds.invoke(sum)
             }])
             assert.equal(merge(1, 2), 3)
         })
 
         it('should provide when condition the type facts', function() {
             var merge = compile([{
-                when: pm.invoke(function(facts) {
+                when: cmds.invoke(function(facts) {
                     assert.equal(facts.a.type, 'Number')
                     assert.equal(facts.b.type, 'Number')
                     return true
                 }),
-                then: pm.invoke(sum)
+                then: cmds.invoke(sum)
             }])
             assert.equal(merge(1, 2), 3)
         })
@@ -146,15 +147,15 @@ describe('Power Merge', function() {
         it('should provide when condition the node facts', function() {
             var merge = compile([
                 {
-                    when: pm.eq('node.name', 'b'),
-                    then: pm.invoke(function(facts) {
+                    when: cmds.eq('node.name', 'b'),
+                    then: cmds.invoke(function(facts) {
                         assert.equal(facts.node.name, 'b')
                         assert.equal(facts.node.path, 'a.b')
                         assert.equal(facts.node.depth, 2)
                         return facts.a.value + facts.b.value
                     })
                 }, {
-                    then: pm.recurse()
+                    then: cmds.recurse()
                 }
             ])
             var result = merge({ a: { b: 1 } }, { a: { b: 2 } })
@@ -164,12 +165,12 @@ describe('Power Merge', function() {
         it('should short circuit after invoking a rule', function() {
             var merge = compile([
                 {
-                    when: pm.always(),
-                    then: pm.invoke(sum)
+                    when: cmds.always(),
+                    then: cmds.invoke(sum)
                 },
                 {
-                    when: pm.always(),
-                    then: pm.invoke(function() {
+                    when: cmds.always(),
+                    then: cmds.invoke(function() {
                         throw new Error('Should not have been invoked')
                     })
                 }
@@ -179,8 +180,8 @@ describe('Power Merge', function() {
 
         it('should error if no rules pass', function() {
             var merge = compile([{
-                when: pm.never(),
-                then: pm.invoke(sum)
+                when: cmds.never(),
+                then: cmds.invoke(sum)
             }])
             assert.throws(function() {
                 merge(1, 2)
@@ -191,8 +192,8 @@ describe('Power Merge', function() {
             var merge = pm.compile({
                 api: { async: true },
                 rules: [{
-                    when: pm.never(),
-                    then: pm.invoke(sum)
+                    when: cmds.never(),
+                    then: cmds.invoke(sum)
                 }]
             })
             merge(1, 2, function(err, result) {
@@ -205,8 +206,8 @@ describe('Power Merge', function() {
             var merge = pm.compile({
                 api: { async: true },
                 rules: [{
-                    when: pm.always(),
-                    then: pm.error('Oh Noes!')
+                    when: cmds.always(),
+                    then: cmds.error('Oh Noes!')
                 }]
             })
             merge(1, 2, function(err, result) {
@@ -220,48 +221,48 @@ describe('Power Merge', function() {
 
         var mergeTolerateCircular = pm.compile({ rules: [
             {
-                when: pm.and([
-                    pm.eq('a.type', 'Object'),
-                    pm.eq('b.type', 'Object')
+                when: cmds.and([
+                    cmds.eq('a.type', 'Object'),
+                    cmds.eq('b.type', 'Object')
                 ]),
-                then: pm.recurse()
+                then: cmds.recurse()
             },
             {
-                when: pm.and([
-                    pm.eq('a.type', 'Array'),
-                    pm.eq('b.type', 'Array')
+                when: cmds.and([
+                    cmds.eq('a.type', 'Array'),
+                    cmds.eq('b.type', 'Array')
                 ]),
-                then: pm.iterate()
+                then: cmds.iterate()
             },
             {
-                then: pm.clone('a.value')
+                then: cmds.clone('a.value')
             }
         ]})
 
         var mergeErrorOnCircular = pm.compile({ rules: [
             {
-                when: pm.or([
-                    pm.eq('a.circular', true),
-                    pm.eq('b.circular', true)
+                when: cmds.or([
+                    cmds.eq('a.circular', true),
+                    cmds.eq('b.circular', true)
                 ]),
-                then: pm.error('Circular reference at {{node.path}}')
+                then: cmds.error('Circular reference at {{node.path}}')
             },
             {
-                when: pm.or([
-                    pm.eq('a.type', 'Object'),
-                    pm.eq('b.type', 'Object')
+                when: cmds.or([
+                    cmds.eq('a.type', 'Object'),
+                    cmds.eq('b.type', 'Object')
                 ]),
-                then: pm.recurse()
+                then: cmds.recurse()
             },
             {
-                when: pm.or([
-                    pm.eq('a.type', 'Array'),
-                    pm.eq('b.type', 'Array')
+                when: cmds.or([
+                    cmds.eq('a.type', 'Array'),
+                    cmds.eq('b.type', 'Array')
                 ]),
-                then: pm.iterate()
+                then: cmds.iterate()
             },
             {
-                then: pm.clone('a.value')
+                then: cmds.clone('a.value')
             }
         ]})
 

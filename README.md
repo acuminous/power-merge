@@ -9,90 +9,37 @@
 [![Dependency Status](https://david-dm.org/cressie176/power-merge.svg)](https://david-dm.org/cressie176/power-merge)
 [![devDependencies Status](https://david-dm.org/cressie176/power-merge/dev-status.svg)](https://david-dm.org/cressie176/power-merge?type=dev)
 
-There are scores of merge libraries for node.js, but they all have hidden assumptions and surprises waiting to catch you out. For example:
+power-merge is a library for custom merging of two or more documents. If your merge requirments are simple and you understand/are happy with how [Ramda's mergeDeepLeft](http://ramdajs.com/docs/#mergeDeepLeft) or [Lodash's](https://lodash.com/docs/4.17.4#merge) works with regard to:
 
-Ramda merge unions arrays
-```js
-R.merge({ a: [1, 2, 3] }, { b: [3, 4, 5] })         // { a: [ 1, 2, 3, 4, 5 ] }
-```
+* arrays
+* null values
+* undefined values
+* inherited properties
+* functions
+* regular expressions
+* dates
+* [objects with a clone function](https://momentjs.com/docs/#/parsing/moment-clone/)
+* circular references
+* mutability
 
-Lodash merge mashes (for want of a better word) arrays
-```js
-_.merge({ a: [1, 2, 3] }, { a: [3, 4, 5, 6] })      // { a: [ 1, 2, 3, 6 ] }
-```
+then you're probably better off using one of those libraries. They will be faster, use fewer system resources and are far more battle tested.
 
-But what if I only want the left most array, or if I want the union on both arrays, based on a key? e.g.
-```js
-merge(
-    { hosts: [
-        { ip: '192.168.1.100', port: 9090 },
-        { ip: '192.168.1.101', port: 9090 }
-    ] },
-    { hosts: [
-        { ip: '192.168.1.100', port: 8080 },
-        { ip: '192.168.1.200', port: 8080 }
-    ] }
-)
-
-// Desired Result
-{ hosts: [
-    { ip: '192.168.1.100', port: 9090 },
-    { ip: '192.168.1.101', port: 9090 },
-    { ip: '192.168.1.200', port: 8080 }
-] }
-```
-power-merge puts you in charge of your merge rules, making it easy to specify custom merge behaviour for any property within your documents.
-
-## Caveats
-* Depending on how you configure the merge rules (referencing / recursing / cloning), power-merge may be very slow and use considerable system resources when processing large documents
+However it your merge requirements aren't satisfied by a pre-configured merge library, you've come to the right place.
 
 ## TL;DR
 ### 1. Define the rules
 ```js
 const pm = require('power-merge')
+const { and, eq, unionWith } = pm.commands
+const { ignoreNull, baseRules } = pm.rules
 const R = require('ramda')
 
-const rules = [
-    // Union an array of hosts by the 'ip' attribute
-    {
-        when: pm.and([
-            pm.eq('node.name', 'hosts'),
-            pm.eq('a.type', 'Array'),
-            pm.eq('b.type', 'Array')
-        ]),
-        then: pm.unionWith(R.eqBy(R.prop('ip')))
-    },
-    // Recurse into objects
-    {
-        when: pm.and([
-            pm.eq('a.type', 'Object'),
-            pm.eq('b.type', 'Object')
-        ]),
-        then: pm.recurse()
-    },
-    // Iterate over arrays
-    {
-        when: pm.and([
-            pm.eq('a.type', 'Array'),
-            pm.eq('b.type', 'Array')
-        ]),
-        then: pm.iterate()
-    },
-    // If the "a" value is null, ignore the attribute altogether
-    {
-        when: pm.eq('a.value', null),
-        then: pm.ignore()
-    },
-    // If the "a" value is undefined, clone the "b" value
-    {
-        when: pm.eq('a.value', undefined),
-        then: pm.clone('b.value')
-    },
-    // Otherwise clone the "a" value
-    {
-        then: pm.clone('a.value')
-    }
-]
+const unionHostsByIp = {
+    when: eq('node.name', 'hosts')
+    then: unionWith(R.eqBy(R.prop('ip')))
+}
+
+const rules = [ unionHostsByIp, ignoreNull, baseRules ]
 ```
 ### 2. Compile the rules
 ```js
@@ -102,7 +49,7 @@ const merge = pm.compile({ rules })
 ```js
 const a = {
     poll: {
-        delay: '30s',
+        delay: null,
         frequency: '5s',
     },
     hosts: [
@@ -117,8 +64,8 @@ const b = {
         frequency: '10s',
     },
     hosts: [
-        { ip: '192.168.1.100', port: 8080 },
-        { ip: '192.168.1.101', port: 8080 }
+        { ip: '192.168.1.100', port: 9090 },
+        { ip: '192.168.1.101', port: 9090 }
     ]
 }
 
@@ -128,12 +75,11 @@ const result = merge(a, b)
 ```js
 {
     poll: {
-        delay: '30s',
         frequency: '5s',
     },
     hosts: [
         { ip: '192.168.1.100', port: 8080 },
-        { ip: '192.168.1.101', port: 8080 },
+        { ip: '192.168.1.101', port: 9090 },
         { ip: '192.168.1.200', port: 8080 }
     ]
 }
@@ -167,14 +113,22 @@ merge([d, c, b, a], function(err, result) {
 power-merge operates on an array of rules. A rule is comprised of zero or one `when` conditions and exactly one `then` condition.
 
 ```js
+const { eq, clone } = pm.commands
 const rules = [{
-    when: pm.eq('a.value', undefined),
-    then: pm.clone('b.value')
+    when: eq('a.value', undefined),
+    then: clone('b.value')
 }, {
-    then: pm.clone('a.value')
+    then: clone('a.value')
 }]
 ```
 The `when` conditions are tested in order until one passes, after which the associated `then` condition is invoked. The result of the `then` condition will normally be the merge result, but could be a token to instruct the merge function to skip over the current node instead of merging it.
+
+To support re-use you can also provide nested arrays of rules which power-merge will automatically flatten, e.g.
+
+```js
+const baseRules = [ rule1, rule2, rule 3 ]
+const rules = [ singleRule, baseRules ]
+```
 
 ### Facts
 Facts is a document are passed to each `when` and `then` condition. The facts are...
@@ -207,10 +161,13 @@ The context contains information about the current merge. It records the depth, 
 Commands are the functions which operate on [facts](#facts). You specify them in the `when` and `then` conditions. e.g.
 
 ```js
-{
-    when: pm.eq('a.value', 'foo'),
-    then: pm.clone('a.value')
-}
+const { eq, clone } = pm.commands
+const rules = [
+    {
+        when: eq('a.value', 'foo'),
+        then: clone('a.value')
+    }
+]
 ```
 references two commands, `eq` and `clone`. The `eq` command takes two parameters, `path` and `value`. It uses the `path` to extract data from the [facts](#facts) and compares it to the `value`, returning true if they are equal, and false otherwise.
 
@@ -219,239 +176,308 @@ The `clone` takes one parameter, `path`. It clones the data located at the speci
 #### always
 Always execute the `then` command.
 ```js
-{
-    when: pm.always(),
-    then: pm.clone()
-}
+const { always, clone } = pm.commands
+const rules = [
+    {
+        when: always(),
+        then: clone()
+    }
+]
 ```
 Since `when` will default to `always`, you can achieve the same result by omitting the `when` clause altogether.
 
 #### and
 Boolean AND multiple commands. e.g.
 ```js
-{
-    when: pm.and([
-        pm.eq('a.type', 'String'),
-        pm.eq('b.type', 'String')
-    ])
-}
+const { and, eq, clone } = pm.commands
+const rules = [
+    {
+        when: and([
+            eq('a.type', 'String'),
+            eq('b.type', 'String')
+        ]),
+        then: clone()
+    }
+]
 ```
 
 #### clone
 Clones the value specified by the [path](#paths) parameter using [Ramda's clone](http://ramdajs.com/docs/#clone) function.
 ```js
-{
-    then: pm.clone()
-}
+const { clone } = pm.commands
+const rules = [
+    {
+        then: clone()
+    }
+]
 ```
 
 #### compose
 Composes a chain of commands so the output from one will be passed to the next. This is useful post processing tasks such as sorting arrays, e.g.
 ```js
-{
-    when: pm.and([
-        pm.eq('a.type', 'Array'),
-        pm.eq('b.type', 'Array')
-    ]),
-    then: pm.compose([
-        pm.union(),
-        pm.invoke(R.sort(function(a, b) {
-            return a.localeCompare(b.ip)
-        }))
-    ])
-}
+const { and, eq, compose, union, invoke } = pm.commands
+const rules = [
+    {
+        when: and([
+            eq('a.type', 'Array'),
+            eq('b.type', 'Array')
+        ]),
+        then: compose([
+            union(),
+            invoke(R.sort(function(a, b) {
+                return a.localeCompare(b.ip)
+            }))
+        ])
+    }
+]
 ```
 
 #### debug
 Useful for debuging output to the consule while developing your merge rules, however use with care since this command will also cause the current node to be omitted from the merged document. The first parameter is a [hogan.js](https://www.npmjs.org/package/hogan.js) template, the second (optional) parameter is a logger in case you want to direct output somewhere other than the console.
 
 ```js
-{
-    then: pm.debug('A: {{value.a}}, B: {{value.b}}')
-}
+const { debug } = pm.commands
+const rules = [
+    {
+        then: debug('A: {{value.a}}, B: {{value.b}}')
+    }
+]
 ```
 
 #### eq
 Compares the value located at the given [path](#paths) with the second parameter, returning true if they are equal and false otherwise
 ```js
-{
-    when: pm.eq('a.type', 'Number')
-}
+const { eq, clone } = pm.commands
+const rules = [
+    {
+        when: eq('a.type', 'Number'),
+        then: clone()
+    }
+]
 ```
 
 #### error
 Throws an error constructed from the given [hogan.js](https://www.npmjs.org/package/hogan.js) template
 ```js
-{
-    then: pm.err('Boom! A: {{value.a}}, B: {{value.b}}')
-}
+const { error } = pm.commands
+const rules = [
+    {
+        then: error('Boom! A: {{value.a}}, B: {{value.b}}')
+    }
+]
 ```
 
 #### gt
 Compares the value located at the given [path](#paths) with the second parameter, returning true if it is greater and false otherwise
 ```js
-{
-    when: pm.gt('a.value', 10)
-}
+const { gt, clone } = pm.commands
+const rules = [
+    {
+        when: gt('a.value', 10),
+        then: clone()
+    }
+]
 ```
 
 #### gte
 Compares the value located at the given [path](#paths) with the second parameter, returning true if it is greater or equal and false otherwise
 ```js
-{
-    when: pm.gte('a.value', 10)
-}
+const { gte, clone } = pm.commands
+const rules = [
+    {
+        when: gte('a.value', 10),
+        then: clone()
+    }
+]
 ```
 
 #### ignore
 Ignores a part of the document, e.g.
 ```js
-{
-    when: pm.eq('a.value', 'do-not-want')
-    then: pm.ignore()
-}
+const { eq, ignore } = pm.commands
+const rules = [
+    {
+        when: eq('a.value', 'do-not-want'),
+        then: ignore()
+    }
+]
 ```
 
-#### invoke
-Invokes a named or inline function.
+#### invoke (inline function)
+Invokes an inline function.
 ```js
-var options = {
-    rules: [
-        // inline
-        {
-            when: pm.invoke(function(facts) {
-                return facts.value.a === 'yes'
-            }),
-            then: pm.invoke(function(facts) {
-                return true
-            })
-        },
-        // named
-        {
-            when: pm.invoke('yes'),
-            then: pm.invoke('truism')
-        }
-    ]
-}
-var merge = pm.compile(options, {
-    yes: function(facts) {
-        return facts.value.a === 'yes'
-    }),
-    truism: function(facts) {
-        return true
+const { invoke } = pm.commands
+const rules = [
+    {
+        when: invoke(facts => facts.value.a === 'yes'),
+        then: invoke(facts => true)
     }
+]
+```
+
+#### invoke (named function)
+Invokes an inline function.
+```js
+const { invoke } = pm.commands
+const rules = [
+    {
+        when: invoke('isYes'),
+        then: invoke('truism')
+    }
+]
+pm.compile({ rules }, {
+    isYes: facts => facts.value.a === 'yes'
+    truism: facts) => true
 })
 ```
 
 #### iterate
 Iterates over two arrays, merging each item. If the arrays are different lengths, overflowing items will be merged against undefined.
 ```js
-{
-    when: pm.and([
-        pm.eq('a.type', 'Array'),
-        pm.eq('b.type', 'Array')
-    ]),
-    then: pm.iterate()
-}
+const { and, eq, iterate } = pm.commands
+const rules = [
+    {
+        when: and([
+            eq('a.type', 'Array'),
+            eq('b.type', 'Array')
+        ]),
+        then: iterate()
+    }
+]
 ```
 
 #### lt
 Compares the value located at the given [path](#paths) with the second parameter, returning true if it is less and false otherwise
 ```js
-{
-    when: pm.gt('a.value', 10)
-}
+const { lt, clone } = pm.commands
+const rules = [
+    {
+        when: lt('a.value', 10),
+        then: clone()
+    }
+]
 ```
 
 #### lte
 Compares the value located at the given [path](#paths) with the second parameter, returning true if it is less or equal and false otherwise
 ```js
-{
-    when: pm.gte('a.value', 10)
-}
+const { lte, clone } = pm.commands
+const rules = [
+    {
+        when: lte('a.value', 10),
+        then: clone()
+    }
+]
 ```
 
 #### matches
 Tests the value located at the given [path](#paths) against a regex.
 ```js
-{
-    when: pm.matches('a.value', /foo/i)
-}
+const { matches, clone } = pm.commands
+const rules = [
+    {
+        when: matches('a.value', /foo/i),
+        then: clone()
+    }
+]
 ```
 
 #### ne
 Compares the value located at the given [path](#paths) with the second parameter, returning false if they are equal and true otherwise
 ```js
-{
-    when: pm.eq('a.type', 'Number')
-}
+const { ne } = pm.commands
+const rules = [
+    {
+        when: ne('a.type', 'Number'),
+        then: clone()
+    }
+]
 ```
 
 #### never
 Never execute the `then` command.
 ```js
-{
-    when: pm.never(),
-    then: pm.clone()
-}
+const { never, clone } = pm.commands
+const rules = [
+    {
+        when: never(),
+        then: clone()
+    }
+]
 ```
 Only useful for tests or to temporarily disable a rule.
 
 #### or
 Boolean OR multiple commands. e.g.
 ```js
-{
-    when: pm.or([
-        pm.eq('a.type', 'String'),
-        pm.eq('a.type', 'Number')
-    ])
-}
+const { or, eq, clone } = pm.commands
+const rules = [
+    {
+        when: or([
+            eq('a.type', 'String'),
+            eq('a.type', 'Number')
+        ]),
+        then: clone()
+    }
+]
 ```
 
 #### recurse
 Recursively merge the attributes of "a" and "b". Only sensible when both "a" and "b" are objects (use the [iterate](#iterate) command to recurively merge two arrays).
 ```js
-{
-    when: pm.and([
-        pm.eq('a.type', 'Object'),
-        pm.eq('b.type', 'Object')
-    ]),
-    then: pm.recurse()
-}
+const { and, eq, recurse } = pm.commands
+const rules = [
+    {
+        when: and([
+            eq('a.type', 'Object'),
+            eq('b.type', 'Object')
+        ]),
+        then: recurse()
+    }
+]
 ```
 
 #### reference
 References the value specified by the [path](#paths) parameter.
 ```js
-{
-    then: pm.reference('a.value')
-}
+const { reference } = pm.commands
+const rules = [
+    {
+        then: reference('a.value')
+    }
+]
 ```
 
 #### union
 Union the "a" and "b" values using [Ramda's union](http://ramdajs.com/docs/#lensPath) function (which also dedupes). Only sensible when both "a" and "b" are arrays.
 ```js
-{
-    when: pm.and([
-        pm.eq('a.type', 'Array'),
-        pm.eq('b.type', 'Array')
-    ]),
-    then: pm.union()
-}
+const { and, eq, union } = pm.commands
+const rules = [
+    {
+        when: and([
+            eq('a.type', 'Array'),
+            eq('b.type', 'Array')
+        ]),
+        then: union()
+    }
+]
 ```
 
 #### unionWith
 Union the "a" and "b" values using [Ramda's unionWith](http://ramdajs.com/docs/#lensPath) function (which dedupes based on the result of the given function). Only sensible when both "a" and "b" are arrays.
 ```js
-{
-    when: pm.and([
-        pm.eq('a.type', 'Array'),
-        pm.eq('b.type', 'Array')
-    ]),
-    then: pm.unionWith(function(v) {
-        return v.id
-    })
-}
+const { and, eq, unionWith } = pm.commands
+const rules = [
+    {
+        when: and([
+            eq('a.type', 'Array'),
+            eq('b.type', 'Array')
+        ]),
+        then: unionWith(function(v) {
+            return v.id
+        })
+    }
+]
 ```
 
 ### Custom Commands
@@ -507,10 +533,13 @@ Even without expensive setup, currying does have incur a minor performance penal
 ### Paths
 Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](http://ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array, e.g.
 ```js
-{
-    when: pm.eq(['a', 'value'], 'nothing to see here'),
-    then: pm.ignore()
-}
+const { eq, ignore } = pm.commands
+const rules = [
+    {
+        when: eq(['a', 'value'], 'nothing to see here'),
+        then: ignore()
+    }
+]
 ```
 
 ### Circular References

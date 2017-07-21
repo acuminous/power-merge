@@ -1,4 +1,5 @@
 var pm = require('../..')
+var cmds = pm.commands
 var R = require('ramda')
 
 module.exports = {
@@ -10,19 +11,19 @@ module.exports = {
         },
         rules: [
             {
-                when: pm.and([
-                    pm.eq('a.type', 'Array'),
-                    pm.eq('b.type', 'Array'),
+                when: cmds.and([
+                    cmds.eq('a.type', 'Array'),
+                    cmds.eq('b.type', 'Array'),
                 ]),
-                then: pm.compose([
-                    pm.unionWith(R.eqBy(R.prop('id'))),
-                    pm.invoke(R.sort(function(a, b) {
+                then: cmds.compose([
+                    cmds.unionWith(R.eqBy(R.prop('id'))),
+                    cmds.invoke(R.sort(function(a, b) {
                         return b.id.localeCompare(a.id)
                     }))
                 ])
             },
             {
-                then: pm.clone('a.value')
+                then: cmds.clone('a.value')
             }
         ]
     },

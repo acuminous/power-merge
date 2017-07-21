@@ -1,4 +1,5 @@
 var pm = require('../..')
+var cmds = pm.commands
 var R = require('ramda')
 
 module.exports = {
@@ -10,25 +11,25 @@ module.exports = {
         },
         rules: [
             {
-                when: pm.or([
-                    pm.eq('a.circular', true),
-                    pm.eq('b.circular', true)
+                when: cmds.or([
+                    cmds.eq('a.circular', true),
+                    cmds.eq('b.circular', true)
                 ]),
-                then: pm.error('Circular reference at {{node.path}}')
+                then: cmds.error('Circular reference at {{node.path}}')
             },
             {
-                when: pm.and([
-                    pm.eq('a.type', 'Object'),
-                    pm.eq('b.type', 'Object'),
+                when: cmds.and([
+                    cmds.eq('a.type', 'Object'),
+                    cmds.eq('b.type', 'Object'),
                 ]),
-                then: pm.recurse()
+                then: cmds.recurse()
             },
             {
-                when: pm.eq('a.value', undefined),
-                then: pm.clone('b.value')
+                when: cmds.eq('a.value', undefined),
+                then: cmds.clone('b.value')
             },
             {
-                then: pm.clone('a.value')
+                then: cmds.clone('a.value')
             }
         ]
     },

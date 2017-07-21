@@ -1,4 +1,5 @@
 var pm = require('../..')
+var cmds = pm.commands
 var R = require('ramda')
 var citylots = require('./citylots.json')
 
@@ -12,33 +13,33 @@ module.exports = {
         rules: [
             // Reference arrays of coordinates (too big to clone quickly)
             {
-                when: pm.eq('node.name', 'coordinates'),
-                then: pm.reference('a.value')
+                when: cmds.eq('node.name', 'coordinates'),
+                then: cmds.reference('a.value')
             },
             // Recurse into objects
             {
-                when: pm.and([
-                    pm.eq('a.type', 'Object'),
-                    pm.eq('b.type', 'Object')
+                when: cmds.and([
+                    cmds.eq('a.type', 'Object'),
+                    cmds.eq('b.type', 'Object')
                 ]),
-                then: pm.recurse()
+                then: cmds.recurse()
             },
             // Iterate over arrays
             {
-                when: pm.and([
-                    pm.eq('a.type', 'Array'),
-                    pm.eq('b.type', 'Array')
+                when: cmds.and([
+                    cmds.eq('a.type', 'Array'),
+                    cmds.eq('b.type', 'Array')
                 ]),
-                then: pm.iterate()
+                then: cmds.iterate()
             },
             // If the "a" value is undefined, clone the "b" value
             {
-                when: pm.eq('a.value', undefined),
-                then: pm.clone('b.value')
+                when: cmds.eq('a.value', undefined),
+                then: cmds.clone('b.value')
             },
             // Otherwise clone the "a" value
             {
-                then: pm.clone('a.value')
+                then: cmds.clone('a.value')
             }
         ]
     },

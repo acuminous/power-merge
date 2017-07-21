@@ -82,4 +82,4 @@ function merge(context, rules, args) {
     return a
 }
 
-module.exports = R.merge({ compile: compile, noop: noop }, commands)
+module.exports = { compile: compile, noop: noop, commands: commands }
