@@ -227,9 +227,7 @@ const rules = [
         ]),
         then: compose([
             union(),
-            invoke(R.sort(function(a, b) {
-                return a.localeCompare(b.ip)
-            }))
+            invoke(R.sort((a, b) => a.localeCompare(b.ip)))
         ])
     }
 ]
