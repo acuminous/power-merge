@@ -7,30 +7,30 @@ describe('gt command', function() {
     var context = new Context()
 
     it('should return true when "a" value specified by the path is greater than the given value', function() {
-        var cmd = gt('a.value', 0)
+        var cmd = gt('a.value', 0)(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(context, facts), true)
+        assert.equal(cmd(facts), true)
     })
 
     it('should return false when "a" value specified by the path equals the given value', function() {
-        var cmd = gt('a.value', 1)
+        var cmd = gt('a.value', 1)(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(context, facts), false)
+        assert.equal(cmd(facts), false)
     })
 
     it('should return false when "a" value specified by the path is less than given value', function() {
-        var cmd = gt('a.value', 2)
+        var cmd = gt('a.value', 2)(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(context, facts), false)
+        assert.equal(cmd(facts), false)
     })
 
     it('should allow use of array paths', function() {
-        var cmd = gt(['a', 'value'], 0)
+        var cmd = gt(['a', 'value'], 0)(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(context, facts), true)
+        assert.equal(cmd(facts), true)
     })
 })

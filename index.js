@@ -12,31 +12,26 @@ var noop = require('./lib/noop')
 
 function compile(_options, namedCommands) {
     var options = withDefaultOptions(_options)
-    var rules = preProcessRules(options.rules)
-    var context = new Context({ namedCommands: namedCommands, options: options, rules: rules })
-    return buildMerge(context)
+    var context = new Context({ namedCommands: namedCommands, options: options })
+    var rules = preProcessRules(context, options.rules)
+    return buildMerge(context, rules)
 }
 
 function withDefaultOptions(options) {
     return R.mergeDeepLeft(options || {}, defaults)
 }
 
-function preProcessRules(rules) {
-    return R.compose(R.map(toWhenAndThen), R.flatten)(rules).concat({
-        when: commands.always(),
-        then: commands.error('No passing when condition for ({{a.value}}, {{b.value}})')
-    })
-}
-
-function toWhenAndThen(rule) {
-    return {
-        when: rule.when ? rule.when : commands.always(),
-        then: rule.then
-    }
+function preProcessRules(context, rules) {
+    return R.compose(R.map(function(rule) {
+        return {
+            when: rule.when ? rule.when(context) : commands.always(context),
+            then: rule.then(context)
+        }
+    }), R.flatten)(rules.concat(ruleSets.errorOnNoMatchingRules))
 }
 
 function buildMerge(context, rules) {
-    var partial = R.curry(merge)(context, context.get('rules'))
+    var partial = R.curry(merge)(context, rules)
     context.set('merge', partial)
     return withApiWrapper(partial, context)
 }
@@ -74,10 +69,10 @@ function merge(context, rules, args) {
             }
             facts.a.circular = context.isCircular(facts.a)
             facts.b.circular = context.isCircular(facts.b)
-            if (!rule.when(context, facts)) continue
+            if (!rule.when(facts)) continue
             context.recordHistory(facts.a)
             context.recordHistory(facts.b)
-            a = rule.then(context, facts)
+            a = rule.then(facts)
             context.eraseHistory(facts.a)
             context.eraseHistory(facts.b)
             break

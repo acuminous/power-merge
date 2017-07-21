@@ -1,6 +1,7 @@
 var assert = require('chai').assert
 var and = require('../../lib/commands/and')
 var eq = require('../../lib/commands/eq')
+var error = require('../../lib/commands/error')
 var Context = require('../../lib/Context')
 
 describe('and command', function() {
@@ -11,28 +12,26 @@ describe('and command', function() {
         var cmd = and([
             eq('a.value', 1),
             eq('b.value', 2)
-        ])
+        ])(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(context, facts), true)
+        assert.equal(cmd(facts), true)
     })
 
     it('should return the result of no commands', function() {
-        var cmd = and([])
+        var cmd = and([])(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(context, facts), true)
+        assert.equal(cmd(facts), true)
     })
 
     it('should short circuit when a command return false', function() {
         var cmd = and([
             eq('a.value', 2),
-            function() {
-                throw new Error('Did not short circuit')
-            }
-        ])
+            error('Did not short circuit')
+        ])(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(context, facts), false)
+        assert.equal(cmd(facts), false)
     })
 })

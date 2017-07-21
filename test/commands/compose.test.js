@@ -14,14 +14,14 @@ describe('compose command', function() {
         var cmd = compose([
             union(),
             invoke(R.reverse)
-        ])
+        ])(context)
 
         var facts = {
             a: { value: [1, 2, 3, 4, 5, 6, 7] },
             b: { value: [4, 5, 6, 7, 8, 9, 10] }
         }
 
-        var result = cmd(context, facts).reverse()
+        var result = cmd(facts).reverse()
         assert.equal(result.length, 10)
         for (var i = 0; i < result.length; i++) {
             assert.equal(result[i], i+1)
@@ -29,9 +29,9 @@ describe('compose command', function() {
     })
 
     it('should return the result of no commands', function() {
-        var cmd = compose([])
+        var cmd = compose([])(context)
         var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(context, facts), undefined)
+        assert.equal(cmd(facts), undefined)
     })
 })

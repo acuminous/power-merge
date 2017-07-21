@@ -498,20 +498,31 @@ const rules = [
 ```
 
 ### Custom Commands
-power-merge commands are easy to write, once you understand that they must be expressed as a function that returns a function. The outer function takes the command's configuration parameters, the inner function takes the [context](#context) and [facts](#facts), e.g.
+power-merge commands are easy to write, once you understand that they must be expressed as
+
+i. a function that returns
+    ii. a function that returns
+        iii. a function that returns the merge result
+
+The outer function (i) takes the command's configuration parameters,
+The middle function (ii) takes the [context](#context)
+The inner function (iii) takes the [facts](#facts), e.g.
 
 ```js
 var debug = require('debug')('power-merge:commands:highlight')
 
 module.exports = function highlight(str) {
 
-    return function(context, facts) {
+    return function(context) {
 
-        debug('path: %o, facts: %o', path, facts)
-        var result = str + view(facts) + str
+        return function(facts) {
 
-        debug('return: %o', result)
-        return result
+            debug('path: %o, facts: %o', path, facts)
+            var result = str + view(facts) + str
+
+            debug('return: %o', result)
+            return result
+        }
     }
 })
 ```
@@ -523,14 +534,17 @@ var noop = require('pm').noop
 
 module.exports = function log(text) {
 
-    return function(context, facts) {
-        debug('path: %o, facts: %o', path, facts)
-        console.log(text)
-        return noop
+    return function(context) {
+
+        return function(facts) {
+            debug('path: %o, facts: %o', path, facts)
+            console.log(text)
+            return noop
+        }
     }
 })
 ```
-Unless you need to do some expensive setup such as compiling templates, the above can be simplified by currying...
+Unless you need to do some expensive setup with the configuration parameters or context such as compiling templates, the above can be simplified by currying...
 
 ```js
 var debug = require('debug')('power-merge:commands:highlight')

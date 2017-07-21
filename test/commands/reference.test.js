@@ -7,25 +7,25 @@ describe('reference command', function() {
     var context = new Context()
 
     it('should reference "a" using an array path', function() {
-        var cmd = reference(['a', 'value'])
+        var cmd = reference(['a', 'value'])(context)
         var facts = {
             a: { value: { foo: 1 } },
             b: { value: { foo: 2 } }
         }
 
-        var result = cmd(context, facts)
+        var result = cmd(facts)
         assert.equal(result.foo, facts.a.value.foo)
         assert.ok(result === facts.a.value)
     })
 
     it('should reference "b" using a string path', function() {
-        var cmd = reference('b.value')
+        var cmd = reference('b.value')(context)
         var facts = {
             a: { value: { foo: 1 } },
             b: { value: { foo: 2 } }
         }
 
-        var result = cmd(context, facts)
+        var result = cmd(facts)
         assert.equal(result.foo, facts.b.value.foo)
         assert.ok(result === facts.b.value)
     })
