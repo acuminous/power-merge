@@ -26,7 +26,7 @@ power-merge is a library for custom merging of two or more documents. If your me
 then you're probably better off using one of those libraries. They will be faster, use fewer system resources and are heavily battle tested. However it your merge requirements are somewhat bespoke, then you've come to the right place.
 
 ## TL;DR
-### 1. Define the rules
+### 1. Compile the rules
 ```js
 const pm = require('power-merge')
 const { and, eq, unionWith } = pm.commands
@@ -38,13 +38,9 @@ const unionHostsByIp = {
     then: unionWith(R.eqBy(R.prop('ip')))
 }
 
-const rules = [ unionHostsByIp, ignoreNull, deepClone ]
+const merge = pm.compile({ rules: [ unionHostsByIp, ignoreNull, deepClone ] })
 ```
-### 2. Compile the rules
-```js
-const merge = pm.compile({ rules })
-```
-### 3. Merge the data
+### 2. Merge the data
 ```js
 const a = {
     poll: {
@@ -70,7 +66,7 @@ const b = {
 
 const result = merge(a, b)
 ```
-### 4. Profit
+### 3. Profit
 ```js
 {
     poll: {
