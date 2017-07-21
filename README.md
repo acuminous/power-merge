@@ -114,12 +114,15 @@ power-merge operates on an array of rules. A rule is comprised of zero or one `w
 
 ```js
 const { eq, clone } = pm.commands
-const rules = [{
-    when: eq('a.value', undefined),
-    then: clone('b.value')
-}, {
-    then: clone('a.value')
-}]
+const rules = [
+    {
+        when: eq('a.value', undefined),
+        then: clone('b.value')
+    },
+    {
+        then: clone('a.value')
+    }
+]
 ```
 The `when` conditions are tested in order until one passes, after which the associated `then` condition is invoked. The result of the `then` condition will normally be the merge result, but could be a token to instruct the merge function to skip over the current node instead of merging it.
 
