@@ -12,7 +12,7 @@ module.exports = {
         },
         rules: [
             rs.errorOnCircularReference,
-            rs.base
+            rs.deepClone
         ]
     },
     data: [

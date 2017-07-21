@@ -17,7 +17,7 @@ module.exports = {
                 when: cmds.eq('node.name', 'coordinates'),
                 then: cmds.reference('a.value')
             },
-            rs.base
+            rs.deepClone
         ]
     },
     data: [

@@ -9,7 +9,7 @@
 [![Dependency Status](https://david-dm.org/cressie176/power-merge.svg)](https://david-dm.org/cressie176/power-merge)
 [![devDependencies Status](https://david-dm.org/cressie176/power-merge/dev-status.svg)](https://david-dm.org/cressie176/power-merge?type=dev)
 
-power-merge is a library for custom merging of two or more documents. If your merge requirments are simple and you are happy with how [Ramda's mergeDeepLeft](http://ramdajs.com/docs/#mergeDeepLeft) or [Lodash's](https://lodash.com/docs/4.17.4#merge) works with regard to:
+power-merge is a library for custom merging of two or more documents. If your merge requirments are simple and you are happy with how [Ramda's mergeDeepLeft](http://ramdajs.com/docs/#mergeDeepLeft) or [Lodash's merge](https://lodash.com/docs/4.17.4#merge) works with regard to:
 
 * arrays
 * null values
@@ -31,7 +31,7 @@ However it your merge requirements are somewhat bespoke, then you've come to the
 ```js
 const pm = require('power-merge')
 const { and, eq, unionWith } = pm.commands
-const { ignoreNull, base } = pm.ruleSets
+const { ignoreNull, deepClone } = pm.ruleSets
 const R = require('ramda')
 
 const unionHostsByIp = {
@@ -39,7 +39,7 @@ const unionHostsByIp = {
     then: unionWith(R.eqBy(R.prop('ip')))
 }
 
-const rules = [ unionHostsByIp, ignoreNull, base ]
+const rules = [ unionHostsByIp, ignoreNull, deepClone ]
 ```
 ### 2. Compile the rules
 ```js

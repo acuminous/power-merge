@@ -26,7 +26,7 @@ module.exports = {
                 ])
             },
             rs.ignoreNull,
-            rs.base
+            rs.deepClone
         ]
     },
     data: [
