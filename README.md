@@ -61,7 +61,7 @@ const result = merge(a, b)
 }
 ```
 
-### 4. Make Your Own Rules!
+### Now Make Your Own Rules!
 ```js
 const pm = require('power-merge')
 const { ignoreNull, deepClone } = pm.ruleSets
