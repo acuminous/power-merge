@@ -304,7 +304,7 @@ const rules = [
 ]
 ```
 
-#### invoke (inline function)
+#### invoke (inline)
 Invokes an inline function.
 ```js
 const { invoke } = pm.commands
@@ -316,8 +316,8 @@ const rules = [
 ]
 ```
 
-#### invoke (named function)
-Invokes an inline function.
+#### invoke (named)
+Invokes a named function.
 ```js
 const { invoke } = pm.commands
 const rules = [
