@@ -23,9 +23,7 @@ power-merge is a library for custom merging of two or more documents. If your me
 * circular references
 * mutability
 
-then you're probably better off using one of those libraries. They will be faster, use fewer system resources and are heavily battle tested.
-
-However it your merge requirements are somewhat bespoke, then you've come to the right place.
+then you're probably better off using one of those libraries. They will be faster, use fewer system resources and are heavily battle tested. However it your merge requirements are somewhat bespoke, then you've come to the right place.
 
 ## TL;DR
 ### 1. Define the rules
