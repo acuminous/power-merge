@@ -19,7 +19,7 @@ power-merge is a library for custom merging of two or more documents. If your me
 * functions
 * regular expressions
 * dates
-* [objects with a clone function](https://momentjs.com/docs/#/parsing/moment-clone/)
+* objects with a clone function, e.g. [moment](https://momentjs.com/docs/#/parsing/moment-clone/)
 * circular references
 * mutability
 
