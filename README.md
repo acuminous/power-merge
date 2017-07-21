@@ -498,18 +498,21 @@ const rules = [
 ```
 
 ### Custom Commands
-power-merge commands are easy to write, once you understand that they must be expressed as
+power-merge commands are easy to write, once you understand that they must be expressed as 3 levels of nested functions.
 
-<pre>
-(i) a function that returns
-   (ii) a function that returns
-      (iii) a function that returns
-          (iv) the merge result or pm.noop
-</pre>
+```js
+module.exports = function(param1, param2) {
+    return function(context) {
+        return function(facts) {
+            return result // or pm.noop
+        }
+    }
+}    
+```
 
-The outer function (i) takes the command's configuration parameters,
-The middle function (ii) takes the [context](#context)
-The inner function (iii) takes the [facts](#facts), e.g.
+The outer function takes the command's configuration parameters,
+The middle function takes the [context](#context)
+The inner function takes the [facts](#facts), e.g.
 
 ```js
 var debug = require('debug')('power-merge:commands:highlight')
