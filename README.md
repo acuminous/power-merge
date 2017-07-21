@@ -128,6 +128,31 @@ const baseRules = [ rule1, rule2, rule3 ]
 const customRules = [ rule4, rule5 ]
 const rules = [ customRules, baseRules ]
 ```
+power-merge ships with the following preconfigured rulesets
+
+#### alwaysIgnore
+Will always pass, and do nothing. Useful to place at the end of your rules array if you don't like the default behaviour of throwing an error when no rules pass.
+```js
+const { alwaysIgnore } = pm.ruleSets
+const rules = [ customRules, alwaysIgnore ]
+```
+
+#### deepClone
+Uses a combination of [recurseKeys](#recurseKeys), [iterate](#iterate) and [clone](clone#) commands to recursively clone two documents own properties.
+```js
+const { deepClone } = pm.ruleSets
+const rules = [ customRules, deepClone ]
+```
+
+#### errorOnCircularReference
+Does what it says on the tin
+```js
+const { errorOnCircularReference } = pm.ruleSets
+const rules = [ customRules, errorOnCircularReference, deepClone ]
+```
+
+#### errorOnNoMatchingRules
+Also does what it says on the tin. This rule is automatically added to the end of every ruleset. If you want different behaviour finish your ruleset with something like [alwaysIgnore](#alwaysIgnore)
 
 ### Facts
 Facts is a document are passed to each `when` and `then` condition. The facts are...
