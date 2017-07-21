@@ -1,6 +1,6 @@
 {
   "name": "power-merge",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Merge multiple objects in a configurable way",
   "main": "index.js",
   "scripts": {
