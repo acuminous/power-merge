@@ -1,8 +1,8 @@
 var assert = require('chai').assert
-var recurse = require('../../lib/commands/recurse')
+var recurseKeys = require('../../lib/commands/recurseKeys')
 var Context = require('../../lib/Context')
 
-describe('recurse command', function() {
+describe('recurseKeys command', function() {
 
     function concat(args) {
         return args[0] + '-' + args[1]
@@ -11,7 +11,7 @@ describe('recurse command', function() {
     it('should recuse objects when both keys are present', function() {
         var context = new Context({ merge: concat })
 
-        var cmd = recurse()
+        var cmd = recurseKeys()
         var facts = {
             a: { value: { x: '1.1' } },
             b: { value: { x: '2.1' } },
@@ -25,7 +25,7 @@ describe('recurse command', function() {
     it('should recurse objects when key exists in a but not in b', function() {
         var context = new Context({ merge: concat })
 
-        var cmd = recurse()
+        var cmd = recurseKeys()
         var facts = {
             a: { value: { x: '1.1' } },
             b: { value: {} },
@@ -39,7 +39,7 @@ describe('recurse command', function() {
     it('should recurse objects when key exists in b but not in a', function() {
         var context = new Context({ merge: concat })
 
-        var cmd = recurse()
+        var cmd = recurseKeys()
         var facts = {
             a: { value: {} },
             b: { value: { x: '2.1' } },
@@ -53,7 +53,7 @@ describe('recurse command', function() {
     it('should recuse objects a is undefined', function() {
         var context = new Context({ merge: concat })
 
-        var cmd = recurse()
+        var cmd = recurseKeys()
         var facts = {
             a: { value: undefined },
             b: { value: { x: '2.1' } },
@@ -67,7 +67,7 @@ describe('recurse command', function() {
     it('should recuse objects a is null', function() {
         var context = new Context({ merge: concat })
 
-        var cmd = recurse()
+        var cmd = recurseKeys()
         var facts = {
             a: { value: undefined },
             b: { value: { x: '2.1' } },
@@ -81,7 +81,7 @@ describe('recurse command', function() {
     it('should recuse objects when b is undefined', function() {
         var context = new Context({ merge: concat })
 
-        var cmd = recurse()
+        var cmd = recurseKeys()
         var facts = {
             a: { value: { x: '1.1' } },
             b: { value: undefined },
@@ -95,7 +95,7 @@ describe('recurse command', function() {
     it('should recuse objects when b is null', function() {
         var context = new Context({ merge: concat })
 
-        var cmd = recurse()
+        var cmd = recurseKeys()
         var facts = {
             a: { value: { x: '1.1' } },
             b: { value: undefined },

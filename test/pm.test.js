@@ -155,7 +155,7 @@ describe('Power Merge', function() {
                         return facts.a.value + facts.b.value
                     })
                 }, {
-                    then: cmds.recurse()
+                    then: cmds.recurseKeys()
                 }
             ])
             var result = merge({ a: { b: 1 } }, { a: { b: 2 } })
@@ -225,7 +225,7 @@ describe('Power Merge', function() {
                     cmds.eq('a.type', 'Object'),
                     cmds.eq('b.type', 'Object')
                 ]),
-                then: cmds.recurse()
+                then: cmds.recurseKeys()
             },
             {
                 when: cmds.and([
@@ -252,7 +252,7 @@ describe('Power Merge', function() {
                     cmds.eq('a.type', 'Object'),
                     cmds.eq('b.type', 'Object')
                 ]),
-                then: cmds.recurse()
+                then: cmds.recurseKeys()
             },
             {
                 when: cmds.or([

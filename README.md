@@ -423,17 +423,17 @@ const rules = [
 ]
 ```
 
-#### recurse
-Recursively merge the attributes of "a" and "b". Only sensible when both "a" and "b" are objects (use the [iterate](#iterate) command to recurively merge two arrays).
+#### recurseKeys
+Recursively merge union of ```Object.keys('a') and Object.keys('b'). Only sensible when both 'a' and 'b' are objects (use the [iterate](#iterate) command to recurively merge two arrays).
 ```js
-const { and, eq, recurse } = pm.commands
+const { and, eq, recurseKeys } = pm.commands
 const rules = [
     {
         when: and([
             eq('a.type', 'Object'),
             eq('b.type', 'Object')
         ]),
-        then: recurse()
+        then: recurseKeys()
     }
 ]
 ```
