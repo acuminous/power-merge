@@ -125,7 +125,8 @@ To support re-use you can also provide nested arrays of rules which power-merge 
 
 ```js
 const baseRules = [ rule1, rule2, rule3 ]
-const rules = [ rule4, baseRules ]
+const customRules = [ rule4, rule5 ]
+const rules = [ customRules, baseRules ]
 ```
 
 ### Facts
