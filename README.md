@@ -128,6 +128,8 @@ const baseRules = [ rule1, rule2, rule3 ]
 const customRules = [ rule4, rule5 ]
 const rules = [ customRules, baseRules ]
 ```
+
+### RuleSets
 power-merge ships with the following preconfigured rulesets
 
 #### alwaysIgnore
