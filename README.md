@@ -129,7 +129,7 @@ The `when` conditions are tested in order until one passes, after which the asso
 To support re-use you can also provide nested arrays of rules which power-merge will automatically flatten, e.g.
 
 ```js
-const baseRules = [ rule1, rule2, rule 3 ]
+const baseRules = [ rule1, rule2, rule3 ]
 const rules = [ singleRule, baseRules ]
 ```
 
