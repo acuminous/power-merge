@@ -500,9 +500,12 @@ const rules = [
 ### Custom Commands
 power-merge commands are easy to write, once you understand that they must be expressed as
 
-i. a function that returns
-    ii. a function that returns
-        iii. a function that returns the merge result
+<pre>
+(i) a function that returns
+   (ii) a function that returns
+      (iii) a function that returns
+          (iv) the merge result or pm.noop
+</pre>
 
 The outer function (i) takes the command's configuration parameters,
 The middle function (ii) takes the [context](#context)
