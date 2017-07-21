@@ -9,7 +9,7 @@
 [![Dependency Status](https://david-dm.org/cressie176/power-merge.svg)](https://david-dm.org/cressie176/power-merge)
 [![devDependencies Status](https://david-dm.org/cressie176/power-merge/dev-status.svg)](https://david-dm.org/cressie176/power-merge?type=dev)
 
-power-merge is a library for custom merging of two or more documents. If your merge requirments are simple and you understand/are happy with how [Ramda's mergeDeepLeft](http://ramdajs.com/docs/#mergeDeepLeft) or [Lodash's](https://lodash.com/docs/4.17.4#merge) works with regard to:
+power-merge is a library for custom merging of two or more documents. If your merge requirments are simple and you are happy with how [Ramda's mergeDeepLeft](http://ramdajs.com/docs/#mergeDeepLeft) or [Lodash's](https://lodash.com/docs/4.17.4#merge) works with regard to:
 
 * arrays
 * null values
@@ -22,9 +22,9 @@ power-merge is a library for custom merging of two or more documents. If your me
 * circular references
 * mutability
 
-then you're probably better off using one of those libraries. They will be faster, use fewer system resources and are far more battle tested.
+then you're probably better off using one of those libraries. They will be faster, use fewer system resources and heavily battle tested.
 
-However it your merge requirements aren't satisfied by a pre-configured merge library, you've come to the right place.
+However it your merge requirements are somewhat bespoke, then you've come to the right place.
 
 ## TL;DR
 ### 1. Define the rules
