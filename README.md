@@ -61,10 +61,9 @@ const result = merge(a, b)
 }
 ```
 
-### Now Make Your Own Rules!
+## TL;DR With Custom Rules
+### 1. Write the rules
 ```js
-const pm = require('power-merge')
-const { ignoreNull, deepClone } = pm.ruleSets
 const { and, eq, unionWith } = pm.commands
 const R = require('ramda')
 
@@ -72,9 +71,18 @@ const unionHostsByIp = {
     when: eq('node.name', 'hosts')
     then: unionWith(R.eqBy(R.prop('ip')))
 }
+```
+
+### 2. Compile the rules
+```js
+const pm = require('power-merge')
+const { ignoreNull, deepClone } = pm.ruleSets
 
 const merge = pm.compile({ rules: [ unionHostsByIp, ignoreNull, deepClone ] })
+```
 
+### 3. Merge the data
+```js
 const a = {
     poll: {
         delay: null,
@@ -98,8 +106,10 @@ const b = {
 }
 
 const result = merge(a, b)
+```
 
-/**************** Result ****************
+### 4. Profit
+```js
 {
     poll: {
         frequency: '5s',
@@ -110,9 +120,7 @@ const result = merge(a, b)
         { ip: '192.168.1.200', port: 80 }
     ]
 }
-****************************************/
 ```
-
 
 ## How power-merge works
 
@@ -563,7 +571,7 @@ module.exports = function(param1, param2) {
             return result // or pm.noop
         }
     }
-}    
+}
 ```
 
 The outer function takes the command's configuration parameters,
