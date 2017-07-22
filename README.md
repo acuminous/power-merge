@@ -61,8 +61,8 @@ const result = merge(a, b)
 }
 ```
 
-## TL;DR With Custom Rules
-### 1. Write the rules
+## But wait, there's more...
+### 1. Write your own rules
 ```js
 const { and, eq, unionWith } = pm.commands
 const R = require('ramda')
@@ -644,9 +644,7 @@ const rules = [
 ```
 
 ### Circular References
-If you use the [clone](#clone) command circular references will be handled automatically. Clone uses [Ramda's clone](http://ramdajs.com/docs/#clone) function under the hood, which makes a copy of the original item, but uses references to the copy if they are encountered in a circular context.
-
-If you prefer some other action, then you can explicitly handle circular references as with any other [fact](#facts).
+If you use the [clone](#clone) command circular references will be handled automatically. Clone uses [Ramda's clone](http://ramdajs.com/docs/#clone) function under the hood, which makes a copy of the original item, but uses references to the copy if they are encountered in a circular context. If you prefer some other action, then you can explicitly handle circular references as with any other [fact](#facts).
 
 ### Debugging
 power-merge uses [debug](https://www.npmjs.org/package/debug). You can enable as follows...
