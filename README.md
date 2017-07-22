@@ -1,4 +1,4 @@
-# ⚡ power-merge ⚡
+# ⚡ Power Merge ⚡
 
 [![NPM version](https://img.shields.io/npm/v/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
 [![NPM downloads](https://img.shields.io/npm/dm/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
