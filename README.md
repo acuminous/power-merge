@@ -574,9 +574,9 @@ module.exports = function(param1, param2) {
 }
 ```
 
-The outer function takes the command's configuration parameters,
-The middle function takes the [context](#context)
-The inner function takes the [facts](#facts), e.g.
+1. The outer function takes the command's configuration parameters
+1. The middle function takes the [context](#context)
+1. The inner function takes the [facts](#facts), e.g.
 
 ```js
 var debug = require('debug')('power-merge:commands:highlight')
