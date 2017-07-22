@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unrelease]
+## [1.0.2]
 ### [Updated]
 - Readme
 
