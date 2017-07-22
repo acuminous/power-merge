@@ -64,7 +64,7 @@ const result = merge(a, b)
 ## But wait, there's more...
 A rules driven merge libary wouldn't be much use if you couldn't compose your own rules. Here's how...
 
-### 1. Write your own rules
+### 1. Make the rules
 ```js
 const { and, eq, unionWith } = pm.commands
 const R = require('ramda')
