@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.3]
+### [Updated]
+- Description in package.json
+- Fixed keyswords in package.json
+
 ## [1.0.2]
 ### [Updated]
 - Readme
