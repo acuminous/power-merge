@@ -1,6 +1,6 @@
 {
   "name": "power-merge",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Merge multiple objects and/or arrays by configurating rules that govern whether an attribute should be cloned, referenced, recursed, mutated or ignored",
   "main": "index.js",
   "scripts": {
