@@ -18,8 +18,7 @@
     "deep",
     "arrays",
     "configurable",
-    "rules",
-
+    "rules"
   ],
   "author": "Stephen Cresswell",
   "license": "ISC",
