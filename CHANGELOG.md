@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.4]
+### [Updated]
+- npmignore
+
 ## [1.0.3]
 ### [Updated]
 - Description in package.json
