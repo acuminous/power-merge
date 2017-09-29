@@ -1,5 +1,7 @@
 # ⚡ Power Merge ⚡
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/cressie176/power-merge.svg)](https://greenkeeper.io/)
+
 [![NPM version](https://img.shields.io/npm/v/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
 [![NPM downloads](https://img.shields.io/npm/dm/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
 [![Build Status](https://img.shields.io/travis/cressie176/power-merge/master.svg)](https://travis-ci.org/cressie176/power-merge)
