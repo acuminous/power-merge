@@ -251,7 +251,7 @@ const { always, clone } = pm.commands
 const rules = [
     {
         when: always(),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -267,7 +267,7 @@ const rules = [
             eq('a.type', 'String'),
             eq('b.type', 'String')
         ]),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -278,7 +278,7 @@ Clones the value specified by the [path](#paths) parameter using [Ramda's clone]
 const { clone } = pm.commands
 const rules = [
     {
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -320,7 +320,7 @@ const { eq, clone } = pm.commands
 const rules = [
     {
         when: eq('a.type', 'Number'),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -343,7 +343,7 @@ const { gt, clone } = pm.commands
 const rules = [
     {
         when: gt('a.value', 10),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -355,7 +355,7 @@ const { gte, clone } = pm.commands
 const rules = [
     {
         when: gte('a.value', 10),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -422,7 +422,7 @@ const { lt, clone } = pm.commands
 const rules = [
     {
         when: lt('a.value', 10),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -434,7 +434,7 @@ const { lte, clone } = pm.commands
 const rules = [
     {
         when: lte('a.value', 10),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -446,7 +446,7 @@ const { matches, clone } = pm.commands
 const rules = [
     {
         when: matches('a.value', /foo/i),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -458,7 +458,7 @@ const { ne } = pm.commands
 const rules = [
     {
         when: ne('a.type', 'Number'),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -470,7 +470,7 @@ const { never, clone } = pm.commands
 const rules = [
     {
         when: never(),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```
@@ -486,7 +486,7 @@ const rules = [
             eq('a.type', 'String'),
             eq('a.type', 'Number')
         ]),
-        then: clone()
+        then: clone('a.value')
     }
 ]
 ```

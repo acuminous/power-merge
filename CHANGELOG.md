@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.5]
+### [Updated]
+- README
+
 ## [1.0.4]
 ### [Updated]
 - Update depdendencies
