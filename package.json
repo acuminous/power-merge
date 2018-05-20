@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "istanbul": "istanbul cover --report html --report lcov _mocha",
-    "codeclimate": "npm run istanbul && source .codeclimate && codeclimate-test-reporter < coverage/lcov.info",
+    "codeclimate": "npm run istanbul && source .codeclimate",
     "lint": "eslint .",
     "prepush": "npm run lint && npm test && npm run codeclimate"
   },
@@ -26,14 +26,13 @@
   "author": "Stephen Cresswell",
   "license": "ISC",
   "devDependencies": {
-    "chai": "^4.0.2",
-    "codeclimate-test-reporter": "^0.5.0",
-    "eslint": "^4.1.1",
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
     "eslint-config-imperative": "^2.0.1",
     "eslint-plugin-imperative": "^2.0.0",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
-    "mocha": "^5.0.3"
+    "mocha": "^5.2.0"
   },
   "dependencies": {
     "async.asyncify": "^0.5.2",
