@@ -54,7 +54,6 @@ const result = merge(a, b)
 ```
 ### 3. Profit
 ```js
-
 {
     poll: {
         frequency: '5s',
@@ -568,9 +567,9 @@ const rules = [
 power-merge commands are easy to write, once you understand that they must be expressed as 3 levels of nested functions.
 
 ```js
-module.exports = function(param1, param2) {
-    return function(context) {
-        return function(facts) {
+module.exports = function one(param1, param2) {
+    return function two(context) {
+        return function three(facts) {
             return result // or pm.noop
         }
     }
@@ -584,11 +583,11 @@ module.exports = function(param1, param2) {
 ```js
 var debug = require('debug')('power-merge:commands:highlight')
 
-module.exports = function highlight(str) {
+module.exports = function __highlight(str) {
 
-    return function(context) {
+    return function _highlight(context) {
 
-        return function(facts) {
+        return function highlight(facts) {
 
             debug('path: %o, facts: %o', path, facts)
             var result = str + view(facts) + str
@@ -605,11 +604,11 @@ Commands that should cause an attribute to be ignored, rather than merged should
 var debug = require('debug')('power-merge:commands:log')
 var noop = require('pm').noop
 
-module.exports = function log(text) {
+module.exports = function __log(text) {
 
-    return function(context) {
+    return function _log(context) {
 
-        return function(facts) {
+        return function log(facts) {
             debug('path: %o, facts: %o', path, facts)
             console.log(text)
             return noop
@@ -617,22 +616,6 @@ module.exports = function log(text) {
     }
 })
 ```
-Unless you need to do some expensive setup with the configuration parameters or context such as compiling templates, the above can be simplified by currying...
-
-```js
-var debug = require('debug')('power-merge:commands:highlight')
-var R = require('ramda')
-
-module.exports = R.curry(function highlight(str, context, facts) {
-
-    debug('path: %o, facts: %o', path, facts)
-    var result = str + view(facts) + str
-
-    debug('return: %o', result)
-    return result
-})
-```
-Even without expensive setup, currying does have incur a minor performance penalty. It can also make it harder to realise you've forgotten to pass one of the configuration parameters to the command.
 
 ### Paths
 Several of the bundled commands take a `path` parameter to locate a value within the [facts](#facts). In the readme and examples this is always expressed as a dotpath, e.g. `a.value`, however under the hood this is converted to an array ['a', 'value'], which is passed to [Ramda's lensPath](http://ramdajs.com/docs/#lensPath) function. If you can't use dots in your path for any reason, you can pass in an array, e.g.
