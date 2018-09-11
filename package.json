@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "async.asyncify": "^0.5.2",
-    "debug": "^3.1.0",
+    "debug": "^4.0.0",
     "hogan.js": "^3.0.2",
     "ramda": "^0.25.0",
     "require-all": "^2.2.0",
