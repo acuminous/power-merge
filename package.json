@@ -39,7 +39,7 @@
     "debug": "^4.0.0",
     "hogan.js": "^3.0.2",
     "ramda": "^0.25.0",
-    "require-all": "^2.2.0",
+    "require-all": "^3.0.0",
     "variadic": "^1.0.1"
   },
   "directories": {
