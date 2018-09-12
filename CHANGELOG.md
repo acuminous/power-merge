@@ -6,7 +6,7 @@
 - eslint
 - debug
 - require-all
-- drop support for node 4
+- drop support for node 4 and 5
 
 ## 1.1.0
 ### Updated
