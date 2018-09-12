@@ -12,6 +12,8 @@ checks:
     enabled: false
   method-lines:
     enabled: false
+  similar-code:
+    enabled: false
 ratings:
   paths:
   - index.js

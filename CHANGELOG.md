@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.1.1
+### Updated
+- code climate config
+- eslint
+
 ## 1.1.0
 ### Updated
 - Improved debug
