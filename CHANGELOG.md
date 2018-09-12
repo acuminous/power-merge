@@ -1,9 +1,12 @@
 # Change Log
 
-## 1.1.1
+## 1.2.0
 ### Updated
 - code climate config
 - eslint
+- debug
+- require-all
+- drop support for node 4
 
 ## 1.1.0
 ### Updated

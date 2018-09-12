@@ -45,6 +45,9 @@
   "directories": {
     "test": "test"
   },
+  "engines" : {
+    "node" : ">6.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cressie176/power-merge.git"
