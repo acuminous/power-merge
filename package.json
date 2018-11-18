@@ -38,7 +38,7 @@
     "async.asyncify": "^0.5.2",
     "debug": "^4.0.1",
     "hogan.js": "^3.0.2",
-    "ramda": "^0.25.0",
+    "ramda": "^0.26.0",
     "require-all": "^3.0.0",
     "variadic": "^1.0.1"
   },
