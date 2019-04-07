@@ -4,11 +4,11 @@
   "description": "Merge multiple objects and/or arrays in a configurable way by defining rules that govern whether an attribute should be cloned, referenced, recursed, mutated or ignored",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
-    "istanbul": "istanbul cover --report html --report lcov _mocha",
-    "codeclimate": "npm run istanbul && source .codeclimate",
+    "test": "mocha test",
+    "coverage": "nyc --report html --reporter lcov --reporter text-summary mocha test",
+    "codeclimate": "(test -e .codeclimate && npm run coverage && source .codeclimate) || echo skipping codeclimate",
     "lint": "eslint .",
-    "prepush": "npm run lint && npm test && npm run codeclimate"
+    "prepush": "npm run lint && npm run codeclimate"
   },
   "keywords": [
     "merge",
@@ -27,18 +27,18 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^5.6.1",
+    "eslint": "^5.16.0",
     "eslint-config-imperative": "^2.1.0",
     "eslint-plugin-imperative": "^2.1.0",
-    "husky": "^1.1.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0"
+    "husky": "^1.3.1",
+    "mocha": "^6.1.0",
+    "nyc": "^13.3.0"
   },
   "dependencies": {
     "async.asyncify": "^0.5.2",
-    "debug": "^4.0.1",
+    "debug": "^4.1.1",
     "hogan.js": "^3.0.2",
-    "ramda": "^0.25.0",
+    "ramda": "^0.26.1",
     "require-all": "^3.0.0",
     "variadic": "^1.0.1"
   },
