@@ -63,7 +63,6 @@ const result = merge(a, b)
 ## But wait, there's more...
 A rules driven merge libary wouldn't be much use if you couldn't compose your own rules. Here's how...
 
-### 1. Make the rules
 ```js
 const pm = require('power-merge')
 const { ignoreNull, deepClone } = pm.ruleSets
