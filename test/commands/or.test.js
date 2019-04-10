@@ -6,32 +6,32 @@ var Context = require('../../lib/Context')
 
 describe('or command', function() {
 
-    var context = new Context()
+  var context = new Context()
 
-    it('should return the result of all commands', function() {
-        var cmd = or([
-            eq('a.value', 2),
-            eq('b.value', 1)
-        ])(context)
-        var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should return the result of all commands', function() {
+    var cmd = or([
+      eq('a.value', 2),
+      eq('b.value', 1)
+    ])(context)
+    var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), false)
-    })
+    assert.equal(cmd(facts), false)
+  })
 
-    it('should return the result of no commands', function() {
-        var cmd = or([])(context)
-        var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should return the result of no commands', function() {
+    var cmd = or([])(context)
+    var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), true)
-    })
+    assert.equal(cmd(facts), true)
+  })
 
-    it('should short circuit when a command return true', function() {
-        var cmd = or([
-            eq('a.value', 1),
-            error('Did not short circuit')
-        ])(context)
-        var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should short circuit when a command return true', function() {
+    var cmd = or([
+      eq('a.value', 1),
+      error('Did not short circuit')
+    ])(context)
+    var facts = { a: { value : 1 }, b: { value: 2 } }
 
-        assert.equal(cmd(facts), true)
-    })
+    assert.equal(cmd(facts), true)
+  })
 })

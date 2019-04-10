@@ -37,17 +37,17 @@ const merge = pm.compile({ rules: [ ignoreNull, deepClone ] })
 ### 2. Merge the data
 ```js
 const a = {
-    poll: {
-        delay: null,
-        frequency: '5s'
-    }
+  poll: {
+    delay: null,
+    frequency: '5s'
+  }
 }
 
 const b = {
-    poll: {
-        delay: '1m',
-        frequency: '10s'
-    }
+  poll: {
+    delay: '1m',
+    frequency: '10s'
+  }
 }
 
 const result = merge(a, b)
@@ -55,9 +55,9 @@ const result = merge(a, b)
 ### 3. Profit
 ```js
 {
-    poll: {
-        frequency: '5s',
-    }
+  poll: {
+    frequency: '5s',
+  }
 }
 ```
 
@@ -70,8 +70,8 @@ const { and, eq, unionWith } = pm.commands
 const R = require('ramda')
 
 const unionHostsByIp = {
-    when: eq('node.name', 'hosts')
-    then: unionWith(R.eqBy(R.prop('ip')))
+  when: eq('node.name', 'hosts')
+  then: unionWith(R.eqBy(R.prop('ip')))
 }
 ```
 
@@ -86,25 +86,25 @@ const merge = pm.compile({ rules: [ unionHostsByIp, ignoreNull, deepClone ] })
 ### 3. Merge the data
 ```js
 const a = {
-    poll: {
-        delay: null,
-        frequency: '5s',
-    },
-    hosts: [
-        { ip: '192.168.1.100', port: 80 },
-        { ip: '192.168.1.200', port: 80 }
-    ]
+  poll: {
+    delay: null,
+    frequency: '5s',
+  },
+  hosts: [
+    { ip: '192.168.1.100', port: 80 },
+    { ip: '192.168.1.200', port: 80 }
+  ]
 }
 
 const b = {
-    poll: {
-        delay: '1m',
-        frequency: '10s',
-    },
-    hosts: [
-        { ip: '192.168.1.100', port: 8080 },
-        { ip: '192.168.1.101', port: 8080 }
-    ]
+  poll: {
+    delay: '1m',
+    frequency: '10s',
+  },
+  hosts: [
+    { ip: '192.168.1.100', port: 8080 },
+    { ip: '192.168.1.101', port: 8080 }
+  ]
 }
 
 const result = merge(a, b)
@@ -113,14 +113,14 @@ const result = merge(a, b)
 ### 4. Profit
 ```js
 {
-    poll: {
-        frequency: '5s',
-    },
-    hosts: [
-        { ip: '192.168.1.100', port: 80 },
-        { ip: '192.168.1.101', port: 8080 },
-        { ip: '192.168.1.200', port: 80 }
-    ]
+  poll: {
+    frequency: '5s',
+  },
+  hosts: [
+    { ip: '192.168.1.100', port: 80 },
+    { ip: '192.168.1.101', port: 8080 },
+    { ip: '192.168.1.200', port: 80 }
+  ]
 }
 ```
 
@@ -135,16 +135,16 @@ power-merge is intended to be configurable. In addition to the merge rules you c
 
 ```js
 var merge = pm.compile({
-    api: {
-        synchronous: false,
-        direction: 'right-to-left',
-        varardic: false
-    },
-    rules: [ ... ]
+  api: {
+    synchronous: false,
+    direction: 'right-to-left',
+    varardic: false
+  },
+  rules: [ ... ]
 })
 
 merge([d, c, b, a], function(err, result) {
-    // profit
+  // profit
 })
 ```
 
@@ -154,13 +154,13 @@ power-merge operates on an array of rules. A rule is comprised of zero or one `w
 ```js
 const { eq, clone } = pm.commands
 const rules = [
-    {
-        when: eq('a.value', undefined),
-        then: clone('b.value')
-    },
-    {
-        then: clone('a.value')
-    }
+  {
+    when: eq('a.value', undefined),
+    then: clone('b.value')
+  },
+  {
+    then: clone('a.value')
+  }
 ]
 ```
 The `when` conditions are tested in order until one passes, after which the associated `then` condition is invoked. The result of the `then` condition will normally be the merge result, but could be the `pm.noop` token to instruct the merge function to skip over the current node instead of merging it.
@@ -205,21 +205,21 @@ Facts is a document are passed to each `when` and `then` condition. The facts ar
 
 ```js
 {
-    a: {
-        value: '30s',
-        type: 'String',
-        circular: false
-    },
-    b: {
-        value: '1m',
-        type: 'String',
-        circular: false
-    },
-    node: {
-        depth: 3,
-        name: 'delay',
-        path: 'poll.delay'
-    }
+  a: {
+    value: '30s',
+    type: 'String',
+    circular: false
+  },
+  b: {
+    value: '1m',
+    type: 'String',
+    circular: false
+  },
+  node: {
+    depth: 3,
+    name: 'delay',
+    path: 'poll.delay'
+  }
 }
 ```
 `when` conditions are used to check the facts. If they return true, the `then` condition will be executed. `then` conditions typically reference, clone or descend into the fact's `a.value` and/or `b.value`, but could also be written to perform operations upon any of the facts.
@@ -233,10 +233,10 @@ Commands are the functions which operate on [facts](#facts). You specify them in
 ```js
 const { eq, clone } = pm.commands
 const rules = [
-    {
-        when: eq('a.value', 'foo'),
-        then: clone('a.value')
-    }
+  {
+    when: eq('a.value', 'foo'),
+    then: clone('a.value')
+  }
 ]
 ```
 references two commands, `eq` and `clone`. The `eq` command takes two parameters, `path` and `value`. It uses the `path` to extract data from the [facts](#facts) and compares it to the `value`, returning true if they are equal, and false otherwise.
@@ -248,10 +248,10 @@ Always execute the `then` command.
 ```js
 const { always, clone } = pm.commands
 const rules = [
-    {
-        when: always(),
-        then: clone('a.value')
-    }
+  {
+    when: always(),
+    then: clone('a.value')
+  }
 ]
 ```
 Since `when` will default to `always`, you can achieve the same result by omitting the `when` clause altogether.
@@ -261,13 +261,13 @@ Boolean AND multiple commands. e.g.
 ```js
 const { and, eq, clone } = pm.commands
 const rules = [
-    {
-        when: and([
-            eq('a.type', 'String'),
-            eq('b.type', 'String')
-        ]),
-        then: clone('a.value')
-    }
+  {
+    when: and([
+      eq('a.type', 'String'),
+      eq('b.type', 'String')
+    ]),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -276,9 +276,9 @@ Clones the value specified by the [path](#paths) parameter using [Ramda's clone]
 ```js
 const { clone } = pm.commands
 const rules = [
-    {
-        then: clone('a.value')
-    }
+  {
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -287,16 +287,16 @@ Composes a chain of commands so the output from one will be passed to the next. 
 ```js
 const { and, eq, compose, union, invoke } = pm.commands
 const rules = [
-    {
-        when: and([
-            eq('a.type', 'Array'),
-            eq('b.type', 'Array')
-        ]),
-        then: compose([
-            union(),
-            invoke(R.sort((a, b) => a.localeCompare(b.ip)))
-        ])
-    }
+  {
+    when: and([
+      eq('a.type', 'Array'),
+      eq('b.type', 'Array')
+    ]),
+    then: compose([
+      union(),
+      invoke(R.sort((a, b) => a.localeCompare(b.ip)))
+    ])
+  }
 ]
 ```
 
@@ -306,9 +306,9 @@ Useful for debuging output to the consule while developing your merge rules, how
 ```js
 const { debug } = pm.commands
 const rules = [
-    {
-        then: debug('A: {{value.a}}, B: {{value.b}}')
-    }
+  {
+    then: debug('A: {{value.a}}, B: {{value.b}}')
+  }
 ]
 ```
 
@@ -317,10 +317,10 @@ Compares the value located at the given [path](#paths) with the second parameter
 ```js
 const { eq, clone } = pm.commands
 const rules = [
-    {
-        when: eq('a.type', 'Number'),
-        then: clone('a.value')
-    }
+  {
+    when: eq('a.type', 'Number'),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -329,9 +329,9 @@ Throws an error constructed from the given [hogan.js](https://www.npmjs.org/pack
 ```js
 const { error } = pm.commands
 const rules = [
-    {
-        then: error('Boom! A: {{value.a}}, B: {{value.b}}')
-    }
+  {
+    then: error('Boom! A: {{value.a}}, B: {{value.b}}')
+  }
 ]
 ```
 
@@ -340,10 +340,10 @@ Compares the value located at the given [path](#paths) with the second parameter
 ```js
 const { gt, clone } = pm.commands
 const rules = [
-    {
-        when: gt('a.value', 10),
-        then: clone('a.value')
-    }
+  {
+    when: gt('a.value', 10),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -352,10 +352,10 @@ Compares the value located at the given [path](#paths) with the second parameter
 ```js
 const { gte, clone } = pm.commands
 const rules = [
-    {
-        when: gte('a.value', 10),
-        then: clone('a.value')
-    }
+  {
+    when: gte('a.value', 10),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -364,10 +364,10 @@ Ignores a part of the document, e.g.
 ```js
 const { eq, ignore } = pm.commands
 const rules = [
-    {
-        when: eq('a.value', 'do-not-want'),
-        then: ignore()
-    }
+  {
+    when: eq('a.value', 'do-not-want'),
+    then: ignore()
+  }
 ]
 ```
 
@@ -376,10 +376,10 @@ Invokes an inline function.
 ```js
 const { invoke } = pm.commands
 const rules = [
-    {
-        when: invoke(facts => facts.value.a === 'yes'),
-        then: invoke(facts => true)
-    }
+  {
+    when: invoke(facts => facts.value.a === 'yes'),
+    then: invoke(facts => true)
+  }
 ]
 ```
 
@@ -388,14 +388,14 @@ Invokes a named function.
 ```js
 const { invoke } = pm.commands
 const rules = [
-    {
-        when: invoke('isYes'),
-        then: invoke('truism')
-    }
+  {
+    when: invoke('isYes'),
+    then: invoke('truism')
+  }
 ]
 pm.compile({ rules }, {
-    isYes: facts => facts.value.a === 'yes'
-    truism: facts => true
+  isYes: facts => facts.value.a === 'yes'
+  truism: facts => true
 })
 ```
 
@@ -404,13 +404,13 @@ Iterates over two arrays, merging each item. If the arrays are different lengths
 ```js
 const { and, eq, iterate } = pm.commands
 const rules = [
-    {
-        when: and([
-            eq('a.type', 'Array'),
-            eq('b.type', 'Array')
-        ]),
-        then: iterate()
-    }
+  {
+    when: and([
+      eq('a.type', 'Array'),
+      eq('b.type', 'Array')
+    ]),
+    then: iterate()
+  }
 ]
 ```
 
@@ -419,10 +419,10 @@ Compares the value located at the given [path](#paths) with the second parameter
 ```js
 const { lt, clone } = pm.commands
 const rules = [
-    {
-        when: lt('a.value', 10),
-        then: clone('a.value')
-    }
+  {
+    when: lt('a.value', 10),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -431,10 +431,10 @@ Compares the value located at the given [path](#paths) with the second parameter
 ```js
 const { lte, clone } = pm.commands
 const rules = [
-    {
-        when: lte('a.value', 10),
-        then: clone('a.value')
-    }
+  {
+    when: lte('a.value', 10),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -443,10 +443,10 @@ Tests the value located at the given [path](#paths) against a regex.
 ```js
 const { matches, clone } = pm.commands
 const rules = [
-    {
-        when: matches('a.value', /foo/i),
-        then: clone('a.value')
-    }
+  {
+    when: matches('a.value', /foo/i),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -455,10 +455,10 @@ Compares the value located at the given [path](#paths) with the second parameter
 ```js
 const { ne } = pm.commands
 const rules = [
-    {
-        when: ne('a.type', 'Number'),
-        then: clone('a.value')
-    }
+  {
+    when: ne('a.type', 'Number'),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -467,10 +467,10 @@ Never execute the `then` command.
 ```js
 const { never, clone } = pm.commands
 const rules = [
-    {
-        when: never(),
-        then: clone('a.value')
-    }
+  {
+    when: never(),
+    then: clone('a.value')
+  }
 ]
 ```
 Only useful for tests or to temporarily disable a rule.
@@ -480,13 +480,13 @@ Boolean OR multiple commands. e.g.
 ```js
 const { or, eq, clone } = pm.commands
 const rules = [
-    {
-        when: or([
-            eq('a.type', 'String'),
-            eq('a.type', 'Number')
-        ]),
-        then: clone('a.value')
-    }
+  {
+    when: or([
+      eq('a.type', 'String'),
+      eq('a.type', 'Number')
+    ]),
+    then: clone('a.value')
+  }
 ]
 ```
 
@@ -495,13 +495,13 @@ Recursively merge union of `Object.keys('a')` and `Object.keys('b')`, i.e. all e
 ```js
 const { and, eq, recurseKeys } = pm.commands
 const rules = [
-    {
-        when: and([
-            eq('a.type', 'Object'),
-            eq('b.type', 'Object')
-        ]),
-        then: recurseKeys()
-    }
+  {
+    when: and([
+      eq('a.type', 'Object'),
+      eq('b.type', 'Object')
+    ]),
+    then: recurseKeys()
+  }
 ]
 ```
 
@@ -510,13 +510,13 @@ Recursively merge union of `R.keysIn('a')` and `R.keysIn('b')`, i.e. all enumera
 ```js
 const { and, eq, recurseKeysIn } = pm.commands
 const rules = [
-    {
-        when: and([
-            eq('a.type', 'Object'),
-            eq('b.type', 'Object')
-        ]),
-        then: recurseKeysIn()
-    }
+  {
+    when: and([
+      eq('a.type', 'Object'),
+      eq('b.type', 'Object')
+    ]),
+    then: recurseKeysIn()
+  }
 ]
 ```
 
@@ -525,9 +525,9 @@ References the value specified by the [path](#paths) parameter.
 ```js
 const { reference } = pm.commands
 const rules = [
-    {
-        then: reference('a.value')
-    }
+  {
+    then: reference('a.value')
+  }
 ]
 ```
 
@@ -536,13 +536,13 @@ Union the "a" and "b" values using [Ramda's union](http://ramdajs.com/docs/#lens
 ```js
 const { and, eq, union } = pm.commands
 const rules = [
-    {
-        when: and([
-            eq('a.type', 'Array'),
-            eq('b.type', 'Array')
-        ]),
-        then: union()
-    }
+  {
+    when: and([
+      eq('a.type', 'Array'),
+      eq('b.type', 'Array')
+    ]),
+    then: union()
+  }
 ]
 ```
 
@@ -551,15 +551,15 @@ Union the "a" and "b" values using [Ramda's unionWith](http://ramdajs.com/docs/#
 ```js
 const { and, eq, unionWith } = pm.commands
 const rules = [
-    {
-        when: and([
-            eq('a.type', 'Array'),
-            eq('b.type', 'Array')
-        ]),
-        then: unionWith(function(v) {
-            return v.id
-        })
-    }
+  {
+    when: and([
+      eq('a.type', 'Array'),
+      eq('b.type', 'Array')
+    ]),
+    then: unionWith(function(v) {
+      return v.id
+    })
+  }
 ]
 ```
 
@@ -568,11 +568,11 @@ power-merge commands are easy to write, once you understand that they must be ex
 
 ```js
 module.exports = function one(param1, param2) {
-    return function two(context) {
-        return function three(facts) {
-            return result // or pm.noop
-        }
+  return function two(context) {
+    return function three(facts) {
+      return result // or pm.noop
     }
+  }
 }
 ```
 
@@ -585,17 +585,17 @@ var debug = require('debug')('power-merge:commands:highlight')
 
 module.exports = function __highlight(str) {
 
-    return function _highlight(context) {
+  return function _highlight(context) {
 
-        return function highlight(facts) {
+    return function highlight(facts) {
 
-            debug('path: %o, facts: %o', path, facts)
-            var result = str + view(facts) + str
+      debug('path: %o, facts: %o', path, facts)
+      var result = str + view(facts) + str
 
-            debug('return: %o', result)
-            return result
-        }
+      debug('return: %o', result)
+      return result
     }
+  }
 })
 ```
 Commands that should cause an attribute to be ignored, rather than merged should return the special `pm.noop` token. i.e.
@@ -606,14 +606,14 @@ var noop = require('pm').noop
 
 module.exports = function __log(text) {
 
-    return function _log(context) {
+  return function _log(context) {
 
-        return function log(facts) {
-            debug('path: %o, facts: %o', path, facts)
-            console.log(text)
-            return noop
-        }
+    return function log(facts) {
+      debug('path: %o, facts: %o', path, facts)
+      console.log(text)
+      return noop
     }
+  }
 })
 ```
 
@@ -622,10 +622,10 @@ Several of the bundled commands take a `path` parameter to locate a value within
 ```js
 const { eq, ignore } = pm.commands
 const rules = [
-    {
-        when: eq(['a', 'value'], 'nothing to see here'),
-        then: ignore()
-    }
+  {
+    when: eq(['a', 'value'], 'nothing to see here'),
+    then: ignore()
+  }
 ]
 ```
 
