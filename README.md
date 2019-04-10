@@ -52,6 +52,7 @@ const b = {
 // Merge the documents
 const result = merge(a, b)
 ```
+#### Result:
 ```
 {
   poll: {
@@ -104,6 +105,7 @@ const b = {
 // Merge the documents
 const result = merge(a, b)
 ```
+#### Result:
 ```
 {
   poll: {
