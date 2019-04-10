@@ -27,15 +27,14 @@ power-merge is a library for custom merging of two or more documents. If your me
 then you're probably better off using one of those libraries. They will be faster, use fewer system resources and are heavily battle tested. However it your merge requirements are somewhat bespoke, then you've come to the right place.
 
 ## TL;DR
-### 1. Compile the rules
 ```js
 const pm = require('power-merge')
 const { ignoreNull, deepClone } = pm.ruleSets
 
+// Compile the rules
 const merge = pm.compile({ rules: [ ignoreNull, deepClone ] })
-```
-### 2. Merge the data
-```js
+
+// Define the documents
 const a = {
   poll: {
     delay: null,
@@ -50,10 +49,10 @@ const b = {
   }
 }
 
+// Merge the documents
 const result = merge(a, b)
 ```
-### 3. Profit
-```js
+```
 {
   poll: {
     frequency: '5s',
@@ -66,25 +65,21 @@ A rules driven merge libary wouldn't be much use if you couldn't compose your ow
 
 ### 1. Make the rules
 ```js
+const pm = require('power-merge')
+const { ignoreNull, deepClone } = pm.ruleSets
 const { and, eq, unionWith } = pm.commands
 const R = require('ramda')
 
+// Compose a new rule
 const unionHostsByIp = {
   when: eq('node.name', 'hosts')
   then: unionWith(R.eqBy(R.prop('ip')))
 }
-```
 
-### 2. Compile the rules
-```js
-const pm = require('power-merge')
-const { ignoreNull, deepClone } = pm.ruleSets
-
+// Compile the rules
 const merge = pm.compile({ rules: [ unionHostsByIp, ignoreNull, deepClone ] })
-```
 
-### 3. Merge the data
-```js
+// Define the documents
 const a = {
   poll: {
     delay: null,
@@ -107,11 +102,10 @@ const b = {
   ]
 }
 
+// Merge the documents
 const result = merge(a, b)
 ```
-
-### 4. Profit
-```js
+```
 {
   poll: {
     frequency: '5s',
@@ -134,7 +128,7 @@ power-merge is intended to be configurable. In addition to the merge rules you c
 * whether the arguments should be varardic(default) or an array.
 
 ```js
-var merge = pm.compile({
+const merge = pm.compile({
   api: {
     synchronous: false,
     direction: 'right-to-left',
@@ -581,7 +575,7 @@ module.exports = function one(param1, param2) {
 1. The inner function takes the [facts](#facts), e.g.
 
 ```js
-var debug = require('debug')('power-merge:commands:highlight')
+const debug = require('debug')('power-merge:commands:highlight')
 
 module.exports = function __highlight(str) {
 
@@ -590,7 +584,7 @@ module.exports = function __highlight(str) {
     return function highlight(facts) {
 
       debug('path: %o, facts: %o', path, facts)
-      var result = str + view(facts) + str
+      const result = str + view(facts) + str
 
       debug('return: %o', result)
       return result
@@ -601,8 +595,8 @@ module.exports = function __highlight(str) {
 Commands that should cause an attribute to be ignored, rather than merged should return the special `pm.noop` token. i.e.
 
 ```js
-var debug = require('debug')('power-merge:commands:log')
-var noop = require('pm').noop
+const debug = require('debug')('power-merge:commands:log')
+const noop = require('pm').noop
 
 module.exports = function __log(text) {
 
