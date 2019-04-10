@@ -137,10 +137,11 @@ const merge = pm.compile({
   rules: [ ... ]
 })
 
-merge([d, c, b, a], function(err, result) {
+merge([d, c, b, a], (err, result) => {
   // profit
 })
 ```
+The merge function can be promisified if you prefer.
 
 ### Rules
 power-merge operates on an array of rules. A rule is comprised of zero or one `when` conditions and exactly one `then` condition.
