@@ -37,14 +37,14 @@ const a = {
   poll: {
     delay: null,
     frequency: '5s',
-  }
+  },
 };
 
 const b = {
   poll: {
     delay: '1m',
     frequency: '10s',
-  }
+  },
 };
 
 // Merge the documents
