@@ -202,17 +202,17 @@ Facts is a document are passed to each `when` and `then` condition. The facts ar
   a: {
     value: '30s',
     type: 'String',
-    circular: false
+    circular: false,
   },
   b: {
     value: '1m',
     type: 'String',
-    circular: false
+    circular: false,
   },
   node: {
     depth: 3,
     name: 'delay',
-    path: 'poll.delay'
+    path: 'poll.delay',
   },
 };
 ```
