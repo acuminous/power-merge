@@ -6,7 +6,6 @@
   "scripts": {
     "test": "node test",
     "coverage": "nyc --report html --reporter lcov --reporter text-summary node test",
-    "codeclimate": "(test -e .codeclimate && npm run coverage && source .codeclimate) || echo skipping codeclimate",
     "lint": "eslint ."
   },
   "keywords": [
@@ -28,8 +27,8 @@
     "chai": "^4.2.0",
     "eslint": "^6.8.0",
     "eslint-config-esnext": "^4.1.0",
-    "husky": "^3.0.7",
-    "nyc": "^14.1.1",
+    "husky": "^4.3.8",
+    "nyc": "^15.1.0",
     "zunit": "^3.0.4"
   },
   "dependencies": {
