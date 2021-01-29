@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const recurseKeysIn = require('../../lib/commands/recurseKeysIn');
 const Context = require('../../lib/Context');
 
@@ -19,7 +19,7 @@ describe('recurseKeysIn command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.x, '1.1-2.1');
+    assert.strictEqual(result.x, '1.1-2.1');
   });
 
   it('should recurse objects when key exists in a but not in b', () => {
@@ -33,7 +33,7 @@ describe('recurseKeysIn command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.x, '1.1-undefined');
+    assert.strictEqual(result.x, '1.1-undefined');
   });
 
   it('should recurse objects when key exists in b but not in a', () => {
@@ -47,7 +47,7 @@ describe('recurseKeysIn command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.x, 'undefined-2.1');
+    assert.strictEqual(result.x, 'undefined-2.1');
   });
 
   it('should recuse objects a is undefined', () => {
@@ -61,7 +61,7 @@ describe('recurseKeysIn command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.x, 'undefined-2.1');
+    assert.strictEqual(result.x, 'undefined-2.1');
   });
 
   it('should recuse objects a is null', () => {
@@ -75,7 +75,7 @@ describe('recurseKeysIn command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.x, 'undefined-2.1');
+    assert.strictEqual(result.x, 'undefined-2.1');
   });
 
   it('should recuse objects when b is undefined', () => {
@@ -89,7 +89,7 @@ describe('recurseKeysIn command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.x, '1.1-undefined');
+    assert.strictEqual(result.x, '1.1-undefined');
   });
 
   it('should recuse objects when b is null', () => {
@@ -103,6 +103,6 @@ describe('recurseKeysIn command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.x, '1.1-undefined');
+    assert.strictEqual(result.x, '1.1-undefined');
   });
 });

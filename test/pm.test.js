@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const R = require('ramda');
 const pm = require('..');
 const cmds = pm.commands;
@@ -28,14 +28,14 @@ describe('Power Merge', () => {
     ];
 
     function assertMergeResult(original, copy, merged) {
-      assert.equal(JSON.stringify(original), JSON.stringify(copy), 'Data was mutated by merge');
+      assert.strictEqual(JSON.stringify(original), JSON.stringify(copy), 'Data was mutated by merge');
 
-      assert.equal(merged.a, '1.1');
-      assert.equal(merged.b.a, '1.2.1');
-      assert.equal(merged.b.b, '2.2.2');
-      assert.equal(merged.b.c, '3.2.3');
-      assert.equal(merged.c, '2.3');
-      assert.equal(merged.d, '3.4');
+      assert.strictEqual(merged.a, '1.1');
+      assert.strictEqual(merged.b.a, '1.2.1');
+      assert.strictEqual(merged.b.b, '2.2.2');
+      assert.strictEqual(merged.b.c, '3.2.3');
+      assert.strictEqual(merged.c, '2.3');
+      assert.strictEqual(merged.d, '3.4');
     }
 
     permutations.forEach((options) => {
@@ -108,38 +108,38 @@ describe('Power Merge', () => {
         when: cmds.always(),
         then: cmds.invoke(sum)
       }]);
-      assert.equal(merge(1, 2), 3);
+      assert.strictEqual(merge(1, 2), 3);
     });
 
     it('should invoke rules without a when condition', () => {
       const merge = compile([{
         then: cmds.invoke(sum)
       }]);
-      assert.equal(merge(1, 2), 3);
+      assert.strictEqual(merge(1, 2), 3);
     });
 
     it('should provide when condition the value facts', () => {
       const merge = compile([{
         when: cmds.invoke((facts) => {
-          assert.equal(facts.a.value, 1);
-          assert.equal(facts.b.value, 2);
+          assert.strictEqual(facts.a.value, 1);
+          assert.strictEqual(facts.b.value, 2);
           return true;
         }),
         then: cmds.invoke(sum)
       }]);
-      assert.equal(merge(1, 2), 3);
+      assert.strictEqual(merge(1, 2), 3);
     });
 
     it('should provide when condition the type facts', () => {
       const merge = compile([{
         when: cmds.invoke((facts) => {
-          assert.equal(facts.a.type, 'Number');
-          assert.equal(facts.b.type, 'Number');
+          assert.strictEqual(facts.a.type, 'Number');
+          assert.strictEqual(facts.b.type, 'Number');
           return true;
         }),
         then: cmds.invoke(sum)
       }]);
-      assert.equal(merge(1, 2), 3);
+      assert.strictEqual(merge(1, 2), 3);
     });
 
     it('should provide when condition the node facts', () => {
@@ -147,9 +147,9 @@ describe('Power Merge', () => {
         {
           when: cmds.eq('node.name', 'b'),
           then: cmds.invoke((facts) => {
-            assert.equal(facts.node.name, 'b');
-            assert.equal(facts.node.path, 'a.b');
-            assert.equal(facts.node.depth, 2);
+            assert.strictEqual(facts.node.name, 'b');
+            assert.strictEqual(facts.node.path, 'a.b');
+            assert.strictEqual(facts.node.depth, 2);
             return facts.a.value + facts.b.value;
           })
         }, {
@@ -157,7 +157,7 @@ describe('Power Merge', () => {
         }
       ]);
       const result = merge({ a: { b: 1 } }, { a: { b: 2 } });
-      assert.equal(result.a.b, 3);
+      assert.strictEqual(result.a.b, 3);
     });
 
     it('should short circuit after invoking a rule', () => {
@@ -173,7 +173,7 @@ describe('Power Merge', () => {
           })
         }
       ]);
-      assert.equal(merge(1, 2), 3);
+      assert.strictEqual(merge(1, 2), 3);
     });
 
     it('should error if no rules pass', () => {
@@ -195,7 +195,7 @@ describe('Power Merge', () => {
         }]
       });
       merge(1, 2, (err) => {
-        assert.equal('No passing when condition for (1, 2)', err.message);
+        assert.strictEqual('No passing when condition for (1, 2)', err.message);
         done();
       });
     });
@@ -209,7 +209,7 @@ describe('Power Merge', () => {
         }]
       });
       merge(1, 2, (err) => {
-        assert.equal('Oh Noes!', err.message);
+        assert.strictEqual('Oh Noes!', err.message);
         done();
       });
     });
@@ -269,7 +269,7 @@ describe('Power Merge', () => {
       const b = { x: 1 };
       a.x = a;
       const result = mergeTolerateCircular(a, b);
-      assert.equal(result.x, result.x.x);
+      assert.strictEqual(result.x, result.x.x);
     });
 
     it('should tolerate circular references in arrays without special rules', () => {
@@ -277,7 +277,7 @@ describe('Power Merge', () => {
       const b = [1];
       a.push(a);
       const result = mergeTolerateCircular(a, b);
-      assert.equal(result[0], result[0][0]);
+      assert.strictEqual(result[0], result[0][0]);
     });
 
     it('should report circular references in objects', () => {
@@ -358,9 +358,9 @@ describe('Power Merge', () => {
       const b = { a: 1, b: 1, c: 2 };
 
       const result = mergeErrorOnCircular(a, b);
-      assert.equal(result.a.sibling, 1);
-      assert.equal(result.b.sibling, 1);
-      assert.equal(result.c.sibling, 1);
+      assert.strictEqual(result.a.sibling, 1);
+      assert.strictEqual(result.b.sibling, 1);
+      assert.strictEqual(result.c.sibling, 1);
     });
 
     it('should not report circular references in object siblings', () => {
@@ -369,10 +369,10 @@ describe('Power Merge', () => {
       const b = [1, 2, 3];
 
       const result = mergeErrorOnCircular(a, b);
-      assert.equal(result.length, 3);
-      assert.equal(result[0].a, 1);
-      assert.equal(result[1].a, 1);
-      assert.equal(result[2].a, 1);
+      assert.strictEqual(result.length, 3);
+      assert.strictEqual(result[0].a, 1);
+      assert.strictEqual(result[1].a, 1);
+      assert.strictEqual(result[2].a, 1);
     });
   });
 
@@ -385,7 +385,7 @@ describe('Power Merge', () => {
 
         const result = merge(example.data);
 
-        assert.deepEqual(result, example.result);
+        assert.deepStrictEqual(result, example.result);
       }, { timeout: 0 });
     });
 

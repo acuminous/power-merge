@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const reference = require('../../lib/commands/reference');
 const Context = require('../../lib/Context');
 
@@ -14,7 +14,7 @@ describe('reference command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.foo, facts.a.value.foo);
+    assert.strictEqual(result.foo, facts.a.value.foo);
     assert.ok(result === facts.a.value);
   });
 
@@ -26,7 +26,7 @@ describe('reference command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.foo, facts.b.value.foo);
+    assert.strictEqual(result.foo, facts.b.value.foo);
     assert.ok(result === facts.b.value);
   });
 });

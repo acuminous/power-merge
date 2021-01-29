@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const iterate = require('../../lib/commands/iterate');
 const Context = require('../../lib/Context');
 
@@ -19,9 +19,9 @@ describe('iterate command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.length, 2);
-    assert.equal(result[0], '1.1-2.1');
-    assert.equal(result[1], '1.2-2.2');
+    assert.strictEqual(result.length, 2);
+    assert.strictEqual(result[0], '1.1-2.1');
+    assert.strictEqual(result[1], '1.2-2.2');
   });
 
   it('should iterate over arrays when item exists in a but not in b', () => {
@@ -35,9 +35,9 @@ describe('iterate command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.length, 2);
-    assert.equal(result[0], '1.1-2.1');
-    assert.equal(result[1], '1.2-undefined');
+    assert.strictEqual(result.length, 2);
+    assert.strictEqual(result[0], '1.1-2.1');
+    assert.strictEqual(result[1], '1.2-undefined');
   });
 
   it('should iterate over arrays when item exists in b but not in a', () => {
@@ -51,9 +51,9 @@ describe('iterate command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.length, 2);
-    assert.equal(result[0], '1.1-2.1');
-    assert.equal(result[1], 'undefined-2.2');
+    assert.strictEqual(result.length, 2);
+    assert.strictEqual(result[0], '1.1-2.1');
+    assert.strictEqual(result[1], 'undefined-2.2');
   });
 
   it('should iterate over arrays when a is undefined', () => {
@@ -67,9 +67,9 @@ describe('iterate command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.length, 2);
-    assert.equal(result[0], 'undefined-2.1');
-    assert.equal(result[1], 'undefined-2.2');
+    assert.strictEqual(result.length, 2);
+    assert.strictEqual(result[0], 'undefined-2.1');
+    assert.strictEqual(result[1], 'undefined-2.2');
   });
 
   it('should iterate over arrays when a is null', () => {
@@ -83,9 +83,9 @@ describe('iterate command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.length, 2);
-    assert.equal(result[0], 'undefined-2.1');
-    assert.equal(result[1], 'undefined-2.2');
+    assert.strictEqual(result.length, 2);
+    assert.strictEqual(result[0], 'undefined-2.1');
+    assert.strictEqual(result[1], 'undefined-2.2');
   });
 
 
@@ -100,9 +100,9 @@ describe('iterate command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.length, 2);
-    assert.equal(result[0], '1.1-undefined');
-    assert.equal(result[1], '1.2-undefined');
+    assert.strictEqual(result.length, 2);
+    assert.strictEqual(result[0], '1.1-undefined');
+    assert.strictEqual(result[1], '1.2-undefined');
   });
 
   it('should iterate over arrays when b is null', () => {
@@ -116,8 +116,8 @@ describe('iterate command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.length, 2);
-    assert.equal(result[0], '1.1-undefined');
-    assert.equal(result[1], '1.2-undefined');
+    assert.strictEqual(result.length, 2);
+    assert.strictEqual(result[0], '1.1-undefined');
+    assert.strictEqual(result[1], '1.2-undefined');
   });
 });

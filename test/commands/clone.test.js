@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const clone = require('../../lib/commands/clone');
 const Context = require('../../lib/Context');
 
@@ -14,7 +14,7 @@ describe('clone command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.foo, facts.a.value.foo);
+    assert.strictEqual(result.foo, facts.a.value.foo);
     assert.ok(result !== facts.a.value);
   });
 
@@ -26,7 +26,7 @@ describe('clone command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.foo, facts.a.value.foo);
+    assert.strictEqual(result.foo, facts.a.value.foo);
     assert.ok(result !== facts.a.value);
   });
 });

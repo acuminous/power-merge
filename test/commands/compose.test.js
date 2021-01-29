@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const union = require('../../lib/commands/union');
 const invoke = require('../../lib/commands/invoke');
 const compose = require('../../lib/commands/compose');
@@ -22,9 +22,9 @@ describe('compose command', () => {
     };
 
     const result = cmd(facts).reverse();
-    assert.equal(result.length, 10);
+    assert.strictEqual(result.length, 10);
     for (let i = 0; i < result.length; i++) {
-      assert.equal(result[i], i+1);
+      assert.strictEqual(result[i], i+1);
     }
   });
 
@@ -32,6 +32,6 @@ describe('compose command', () => {
     const cmd = compose([])(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), undefined);
+    assert.strictEqual(cmd(facts), undefined);
   });
 });

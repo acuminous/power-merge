@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const or = require('../../lib/commands/or');
 const eq = require('../../lib/commands/eq');
 const error = require('../../lib/commands/error');
@@ -15,14 +15,14 @@ describe('or command', () => {
     ])(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), false);
+    assert.strictEqual(cmd(facts), false);
   });
 
   it('should return the result of no commands', () => {
     const cmd = or([])(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), true);
+    assert.strictEqual(cmd(facts), true);
   });
 
   it('should short circuit when a command return true', () => {
@@ -32,6 +32,6 @@ describe('or command', () => {
     ])(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), true);
+    assert.strictEqual(cmd(facts), true);
   });
 });

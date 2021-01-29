@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const error = require('../../lib/commands/error');
 const Context = require('../../lib/Context');
 

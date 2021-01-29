@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const gt = require('../../lib/commands/gt');
 const Context = require('../../lib/Context');
 
@@ -10,27 +10,27 @@ describe('gt command', () => {
     const cmd = gt('a.value', 0)(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), true);
+    assert.strictEqual(cmd(facts), true);
   });
 
   it('should return false when "a" value specified by the path equals the given value', () => {
     const cmd = gt('a.value', 1)(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), false);
+    assert.strictEqual(cmd(facts), false);
   });
 
   it('should return false when "a" value specified by the path is less than given value', () => {
     const cmd = gt('a.value', 2)(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), false);
+    assert.strictEqual(cmd(facts), false);
   });
 
   it('should allow use of array paths', () => {
     const cmd = gt(['a', 'value'], 0)(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), true);
+    assert.strictEqual(cmd(facts), true);
   });
 });

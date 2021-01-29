@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const unionWith = require('../../lib/commands/unionWith');
 const Context = require('../../lib/Context');
 
@@ -18,9 +18,9 @@ describe('unionWith command', () => {
     };
 
     const result = cmd(facts);
-    assert.equal(result.length, 5);
+    assert.strictEqual(result.length, 5);
     for (let i = 0; i < result.length; i++) {
-      assert.equal(result[i], i+1);
+      assert.strictEqual(result[i], i+1);
     }
   });
 });

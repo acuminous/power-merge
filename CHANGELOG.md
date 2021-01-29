@@ -1,4 +1,11 @@
 # Change Log
+## 1.6.0
+- Update dependencies
+- Migrate to zUnit
+- Migrate to github actions
+- Migrate to esnext
+- Migrate to node assert
+
 ## 1.5.0
 - Updated dependencies
 

@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const invoke = require('../../lib/commands/invoke');
 const Context = require('../../lib/Context');
 
@@ -13,7 +13,7 @@ describe('invoke command', () => {
     const cmd = invoke(sum)(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), 3);
+    assert.strictEqual(cmd(facts), 3);
   });
 
   it('should invoke named functions', () => {
@@ -21,7 +21,7 @@ describe('invoke command', () => {
     const cmd = invoke('sum')(context);
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), 3);
+    assert.strictEqual(cmd(facts), 3);
   });
 
   it('should error on missing named functions', () => {

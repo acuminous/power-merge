@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const debug = require('../../lib/commands/debug');
 const Context = require('../../lib/Context');
 
@@ -20,8 +20,8 @@ describe('debug command', () => {
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
     cmd(facts);
-    assert.equal(messages.length, 1);
-    assert.equal(messages[0], 'meh');
+    assert.strictEqual(messages.length, 1);
+    assert.strictEqual(messages[0], 'meh');
   });
 
   it('should use template', () => {
@@ -29,8 +29,8 @@ describe('debug command', () => {
     const facts = { a: { value : 1 }, b: { value: 2 } };
 
     cmd(facts);
-    assert.equal(messages.length, 1);
-    assert.equal(messages[0], 'meh 1 2');
+    assert.strictEqual(messages.length, 1);
+    assert.strictEqual(messages[0], 'meh 1 2');
   });
 
 });
