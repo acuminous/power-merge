@@ -49,12 +49,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cressie176/power-merge.git"
+    "url": "git+https://github.com/acuminous/power-merge.git"
   },
   "bugs": {
-    "url": "https://github.com/cressie176/power-merge/issues"
+    "url": "https://github.com/acuminous/power-merge/issues"
   },
-  "homepage": "https://cressie176.github.io/power-merge/",
+  "homepage": "https://acuminous.github.io/power-merge/",
   "husky": {
     "hooks": {
       "pre-push": "npm run lint && npm run codeclimate"
