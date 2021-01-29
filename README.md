@@ -2,6 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
 [![NPM downloads](https://img.shields.io/npm/dm/power-merge.svg?style=flat-square)](https://www.npmjs.com/package/power-merge)
+[![Node.js CI](https://github.com/acuminous/power-merge/workflows/Node.js%20CI/badge.svg)](https://github.com/acuminous/power-merge/actions?query=workflow%3A%22Node.js+CI%22)
 [![Code Climate](https://codeclimate.com/github/acuminous/power-merge/badges/gpa.svg)](https://codeclimate.com/github/acuminous/power-merge)
 [![Test Coverage](https://codeclimate.com/github/acuminous/power-merge/badges/coverage.svg)](https://codeclimate.com/github/acuminous/power-merge/coverage)
 [![Code Style](https://img.shields.io/badge/code%20style-imperative-brightgreen.svg)](https://github.com/acuminous/eslint-config-imperative)
