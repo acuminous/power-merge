@@ -1,7 +1,7 @@
-var pm = require('../..')
-var cmds = pm.commands
-var rs = pm.ruleSets
-var R = require('ramda')
+const pm = require('../..')
+const cmds = pm.commands
+const rs = pm.ruleSets
+const R = require('ramda')
 
 module.exports = {
     config: {

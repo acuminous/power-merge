@@ -1,36 +1,36 @@
-var assert = require('chai').assert
-var debug = require('../../lib/commands/debug')
-var Context = require('../../lib/Context')
+const assert = require('chai').assert;
+const debug = require('../../lib/commands/debug');
+const Context = require('../../lib/Context');
 
-describe('debug command', function() {
+describe('debug command', () => {
 
-  var context = new Context()
-  var messages
+  const context = new Context();
+  let messages;
 
-  beforeEach(function() {
-    messages = []
-  })
+  beforeEach(() => {
+    messages = [];
+  });
 
   function log(message) {
-    messages.push(message)
+    messages.push(message);
   }
 
-  it('should debug via supplied function', function() {
-    var cmd = debug('meh', log)(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should debug via supplied function', () => {
+    const cmd = debug('meh', log)(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    cmd(facts)
-    assert.equal(messages.length, 1)
-    assert.equal(messages[0], 'meh')
-  })
+    cmd(facts);
+    assert.equal(messages.length, 1);
+    assert.equal(messages[0], 'meh');
+  });
 
-  it('should use template', function() {
-    var cmd = debug('meh {{a.value}} {{b.value}}', log)(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should use template', () => {
+    const cmd = debug('meh {{a.value}} {{b.value}}', log)(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    cmd(facts)
-    assert.equal(messages.length, 1)
-    assert.equal(messages[0], 'meh 1 2')
-  })
+    cmd(facts);
+    assert.equal(messages.length, 1);
+    assert.equal(messages[0], 'meh 1 2');
+  });
 
-})
+});

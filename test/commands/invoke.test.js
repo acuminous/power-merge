@@ -1,46 +1,46 @@
-var assert = require('chai').assert
-var invoke = require('../../lib/commands/invoke')
-var Context = require('../../lib/Context')
+const assert = require('chai').assert;
+const invoke = require('../../lib/commands/invoke');
+const Context = require('../../lib/Context');
 
-describe('invoke command', function() {
+describe('invoke command', () => {
 
   function sum(facts) {
-    return facts.a.value + facts.b.value
+    return facts.a.value + facts.b.value;
   }
 
-  it('should invoke inline functions', function() {
-    var context = new Context()
-    var cmd = invoke(sum)(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should invoke inline functions', () => {
+    const context = new Context();
+    const cmd = invoke(sum)(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), 3)
-  })
+    assert.equal(cmd(facts), 3);
+  });
 
-  it('should invoke named functions', function() {
-    var context = new Context({ namedCommands: { sum: sum } })
-    var cmd = invoke('sum')(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should invoke named functions', () => {
+    const context = new Context({ namedCommands: { sum } });
+    const cmd = invoke('sum')(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), 3)
-  })
+    assert.equal(cmd(facts), 3);
+  });
 
-  it('should error on missing named functions', function() {
-    var context = new Context()
-    var cmd = invoke('sum')(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should error on missing named functions', () => {
+    const context = new Context();
+    const cmd = invoke('sum')(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.throws(function() {
-      cmd(facts)
-    }, /No such command: sum/)
-  })
+    assert.throws(() => {
+      cmd(facts);
+    }, /No such command: sum/);
+  });
 
-  it('should error on non functions', function() {
-    var context = new Context({ namedCommands: { sum: true } })
-    var cmd = invoke('sum')(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should error on non functions', () => {
+    const context = new Context({ namedCommands: { sum: true } });
+    const cmd = invoke('sum')(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.throws(function() {
-      cmd(facts)
-    }, /sum is not a function/)
-  })
-})
+    assert.throws(() => {
+      cmd(facts);
+    }, /sum is not a function/);
+  });
+});

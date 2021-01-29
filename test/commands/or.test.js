@@ -1,37 +1,37 @@
-var assert = require('chai').assert
-var or = require('../../lib/commands/or')
-var eq = require('../../lib/commands/eq')
-var error = require('../../lib/commands/error')
-var Context = require('../../lib/Context')
+const assert = require('chai').assert;
+const or = require('../../lib/commands/or');
+const eq = require('../../lib/commands/eq');
+const error = require('../../lib/commands/error');
+const Context = require('../../lib/Context');
 
-describe('or command', function() {
+describe('or command', () => {
 
-  var context = new Context()
+  const context = new Context();
 
-  it('should return the result of all commands', function() {
-    var cmd = or([
+  it('should return the result of all commands', () => {
+    const cmd = or([
       eq('a.value', 2),
       eq('b.value', 1)
-    ])(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+    ])(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), false)
-  })
+    assert.equal(cmd(facts), false);
+  });
 
-  it('should return the result of no commands', function() {
-    var cmd = or([])(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should return the result of no commands', () => {
+    const cmd = or([])(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), true)
-  })
+    assert.equal(cmd(facts), true);
+  });
 
-  it('should short circuit when a command return true', function() {
-    var cmd = or([
+  it('should short circuit when a command return true', () => {
+    const cmd = or([
       eq('a.value', 1),
       error('Did not short circuit')
-    ])(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+    ])(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.equal(cmd(facts), true)
-  })
-})
+    assert.equal(cmd(facts), true);
+  });
+});

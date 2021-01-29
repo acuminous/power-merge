@@ -1,27 +1,27 @@
-var assert = require('chai').assert
-var error = require('../../lib/commands/error')
-var Context = require('../../lib/Context')
+const assert = require('chai').assert;
+const error = require('../../lib/commands/error');
+const Context = require('../../lib/Context');
 
-describe('error command', function() {
+describe('error command', () => {
 
-  var context = new Context()
+  const context = new Context();
 
-  it('should throw an error', function() {
-    var cmd = error('Oh Noes!')(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should throw an error', () => {
+    const cmd = error('Oh Noes!')(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.throws(function() {
-      cmd(facts)
-    }, /Oh Noes!/)
-  })
+    assert.throws(() => {
+      cmd(facts);
+    }, /Oh Noes!/);
+  });
 
-  it('should use template', function() {
-    var cmd = error('Oh Noes! {{a.value}} {{b.value}}')(context)
-    var facts = { a: { value : 1 }, b: { value: 2 } }
+  it('should use template', () => {
+    const cmd = error('Oh Noes! {{a.value}} {{b.value}}')(context);
+    const facts = { a: { value : 1 }, b: { value: 2 } };
 
-    assert.throws(function() {
-      cmd(facts)
-    }, /Oh Noes! 1 2/)
-  })
+    assert.throws(() => {
+      cmd(facts);
+    }, /Oh Noes! 1 2/);
+  });
 
-})
+});

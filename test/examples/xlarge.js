@@ -1,8 +1,8 @@
-var pm = require('../..')
-var cmds = pm.commands
-var rs = pm.ruleSets
-var R = require('ramda')
-var citylots = require('./citylots.json')
+const pm = require('../..')
+const cmds = pm.commands
+const rs = pm.ruleSets
+const R = require('ramda')
+const citylots = require('./citylots.json')
 
 module.exports = {
     config: {
@@ -26,4 +26,3 @@ module.exports = {
     ],
     result: citylots
 }
-

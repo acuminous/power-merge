@@ -1,6 +1,0 @@
-{
-  "extends": "imperative",
-  "rules": {
-    "indent": ["error", 2]
-  }
-}

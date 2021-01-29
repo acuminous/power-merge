@@ -1,32 +1,32 @@
-var assert = require('chai').assert
-var reference = require('../../lib/commands/reference')
-var Context = require('../../lib/Context')
+const assert = require('chai').assert;
+const reference = require('../../lib/commands/reference');
+const Context = require('../../lib/Context');
 
-describe('reference command', function() {
+describe('reference command', () => {
 
-  var context = new Context()
+  const context = new Context();
 
-  it('should reference "a" using an array path', function() {
-    var cmd = reference(['a', 'value'])(context)
-    var facts = {
+  it('should reference "a" using an array path', () => {
+    const cmd = reference(['a', 'value'])(context);
+    const facts = {
       a: { value: { foo: 1 } },
       b: { value: { foo: 2 } }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.foo, facts.a.value.foo)
-    assert.ok(result === facts.a.value)
-  })
+    const result = cmd(facts);
+    assert.equal(result.foo, facts.a.value.foo);
+    assert.ok(result === facts.a.value);
+  });
 
-  it('should reference "b" using a string path', function() {
-    var cmd = reference('b.value')(context)
-    var facts = {
+  it('should reference "b" using a string path', () => {
+    const cmd = reference('b.value')(context);
+    const facts = {
       a: { value: { foo: 1 } },
       b: { value: { foo: 2 } }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.foo, facts.b.value.foo)
-    assert.ok(result === facts.b.value)
-  })
-})
+    const result = cmd(facts);
+    assert.equal(result.foo, facts.b.value.foo);
+    assert.ok(result === facts.b.value);
+  });
+});

@@ -1,108 +1,108 @@
-var assert = require('chai').assert
-var recurseKeysIn = require('../../lib/commands/recurseKeysIn')
-var Context = require('../../lib/Context')
+const assert = require('chai').assert;
+const recurseKeysIn = require('../../lib/commands/recurseKeysIn');
+const Context = require('../../lib/Context');
 
-describe('recurseKeysIn command', function() {
+describe('recurseKeysIn command', () => {
 
   function concat(args) {
-    return args[0] + '-' + args[1]
+    return args[0] + '-' + args[1];
   }
 
-  it('should recuse objects when both keys are present', function() {
-    var context = new Context({ merge: concat })
+  it('should recuse objects when both keys are present', () => {
+    const context = new Context({ merge: concat });
 
-    var cmd = recurseKeysIn()(context)
-    var facts = {
+    const cmd = recurseKeysIn()(context);
+    const facts = {
       a: { value: { x: '1.1' } },
       b: { value: { x: '2.1' } },
       node: { depth: 1 }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.x, '1.1-2.1')
-  })
+    const result = cmd(facts);
+    assert.equal(result.x, '1.1-2.1');
+  });
 
-  it('should recurse objects when key exists in a but not in b', function() {
-    var context = new Context({ merge: concat })
+  it('should recurse objects when key exists in a but not in b', () => {
+    const context = new Context({ merge: concat });
 
-    var cmd = recurseKeysIn()(context)
-    var facts = {
+    const cmd = recurseKeysIn()(context);
+    const facts = {
       a: { value: { x: '1.1' } },
       b: { value: {} },
       node: { depth: 1 }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.x, '1.1-undefined')
-  })
+    const result = cmd(facts);
+    assert.equal(result.x, '1.1-undefined');
+  });
 
-  it('should recurse objects when key exists in b but not in a', function() {
-    var context = new Context({ merge: concat })
+  it('should recurse objects when key exists in b but not in a', () => {
+    const context = new Context({ merge: concat });
 
-    var cmd = recurseKeysIn()(context)
-    var facts = {
+    const cmd = recurseKeysIn()(context);
+    const facts = {
       a: { value: {} },
       b: { value: { x: '2.1' } },
       node: { depth: 1 }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.x, 'undefined-2.1')
-  })
+    const result = cmd(facts);
+    assert.equal(result.x, 'undefined-2.1');
+  });
 
-  it('should recuse objects a is undefined', function() {
-    var context = new Context({ merge: concat })
+  it('should recuse objects a is undefined', () => {
+    const context = new Context({ merge: concat });
 
-    var cmd = recurseKeysIn()(context)
-    var facts = {
+    const cmd = recurseKeysIn()(context);
+    const facts = {
       a: { value: undefined },
       b: { value: { x: '2.1' } },
       node: { depth: 1 }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.x, 'undefined-2.1')
-  })
+    const result = cmd(facts);
+    assert.equal(result.x, 'undefined-2.1');
+  });
 
-  it('should recuse objects a is null', function() {
-    var context = new Context({ merge: concat })
+  it('should recuse objects a is null', () => {
+    const context = new Context({ merge: concat });
 
-    var cmd = recurseKeysIn()(context)
-    var facts = {
+    const cmd = recurseKeysIn()(context);
+    const facts = {
       a: { value: undefined },
       b: { value: { x: '2.1' } },
       node: { depth: 1 }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.x, 'undefined-2.1')
-  })
+    const result = cmd(facts);
+    assert.equal(result.x, 'undefined-2.1');
+  });
 
-  it('should recuse objects when b is undefined', function() {
-    var context = new Context({ merge: concat })
+  it('should recuse objects when b is undefined', () => {
+    const context = new Context({ merge: concat });
 
-    var cmd = recurseKeysIn()(context)
-    var facts = {
+    const cmd = recurseKeysIn()(context);
+    const facts = {
       a: { value: { x: '1.1' } },
       b: { value: undefined },
       node: { depth: 1 }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.x, '1.1-undefined')
-  })
+    const result = cmd(facts);
+    assert.equal(result.x, '1.1-undefined');
+  });
 
-  it('should recuse objects when b is null', function() {
-    var context = new Context({ merge: concat })
+  it('should recuse objects when b is null', () => {
+    const context = new Context({ merge: concat });
 
-    var cmd = recurseKeysIn()(context)
-    var facts = {
+    const cmd = recurseKeysIn()(context);
+    const facts = {
       a: { value: { x: '1.1' } },
       b: { value: undefined },
       node: { depth: 1 }
-    }
+    };
 
-    var result = cmd(facts)
-    assert.equal(result.x, '1.1-undefined')
-  })
-})
+    const result = cmd(facts);
+    assert.equal(result.x, '1.1-undefined');
+  });
+});
