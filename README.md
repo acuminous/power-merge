@@ -5,7 +5,6 @@
 [![Node.js CI](https://github.com/acuminous/power-merge/workflows/Node.js%20CI/badge.svg)](https://github.com/acuminous/power-merge/actions?query=workflow%3A%22Node.js+CI%22)
 [![Code Climate](https://codeclimate.com/github/acuminous/power-merge/badges/gpa.svg)](https://codeclimate.com/github/acuminous/power-merge)
 [![Test Coverage](https://codeclimate.com/github/acuminous/power-merge/badges/coverage.svg)](https://codeclimate.com/github/acuminous/power-merge/coverage)
-[![Code Style](https://img.shields.io/badge/code%20style-imperative-brightgreen.svg)](https://github.com/acuminous/eslint-config-imperative)
 [![Dependency Status](https://david-dm.org/acuminous/power-merge.svg)](https://david-dm.org/acuminous/power-merge)
 [![devDependencies Status](https://david-dm.org/acuminous/power-merge/dev-status.svg)](https://david-dm.org/acuminous/power-merge?type=dev)
 
