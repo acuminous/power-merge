@@ -70,7 +70,7 @@ const R = require('ramda')
 
 // Compose a new rule
 const unionHostsByIp = {
-  when: eq('node.name', 'hosts')
+  when: eq('node.name', 'hosts'),
   then: unionWith(R.eqBy(R.prop('ip')))
 }
 
