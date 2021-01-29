@@ -58,7 +58,7 @@ describe('Power Merge', function() {
         }
       ]
 
-      testFn(step, function(done) {
+      testFn(step, function(test, done) {
         var merge = pm.compile({ api: options, rules: rules })
         var original = R.clone(data)
 
@@ -188,7 +188,7 @@ describe('Power Merge', function() {
       }, /No passing when condition/)
     })
 
-    it('should error asynchronously if no rules pass', function(done) {
+    it('should error asynchronously if no rules pass', function(test, done) {
       var merge = pm.compile({
         api: { async: true },
         rules: [{
@@ -202,7 +202,7 @@ describe('Power Merge', function() {
       })
     })
 
-    it('should error asynchronously for thrown errors', function(done) {
+    it('should error asynchronously for thrown errors', function(test, done) {
       var merge = pm.compile({
         api: { async: true },
         rules: [{
@@ -382,14 +382,13 @@ describe('Power Merge', function() {
 
     Object.keys(examples).forEach(function(name) {
       it(name, function() {
-        this.timeout(0)
         var example = examples[name]
         var merge = pm.compile(example.config)
 
         var result = merge(example.data)
 
         assert.deepEqual(result, example.result)
-      })
+      }, { timeout: 0 })
     })
 
   })
