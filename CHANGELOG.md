@@ -1,4 +1,8 @@
 # Change Log
+
+## 1.6.1
+- Tolerate circular reference in all sources
+
 ## 1.6.0
 - Update dependencies
 - Migrate to zUnit

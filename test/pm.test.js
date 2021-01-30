@@ -264,12 +264,30 @@ describe('Power Merge', () => {
       }
     ]});
 
-    it('should tolerate circular references in objects without special rules', () => {
+    it('should tolerate circular references in objects without special rules (a)', () => {
       const a = {};
       const b = { x: 1 };
       a.x = a;
       const result = mergeTolerateCircular(a, b);
       assert.strictEqual(result.x, result.x.x);
+    });
+
+    it('should tolerate circular references in objects without special rules (b)', () => {
+      const a = { x: 1 };
+      const b = {};
+      b.y = b;
+      const result = mergeTolerateCircular(a, b);
+      assert.strictEqual(result.x, 1);
+      assert.strictEqual(result.x.y, undefined);
+    });
+
+    it('should tolerate circular references in objects without special rules (a & b)', () => {
+      const a = {};
+      const b = {};
+      a.x = a;
+      b.x = b;
+      const result = mergeTolerateCircular(a, b);
+      assert.strictEqual(result.x, undefined);
     });
 
     it('should tolerate circular references in arrays without special rules', () => {
@@ -280,7 +298,7 @@ describe('Power Merge', () => {
       assert.strictEqual(result[0], result[0][0]);
     });
 
-    it('should report circular references in objects', () => {
+    it('should report circular references in objects (a)', () => {
       const a = {};
       const b = {};
       a.x = a;
@@ -289,10 +307,20 @@ describe('Power Merge', () => {
       }, /Circular reference at x/);
     });
 
-    it('should report circular references in objects when b is undefined', () => {
+    it('should report circular references in objects (b)', () => {
       const a = {};
-      let b;
+      const b = {};
+      b.x = b;
+      assert.throws(() => {
+        mergeErrorOnCircular(a, b);
+      }, /Circular reference at x/);
+    });
+
+    it('should report circular references in objects (a & b)', () => {
+      const a = {};
+      const b = {};
       a.x = a;
+      b.x = b;
       assert.throws(() => {
         mergeErrorOnCircular(a, b);
       }, /Circular reference at x/);
@@ -302,6 +330,15 @@ describe('Power Merge', () => {
       let a;
       const b = {};
       b.x = b;
+      assert.throws(() => {
+        mergeErrorOnCircular(a, b);
+      }, /Circular reference at x/);
+    });
+
+    it('should report circular references in objects when b is undefined', () => {
+      const a = {};
+      a.x = a;
+      let b;
       assert.throws(() => {
         mergeErrorOnCircular(a, b);
       }, /Circular reference at x/);
